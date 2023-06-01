@@ -301,6 +301,9 @@ export function _connectByChainId(
  */
 /** @public */
 export async function getCollateralsDeployments(network: string): Promise<CollateralsVersionedDeployments> {
+  if (network == "homestead") {
+    network = "mainnet";
+  }
   // Initialize an empty object to hold the versioned deployments.
   const versionedDeployments: CollateralsVersionedDeployments = {};
   
@@ -325,7 +328,7 @@ export async function getCollateralsDeployments(network: string): Promise<Collat
         // Add the versioned deployment to the corresponding collateral in the versionedDeployments object.
     }))
   }
-
+  
   // Return the versioned deployments object.
   return versionedDeployments;
 }

@@ -35,6 +35,19 @@
         {
           "indexed": false,
           "internalType": "address",
+          "name": "_newCollateralAddress",
+          "type": "address"
+        }
+      ],
+      "name": "CollateralAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
           "name": "_defaultPoolAddress",
           "type": "address"
         }
@@ -61,43 +74,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_lqtyStakingAddress",
+          "name": "_pcvAddress",
           "type": "address"
         }
       ],
-      "name": "LQTYStakingAddressChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_borrower",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_LUSDFee",
-          "type": "uint256"
-        }
-      ],
-      "name": "LUSDBorrowingFeePaid",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_thusdTokenAddress",
-          "type": "address"
-        }
-      ],
-      "name": "THUSDTokenAddressChanged",
+      "name": "PCVAddressChanged",
       "type": "event"
     },
     {
@@ -137,6 +118,38 @@
         }
       ],
       "name": "StabilityPoolAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_borrower",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_THUSDFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "THUSDBorrowingFeePaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_thusdTokenAddress",
+          "type": "address"
+        }
+      ],
+      "name": "THUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -211,6 +224,11 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "_assetAmount",
+          "type": "uint256"
+        },
+        {
           "internalType": "address",
           "name": "_upperHint",
           "type": "address"
@@ -247,6 +265,11 @@
           "internalType": "bool",
           "name": "isDebtIncrease",
           "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_assetAmount",
+          "type": "uint256"
         },
         {
           "internalType": "address",
@@ -305,6 +328,11 @@
           "type": "address"
         },
         {
+          "internalType": "uint256",
+          "name": "_assetAmount",
+          "type": "uint256"
+        },
+        {
           "internalType": "address",
           "name": "_upperHint",
           "type": "address"
@@ -315,7 +343,7 @@
           "type": "address"
         }
       ],
-      "name": "moveETHGainToTrove",
+      "name": "moveCollateralGainToTrove",
       "outputs": [],
       "stateMutability": "payable",
       "type": "function"
@@ -329,7 +357,12 @@
         },
         {
           "internalType": "uint256",
-          "name": "_LUSDAmount",
+          "name": "_THUSDAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_assetAmount",
           "type": "uint256"
         },
         {
@@ -366,7 +399,7 @@
           "type": "address"
         }
       ],
-      "name": "repayLUSD",
+      "name": "repayTHUSD",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -420,7 +453,12 @@
         },
         {
           "internalType": "address",
-          "name": "_lqtyStakingAddress",
+          "name": "_pcvAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_collateralAddress",
           "type": "address"
         }
       ],
@@ -475,7 +513,7 @@
           "type": "address"
         }
       ],
-      "name": "withdrawLUSD",
+      "name": "withdrawTHUSD",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

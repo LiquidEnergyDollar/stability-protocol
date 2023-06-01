@@ -22,37 +22,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newDefaultPoolAddress",
+          "name": "_newCollateralAddress",
           "type": "address"
         }
       ],
-      "name": "DefaultPoolAddressChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_ETH",
-          "type": "uint256"
-        }
-      ],
-      "name": "DefaultPoolETHBalanceUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_LUSDDebt",
-          "type": "uint256"
-        }
-      ],
-      "name": "DefaultPoolLUSDDebtUpdated",
+      "name": "CollateralAddressChanged",
       "type": "event"
     },
     {
@@ -65,7 +39,7 @@
           "type": "uint256"
         }
       ],
-      "name": "ETHBalanceUpdated",
+      "name": "CollateralBalanceUpdated",
       "type": "event"
     },
     {
@@ -84,7 +58,20 @@
           "type": "uint256"
         }
       ],
-      "name": "EtherSent",
+      "name": "CollateralSent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_newDefaultPoolAddress",
+          "type": "address"
+        }
+      ],
+      "name": "DefaultPoolAddressChanged",
       "type": "event"
     },
     {
@@ -93,11 +80,24 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_newBalance",
+          "name": "_collateral",
           "type": "uint256"
         }
       ],
-      "name": "LUSDBalanceUpdated",
+      "name": "DefaultPoolCollateralBalanceUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_THUSDDebt",
+          "type": "uint256"
+        }
+      ],
+      "name": "DefaultPoolTHUSDDebtUpdated",
       "type": "event"
     },
     {
@@ -111,6 +111,19 @@
         }
       ],
       "name": "StabilityPoolAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_newBalance",
+          "type": "uint256"
+        }
+      ],
+      "name": "THUSDBalanceUpdated",
       "type": "event"
     },
     {
@@ -134,14 +147,14 @@
           "type": "uint256"
         }
       ],
-      "name": "decreaseLUSDDebt",
+      "name": "decreaseTHUSDDebt",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "getETH",
+      "name": "getCollateralBalance",
       "outputs": [
         {
           "internalType": "uint256",
@@ -154,7 +167,7 @@
     },
     {
       "inputs": [],
-      "name": "getLUSDDebt",
+      "name": "getTHUSDDebt",
       "outputs": [
         {
           "internalType": "uint256",
@@ -173,7 +186,7 @@
           "type": "uint256"
         }
       ],
-      "name": "increaseLUSDDebt",
+      "name": "increaseTHUSDDebt",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -186,7 +199,20 @@
           "type": "uint256"
         }
       ],
-      "name": "sendETHToActivePool",
+      "name": "sendCollateralToActivePool",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateCollateralBalance",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

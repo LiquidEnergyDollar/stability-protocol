@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-bammAllowance: boolean;
+bammAllowance: Decimal;
 ```

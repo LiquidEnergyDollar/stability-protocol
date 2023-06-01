@@ -36,6 +36,7 @@ export interface IAssets {
 export interface INetworkOracles {
   mainnet: IAssets,
   goerli: IAssets,
+  sepolia: IAssets,
 }
 
 dotenv.config();
@@ -70,11 +71,31 @@ const generateRandomAccounts = (numberOfAccounts: number) => {
 
 const deployerAccount = process.env.DEPLOYER_PRIVATE_KEY || Wallet.createRandom().privateKey;
 const devChainRichAccount = "0x4d5db4107d237df6a3d58ee5f70ae63d73d7658d4026f2eefd2f204c81682cb7";
-
 const infuraApiKey = "ad9cef41c9c844a7b54d10be24d416e5";
+
+// List of supported networks
+export const chainIds = {
+  arbitrum: 42161,
+  "arbitrum-goerli": 421613,
+  avalanche: 43114,
+  "avalanche-fuji": 43113,
+  bsc: 56,
+  goerli: 5,
+  sepolia: 11155111,
+  hardhat: 31337,
+  mainnet: 1,
+  optimism: 10,
+  "optimism-goerli": 420,
+  "polygon-mainnet": 137,
+  "polygon-mumbai": 80001,
+  "zksync-goerli": 280,
+  "zksync-mainnet": 324,
+  "base-goerli": 84531,
+};
 
 const infuraNetwork = (name: string): { [name: string]: NetworkUserConfig } => ({
   [name]: {
+    chainId: chainIds[name],
     url: `https://${name}.infura.io/v3/${infuraApiKey}`,
     accounts: [deployerAccount]
   }
@@ -107,6 +128,16 @@ export const oracleAddresses: INetworkOracles = {
       chainlink: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
       tellor: "0x20374E579832859f180536A69093A126Db1c8aE9" // Playground
     }
+  },
+  sepolia: {
+    btc: {
+      chainlink: "0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43",
+      tellor: "0x20374E579832859f180536A69093A126Db1c8aE9" // Wrong address
+    },
+    eth: {
+      chainlink: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+      tellor: "0x20374E579832859f180536A69093A126Db1c8aE9" // Wrong address
+    }
   }
 };
 
@@ -133,6 +164,7 @@ const config: HardhatUserConfig = {
     },
 
     ...infuraNetwork("goerli"),
+    ...infuraNetwork("sepolia"),
     ...infuraNetwork("mainnet")
   },
 
@@ -209,8 +241,8 @@ type DeployParams = {
 };
 
 const defaultChannel = process.env.DEFAULT_CHANNEL || "default";
-const defaultCollateralSymbol = process.env.DEFAULT_COLLATERAL_SYMBOL || "eth";
-const defaultCollateralAddress = process.env.DEFAULT_COLLATERAL_ADDRESS || ZERO_ADDRESS;
+const defaultCollateralSymbol = process.env.DEFAULT_COLLATERAL_SYMBOL;
+const defaultCollateralAddress = process.env.DEFAULT_COLLATERAL_ADDRESS;
 const defaultVersion = process.env.DEFAULT_VERSION || "v1";
 const defaultThusdAddress = process.env.DEFAULT_THUSD_ADDRESS || "";
 const defaultDelay = process.env.DEFAULT_DELAY || 90 * 24 * 60 * 60;
@@ -243,6 +275,7 @@ task("deploy", "Deploys the contracts to the network")
     async ({ channel, collateralSymbol, collateralAddress, contractsVersion, delay, stablecoinAddress, gasPrice, useRealPriceFeed }: DeployParams, env) => {     
       const overrides = { gasPrice: gasPrice && Decimal.from(gasPrice).div(1000000000).hex };
       const [deployer] = await env.ethers.getSigners();
+      console.log("DEPLOYER " + JSON.stringify(deployer));
       useRealPriceFeed ??= env.network.name === "mainnet";
 
       if (useRealPriceFeed && !hasOracles(env.network.name)) {

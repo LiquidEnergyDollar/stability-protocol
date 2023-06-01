@@ -16,7 +16,7 @@ export interface BlockPolledLiquityStoreExtraState
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [bammAllowance](./lib-ethers.blockpolledliquitystoreextrastate.bammallowance.md) |  | boolean |  |
+|  [bammAllowance](./lib-ethers.blockpolledliquitystoreextrastate.bammallowance.md) |  | [Decimal](./lib-base.decimal.md) |  |
 |  [blockTag?](./lib-ethers.blockpolledliquitystoreextrastate.blocktag.md) |  | number | _(Optional)_ Number of block that the store state was fetched from. |
 |  [blockTimestamp](./lib-ethers.blockpolledliquitystoreextrastate.blocktimestamp.md) |  | number | Timestamp of latest block (number of seconds since epoch). |
 

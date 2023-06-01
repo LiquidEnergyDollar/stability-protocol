@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "ILQTYToken",
-  "sourceName": "contracts/Interfaces/ILQTYToken.sol",
+  "contractName": "ITHUSDToken",
+  "sourceName": "contracts/Interfaces/ITHUSDToken.sol",
   "abi": [
     {
       "anonymous": false,
@@ -34,11 +34,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_communityIssuanceAddress",
+          "name": "_newBorrowerOperationsAddress",
           "type": "address"
         }
       ],
-      "name": "CommunityIssuanceAddressSet",
+      "name": "BorrowerOperationsAddressAdded",
       "type": "event"
     },
     {
@@ -47,11 +47,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_lqtyStakingAddress",
+          "name": "_newStabilityPoolAddress",
           "type": "address"
         }
       ],
-      "name": "LQTYStakingAddressSet",
+      "name": "StabilityPoolAddressAdded",
       "type": "event"
     },
     {
@@ -60,11 +60,17 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_lockupContractFactoryAddress",
+          "name": "_user",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
         }
       ],
-      "name": "LockupContractFactoryAddressSet",
+      "name": "THUSDTokenBalanceUpdated",
       "type": "event"
     },
     {
@@ -90,6 +96,19 @@
         }
       ],
       "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_troveManagerAddress",
+          "type": "address"
+        }
+      ],
+      "name": "TroveManagerAddressAdded",
       "type": "event"
     },
     {
@@ -160,6 +179,24 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "burn",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "decimals",
       "outputs": [
@@ -210,32 +247,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "getDeploymentStartTime",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getLpRewardsEntitlement",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -257,6 +268,43 @@
         }
       ],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "mint",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "contractAddress",
+          "type": "address"
+        }
+      ],
+      "name": "mintList",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -351,7 +399,12 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_sender",
+          "name": "poolAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "user",
           "type": "address"
         },
         {
@@ -360,7 +413,30 @@
           "type": "uint256"
         }
       ],
-      "name": "sendToLQTYStaking",
+      "name": "returnFromPool",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_sender",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "poolAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sendToPool",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

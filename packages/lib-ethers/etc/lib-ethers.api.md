@@ -72,7 +72,7 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
 // @public
 export interface BlockPolledLiquityStoreExtraState {
     // (undocumented)
-    bammAllowance: boolean;
+    bammAllowance: Decimal;
     blockTag?: number;
     blockTimestamp: number;
     // @internal (undocumented)
@@ -148,7 +148,7 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
     // @internal (undocumented)
     _getActivePool(overrides?: EthersCallOverrides): Promise<Trove>;
     // (undocumented)
-    getBammAllowance(overrides?: EthersCallOverrides): Promise<boolean>;
+    getBammAllowance(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getBammDeposit(address?: string, overrides?: EthersCallOverrides): Promise<BammDeposit>;
     // @internal (undocumented)
@@ -486,7 +486,7 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     // @internal (undocumented)
     _getActivePool(overrides?: EthersCallOverrides): Promise<Trove>;
     // (undocumented)
-    getBammAllowance(overrides?: EthersCallOverrides): Promise<boolean>;
+    getBammAllowance(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getBammDeposit(address?: string, overrides?: EthersCallOverrides): Promise<BammDeposit>;
     // @internal (undocumented)

@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-getBammAllowance(overrides?: EthersCallOverrides): Promise<boolean>;
+getBammAllowance(overrides?: EthersCallOverrides): Promise<Decimal>;
 ```
 
 ## Parameters
@@ -18,5 +18,5 @@ getBammAllowance(overrides?: EthersCallOverrides): Promise<boolean>;
 
 **Returns:**
 
-Promise&lt;boolean&gt;
+Promise&lt;[Decimal](./lib-base.decimal.md)<!-- -->&gt;
 

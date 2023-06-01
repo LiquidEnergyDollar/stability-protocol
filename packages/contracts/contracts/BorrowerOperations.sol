@@ -112,7 +112,9 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         checkContract(_priceFeedAddress);
         checkContract(_sortedTrovesAddress);
         checkContract(_thusdTokenAddress);
-        checkContract(_pcvAddress);
+        if (_pcvAddress != address(0)) {
+            checkContract(_pcvAddress);
+        }
         if (_collateralAddress != address(0)) {
             checkContract(_collateralAddress);
         }
@@ -394,7 +396,9 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         _requireUserAcceptsFee(THUSDFee, _THUSDAmount, _maxFeePercentage);
 
         // Send fee to PCV contract
-        _thusdToken.mint(pcvAddress, THUSDFee);
+        if (pcvAddress != address(0)) {
+            _thusdToken.mint(pcvAddress, THUSDFee);
+        }
         return THUSDFee;
     }
 

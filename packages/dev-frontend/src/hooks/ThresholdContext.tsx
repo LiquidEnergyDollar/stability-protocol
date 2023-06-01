@@ -31,7 +31,7 @@ type ThresholdContextValue = {
 };
 
 type SupportedNetworks = {
-  [key: string]: "homestead" | "goerli";
+  [key: string]: "homestead" | "goerli" | "sepolia";
 };
 
 const ThresholdContext = createContext<ThresholdContextValue | undefined>(undefined);
@@ -48,10 +48,10 @@ const wsParams = (network: string, infuraApiKey: string): [string, string] => [
   network
 ];
 
-const supportedNetworks: SupportedNetworks = { 1: "homestead", 5: "goerli"};
+const supportedNetworks: SupportedNetworks = { 1: "homestead", 5: "goerli", 11155111: "sepolia"};
 
 const getCollateralVersions = async (chainId: number): Promise<CollateralsVersionedDeployments> => {
-  return await getCollateralsDeployments(chainId === 1 ? 'mainnet' : 'goerli');
+  return await getCollateralsDeployments(supportedNetworks[chainId]);
 }
 
 async function getConnections(
@@ -199,8 +199,7 @@ export const ThresholdProvider = ({
     return <>{unsupportedMainnetFallback}</>;
   }
 
-  //Forcing goerli connection
-  if (!connections || chainId !== 5) {
+  if (!connections || !(chainId in supportedNetworks)) {
     return unsupportedNetworkFallback ? <>{unsupportedNetworkFallback(chainId)}</> : <></>;
   }
   if (threshold.length !== connections.length) {
