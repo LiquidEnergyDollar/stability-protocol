@@ -103,12 +103,12 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
       totalRedistributed: this._readable.getTotalRedistributed({ blockTag }),
       total: this._readable.getTotal({ blockTag }),
       thusdInStabilityPool: this._readable.getTHUSDInStabilityPool({ blockTag }),
-      pcvBalance: this._readable.getPCVBalance({ blockTag }),
+      pcvBalance: Decimal.ZERO, // this._readable.getPCVBalance({ blockTag }),
       _riskiestTroveBeforeRedistribution: this._getRiskiestTroveBeforeRedistribution({ blockTag }),
       symbol: this._readable.getSymbol({ blockTag }),
       collateralAddress: this._readable.getCollateralAddress({ blockTag }),
       mintList: this._readable.checkMintList({ blockTag }),
-      bammAllowance: this._readable.getBammAllowance({ blockTag }),
+      bammAllowance: Decimal.ZERO, // this._readable.getBammAllowance({ blockTag }),
       isStabilityPools: this._readable.isStabilityPools({ blockTag }),
       isBorrowerOperations: this._readable.isBorrowerOperations({ blockTag }),
       isTroveManager: this._readable.isTroveManager({ blockTag }),
@@ -125,7 +125,17 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
               blockTag
             }),
             stabilityDeposit: this._readable.getStabilityDeposit(userAddress, { blockTag }),
-            bammDeposit: this._readable.getBammDeposit(userAddress, { blockTag })
+            bammDeposit: new BammDeposit(
+              Decimal.ZERO,
+              Decimal.ZERO,
+              Decimal.ZERO,
+              Decimal.ZERO,
+              Decimal.ZERO,
+              Decimal.ZERO,
+              Decimal.ZERO,
+              Decimal.ZERO,
+            )
+            // this._readable.getBammDeposit(userAddress, { blockTag })
           }
         : {
             accountBalance: Decimal.ZERO,
