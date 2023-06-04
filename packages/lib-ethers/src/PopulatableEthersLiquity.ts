@@ -1365,4 +1365,21 @@ export class PopulatableEthersLiquity
       )
     );
   }
+
+  /** {@inheritDoc @liquity/lib-base#PopulatableLiquity.mintErc20} */
+  async mintErc20(
+    toAddress: string,
+    amount: Decimalish,
+    overrides?: EthersTransactionOverrides
+  ): Promise<PopulatedEthersLiquityTransaction<void>> {
+    const { erc20 } = _getContracts(this._readable.connection);
+    return this._wrapSimpleTransaction(
+      await erc20.estimateAndPopulate.mint(
+        { ...overrides },
+        id,
+        toAddress,
+        Decimal.from(amount).hex
+      )
+    );
+  }
 }

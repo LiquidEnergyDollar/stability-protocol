@@ -620,6 +620,21 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
   }
 
   /**
+   * {@inheritDoc @liquity/lib-base#TransactableLiquity.mintErc20}
+   *
+   * @throws
+   * Throws {@link EthersTransactionFailedError} in case of transaction failure.
+   * Throws {@link EthersTransactionCancelledError} if the transaction is cancelled or replaced.
+   */
+  mintErc20(
+    toAddress: string,
+    amount: Decimalish,
+    overrides?: EthersTransactionOverrides
+  ): Promise<void> {
+    return this.send.mintErc20(toAddress, amount, overrides).then(waitForSuccess);
+  }
+
+  /**
    * {@inheritDoc @liquity/lib-base#TransactableLiquity.claimCollateralSurplus}
    *
    * @throws
