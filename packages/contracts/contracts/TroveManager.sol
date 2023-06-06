@@ -229,7 +229,9 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         checkContract(_priceFeedAddress);
         checkContract(_thusdTokenAddress);
         checkContract(_sortedTrovesAddress);
-        checkContract(_pcvAddress);
+        if (_pcvAddress != address(0)) {
+            checkContract(_pcvAddress);
+        }
 
         borrowerOperationsAddress = _borrowerOperationsAddress;
         activePool = IActivePool(_activePoolAddress);
@@ -974,7 +976,9 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         _requireUserAcceptsFee(totals.collateralFee, totals.totalCollateralDrawn, _maxFeePercentage);
 
         // Send the collateral fee to the PCV contract
-        contractsCache.activePool.sendCollateral(address(contractsCache.pcv), totals.collateralFee);
+        if (address(contractsCache.pcv) != address(0)) {
+            contractsCache.activePool.sendCollateral(address(contractsCache.pcv), totals.collateralFee);
+        }
 
         totals.collateralToSendToRedeemer = totals.totalCollateralDrawn - totals.collateralFee;
 

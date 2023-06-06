@@ -21,7 +21,7 @@ const parseConfig = (json: unknown): ThresholdConfig => {
       const { coingeckoIdsBySymbol } = json;
       config.coingeckoIdsBySymbol = coingeckoIdsBySymbol;
     } else {
-      console.error("Malformed infuraApiKey:");
+      console.error("Malformed coingeckoIdsBySymbol:");
     }
 
     if (hasKey(json, "infuraApiKey") && json.infuraApiKey !== "") {

@@ -78,7 +78,7 @@ const deployContracts = async (
     }),
     defaultPool: await deployContract(deployer, getContractFactory, "DefaultPool", { ...overrides }),
     hintHelpers: await deployContract(deployer, getContractFactory, "HintHelpers", { ...overrides }),
-    pcv: await deployContract(deployer, getContractFactory, "PCV", delay, { ...overrides }),
+    pcv: `0x0000000000000000000000000000000000000000`,
     priceFeed: await deployContract(
       deployer,
       getContractFactory,
@@ -125,16 +125,17 @@ const deployContracts = async (
     { ...overrides }
   );
 
-  const bamm = await deployContract(
-    deployer, 
-    getContractFactory, 
-    "BAMM",
-    chainlink,
-    addresses.stabilityPool,
-    thusdToken,
-    addresses.erc20,
-    { ...overrides }
-  );
+  const bamm = `0x0000000000000000000000000000000000000000`;
+  // const bamm = await deployContract(
+  //   deployer, 
+  //   getContractFactory, 
+  //   "BAMM",
+  //   chainlink,
+  //   addresses.stabilityPool,
+  //   thusdToken,
+  //   addresses.erc20,
+  //   { ...overrides }
+  // );
 
   return [
     {
@@ -273,14 +274,14 @@ const connectContracts = async (
         nonce
       }),
 
-    nonce =>
-      pcv.setAddresses(
-        thusdToken.address,
-        borrowerOperations.address,
-        bamm.address,
-        erc20.address,
-        { ...overrides, nonce }
-      )
+    // nonce =>
+    //   pcv.setAddresses(
+    //     thusdToken.address,
+    //     borrowerOperations.address,
+    //     bamm.address,
+    //     erc20.address,
+    //     { ...overrides, nonce }
+    //   )
   ];
 
   const txs = await Promise.all(connections.map((connect, i) => connect(txCount + i)));

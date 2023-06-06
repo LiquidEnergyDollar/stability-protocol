@@ -1,0 +1,15 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "BrokenMockTellor",
+  "sourceName": "contracts/TestContracts/MockTellor.sol",
+  "abi": [
+    {
+      "stateMutability": "nonpayable",
+      "type": "fallback"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50604a80601d6000396000f3fe6080604052348015600f57600080fd5b600080fdfea26469706673582212202155aa9336e24c60737e6695861385afcfdf510ee55d91e0508a798e6043680964736f6c63430008110033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b600080fdfea26469706673582212202155aa9336e24c60737e6695861385afcfdf510ee55d91e0508a798e6043680964736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -35,11 +35,55 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newCommunityIssuanceAddress",
+          "name": "_newCollateralAddress",
           "type": "address"
         }
       ],
-      "name": "CommunityIssuanceAddressChanged",
+      "name": "CollateralAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_depositor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_collateral",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_THUSDLoss",
+          "type": "uint256"
+        }
+      ],
+      "name": "CollateralGainWithdrawn",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "CollateralSent",
       "type": "event"
     },
     {
@@ -75,40 +119,9 @@
           "internalType": "uint256",
           "name": "_S",
           "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_G",
-          "type": "uint256"
         }
       ],
       "name": "DepositSnapshotUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_depositor",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_ETH",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_LUSDLoss",
-          "type": "uint256"
-        }
-      ],
-      "name": "ETHGainWithdrawn",
       "type": "event"
     },
     {
@@ -122,189 +135,6 @@
         }
       ],
       "name": "EpochUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_to",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "EtherSent",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_kickbackRate",
-          "type": "uint256"
-        }
-      ],
-      "name": "FrontEndRegistered",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_P",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_G",
-          "type": "uint256"
-        }
-      ],
-      "name": "FrontEndSnapshotUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_newFrontEndStake",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_depositor",
-          "type": "address"
-        }
-      ],
-      "name": "FrontEndStakeChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_depositor",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        }
-      ],
-      "name": "FrontEndTagSet",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_G",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint128",
-          "name": "_epoch",
-          "type": "uint128"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint128",
-          "name": "_scale",
-          "type": "uint128"
-        }
-      ],
-      "name": "G_Updated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_depositor",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_LQTY",
-          "type": "uint256"
-        }
-      ],
-      "name": "LQTYPaidToDepositor",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_LQTY",
-          "type": "uint256"
-        }
-      ],
-      "name": "LQTYPaidToFrontEnd",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_newTHUSDTokenAddress",
-          "type": "address"
-        }
-      ],
-      "name": "THUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -394,7 +224,7 @@
           "type": "uint256"
         }
       ],
-      "name": "StabilityPoolETHBalanceUpdated",
+      "name": "StabilityPoolCollateralBalanceUpdated",
       "type": "event"
     },
     {
@@ -407,7 +237,20 @@
           "type": "uint256"
         }
       ],
-      "name": "StabilityPoolLUSDBalanceUpdated",
+      "name": "StabilityPoolTHUSDBalanceUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_newTHUSDTokenAddress",
+          "type": "address"
+        }
+      ],
+      "name": "THUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -443,14 +286,8 @@
       "type": "event"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        }
-      ],
-      "name": "getCompoundedFrontEndStake",
+      "inputs": [],
+      "name": "getCollateralBalance",
       "outputs": [
         {
           "internalType": "uint256",
@@ -469,7 +306,7 @@
           "type": "address"
         }
       ],
-      "name": "getCompoundedLUSDDeposit",
+      "name": "getCompoundedTHUSDDeposit",
       "outputs": [
         {
           "internalType": "uint256",
@@ -488,26 +325,7 @@
           "type": "address"
         }
       ],
-      "name": "getDepositorETHGain",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_depositor",
-          "type": "address"
-        }
-      ],
-      "name": "getDepositorLQTYGain",
+      "name": "getDepositorCollateralGain",
       "outputs": [
         {
           "internalType": "uint256",
@@ -520,39 +338,7 @@
     },
     {
       "inputs": [],
-      "name": "getETH",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_frontEnd",
-          "type": "address"
-        }
-      ],
-      "name": "getFrontEndLQTYGain",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getTotalLUSDDeposits",
+      "name": "getTotalTHUSDDeposits",
       "outputs": [
         {
           "internalType": "uint256",
@@ -587,27 +373,9 @@
           "internalType": "uint256",
           "name": "_amount",
           "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_frontEndTag",
-          "type": "address"
         }
       ],
       "name": "provideToSP",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_kickbackRate",
-          "type": "uint256"
-        }
-      ],
-      "name": "registerFrontEnd",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -646,11 +414,24 @@
         },
         {
           "internalType": "address",
-          "name": "_communityIssuanceAddress",
+          "name": "_collateralAddress",
           "type": "address"
         }
       ],
       "name": "setAddresses",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateCollateralBalance",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -668,7 +449,7 @@
           "type": "address"
         }
       ],
-      "name": "withdrawETHGainToTrove",
+      "name": "withdrawCollateralGainToTrove",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

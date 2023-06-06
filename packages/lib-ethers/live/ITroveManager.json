@@ -86,57 +86,18 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "_lqtyStakingAddress",
-          "type": "address"
-        }
-      ],
-      "name": "LQTYStakingAddressChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_lqtyTokenAddress",
-          "type": "address"
-        }
-      ],
-      "name": "LQTYTokenAddressChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
           "internalType": "uint256",
-          "name": "_L_ETH",
+          "name": "_L_Collateral",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_L_LUSDDebt",
+          "name": "_L_THUSDDebt",
           "type": "uint256"
         }
       ],
       "name": "LTermsUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_newTHUSDTokenAddress",
-          "type": "address"
-        }
-      ],
-      "name": "THUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -176,11 +137,24 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_LUSDGasCompensation",
+          "name": "_THUSDGasCompensation",
           "type": "uint256"
         }
       ],
       "name": "Liquidation",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_pcvAddress",
+          "type": "address"
+        }
+      ],
+      "name": "PCVAddressChanged",
       "type": "event"
     },
     {
@@ -202,25 +176,25 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_attemptedLUSDAmount",
+          "name": "_attemptedTHUSDAmount",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_actualLUSDAmount",
+          "name": "_actualTHUSDAmount",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_ETHSent",
+          "name": "_collateralSent",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_ETHFee",
+          "name": "_collateralFee",
           "type": "uint256"
         }
       ],
@@ -270,6 +244,19 @@
         }
       ],
       "name": "SystemSnapshotsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_newTHUSDTokenAddress",
+          "type": "address"
+        }
+      ],
+      "name": "THUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -341,13 +328,13 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_L_ETH",
+          "name": "_L_Collateral",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_L_LUSDDebt",
+          "name": "_L_THUSDDebt",
           "type": "uint256"
         }
       ],
@@ -527,7 +514,7 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "LUSDDebt",
+          "name": "THUSDDebt",
           "type": "uint256"
         }
       ],
@@ -546,7 +533,7 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_LUSDDebt",
+          "name": "_THUSDDebt",
           "type": "uint256"
         }
       ],
@@ -633,12 +620,12 @@
         },
         {
           "internalType": "uint256",
-          "name": "pendingLUSDDebtReward",
+          "name": "pendingTHUSDDebtReward",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "pendingETHReward",
+          "name": "pendingCollateralReward",
           "type": "uint256"
         }
       ],
@@ -672,7 +659,7 @@
           "type": "address"
         }
       ],
-      "name": "getPendingETHReward",
+      "name": "getPendingCollateralReward",
       "outputs": [
         {
           "internalType": "uint256",
@@ -691,7 +678,7 @@
           "type": "address"
         }
       ],
-      "name": "getPendingLUSDDebtReward",
+      "name": "getPendingTHUSDDebtReward",
       "outputs": [
         {
           "internalType": "uint256",
@@ -706,7 +693,7 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_ETHDrawn",
+          "name": "_collateralDrawn",
           "type": "uint256"
         }
       ],
@@ -969,36 +956,10 @@
     },
     {
       "inputs": [],
-      "name": "lqtyStaking",
+      "name": "pcv",
       "outputs": [
         {
-          "internalType": "contract ILQTYStaking",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "lqtyToken",
-      "outputs": [
-        {
-          "internalType": "contract ILQTYToken",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "thusdToken",
-      "outputs": [
-        {
-          "internalType": "contract ITHUSDToken",
+          "internalType": "contract IPCV",
           "name": "",
           "type": "address"
         }
@@ -1023,7 +984,7 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_LUSDAmount",
+          "name": "_THUSDAmount",
           "type": "uint256"
         },
         {
@@ -1124,12 +1085,7 @@
         },
         {
           "internalType": "address",
-          "name": "_lqtyTokenAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_lqtyStakingAddress",
+          "name": "_pcvAddress",
           "type": "address"
         }
       ],
@@ -1162,6 +1118,19 @@
       "outputs": [
         {
           "internalType": "contract IStabilityPool",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "thusdToken",
+      "outputs": [
+        {
+          "internalType": "contract ITHUSDToken",
           "name": "",
           "type": "address"
         }

@@ -25,6 +25,16 @@
           "name": "v1"
         }
       ]
+    },
+    {
+      "path": "deployments/default/tst",
+      "name": "tst",
+      "subfolders": [
+        {
+          "path": "deployments/default/tst/v0",
+          "name": "v0"
+        }
+      ]
     }
   ]
 }
