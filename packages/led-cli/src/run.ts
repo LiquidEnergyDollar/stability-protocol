@@ -83,57 +83,61 @@ async function run() {
             resolve(fuzzy.filter(input, methodNames).map((el: any) => el.original));
         });
       }
-    // Ask the user which method they want to call
-    const {methodName} = await inquirer.prompt([
-        {
-            type: 'autocomplete',
-            name: 'methodName',
-            message: 'Which method do you want to call?',
-            source: searchMethods
-        }
-    ]);
 
-    // Prompt for the arguments of the method
-    const argsSpecs = methodArgs[(methodName as string)];
-    const args = [];
-    for (const argSpec of argsSpecs) {
-        const {arg} = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'arg',
-            message: `Enter ${argSpec.name} (${argSpec.type}):`,
-            // Simple type checking
-            // validate: (value: any) => typeof value === argSpec.type || `${argSpec.name} must be a ${argSpec.type}`
-        }
+    // Continue to prompt user for actions until they force exit
+    while(true) {
+        // Ask the user which method they want to call
+        const {methodName} = await inquirer.prompt([
+            {
+                type: 'autocomplete',
+                name: 'methodName',
+                message: 'Which method do you want to call?',
+                source: searchMethods
+            }
         ]);
-        args.push(arg);
-    }
 
-    // TODO: Take some of these as command line inputs
-    const deploymentString = fs.readFileSync(
-        path.join("..", "lib-ethers", "deployments", "default", DEFAULT_COLLATERAL_FOR_TESTING, "v0", `${NETWORK}.json`), 
-        'utf8'
+        // Prompt for the arguments of the method
+        const argsSpecs = methodArgs[(methodName as string)];
+        const args = [];
+        for (const argSpec of argsSpecs) {
+            const {arg} = await inquirer.prompt([
+            {
+                type: 'input',
+                name: 'arg',
+                message: `Enter ${argSpec.name} (${argSpec.type}):`,
+                // Simple type checking
+                // validate: (value: any) => typeof value === argSpec.type || `${argSpec.name} must be a ${argSpec.type}`
+            }
+            ]);
+            args.push(arg);
+        }
+
+        // TODO: Take some of these as command line inputs
+        const deploymentString = fs.readFileSync(
+            path.join("..", "lib-ethers", "deployments", "default", DEFAULT_COLLATERAL_FOR_TESTING, "v0", `${NETWORK}.json`), 
+            'utf8'
+            );
+        const deployment = JSON.parse(deploymentString);
+
+        console.log("process.env.DEPLOYER_PRIVATE_KEY" + process.env.DEPLOYER_PRIVATE_KEY);
+        const deployerAccount = process.env.DEPLOYER_PRIVATE_KEY || Wallet.createRandom().privateKey;
+
+        const provider = new ethers.providers.InfuraProvider(
+            NETWORK == "mainnet" ? "homestead" : NETWORK,
+            process.env.INFURA_API_KEY
         );
-    const deployment = JSON.parse(deploymentString);
-
-    console.log("process.env.DEPLOYER_PRIVATE_KEY" + process.env.DEPLOYER_PRIVATE_KEY);
-    const deployerAccount = process.env.DEPLOYER_PRIVATE_KEY || Wallet.createRandom().privateKey;
-
-    const provider = new ethers.providers.InfuraProvider(
-        NETWORK == "mainnet" ? "homestead" : NETWORK,
-        process.env.INFURA_API_KEY
-    );
-    const signer = new Wallet(deployerAccount, provider);
-    console.log("Calling contract from " + await signer.getAddress());
-    const ethersLiquity: Record<string, any> = EthersLiquity._from(
-        _connectToDeployment(DEFAULT_COLLATERAL_FOR_TESTING, DEFAULT_VERSION_FOR_TESTING, deployment, signer, {
-            userAddress: await signer.getAddress()
-        })
-    );
-    // Call the method and log the result    
-    const result = await (ethersLiquity as any)[methodName](...args);
-    if (result) {
-        console.log(result.toString());
+        const signer = new Wallet(deployerAccount, provider);
+        console.log("Calling contract from " + await signer.getAddress());
+        const ethersLiquity: Record<string, any> = EthersLiquity._from(
+            _connectToDeployment(DEFAULT_COLLATERAL_FOR_TESTING, DEFAULT_VERSION_FOR_TESTING, deployment, signer, {
+                userAddress: await signer.getAddress()
+            })
+        );
+        // Call the method and log the result    
+        const result = await (ethersLiquity as any)[methodName](...args);
+        if (result) {
+            console.log(result.toString());
+        }
     }
 }
 
