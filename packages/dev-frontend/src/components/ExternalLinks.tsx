@@ -1,13 +1,13 @@
 import { Flex, Image, Link, useColorMode } from "theme-ui";
 import { Icon } from "./Icon";
-import { GREY_FILTER } from "../utils/constants";
+import { DARK_FILTER, GREY_FILTER } from "../utils/constants";
 
 export const ExternalLinks = (): JSX.Element => {
   const [colorMode] = useColorMode();
 
   return (
     <>
-      <Link variant="nav" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">
+      <Link sx={{display:"none"}} variant="nav" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">
         <Icon name="book" />
         Documentation
       </Link>
@@ -17,11 +17,11 @@ export const ExternalLinks = (): JSX.Element => {
         alignSelf: "center",
         bottom: 0
       }}>
-        <Link variant="socialIcons" href="https://discord.com/invite/WXK9PC6SRF" target="_blank">
-          <Image src="./icons/discord.svg" sx={colorMode === "darkGrey" ? {filter: GREY_FILTER} : {}} />
+        <Link variant="socialIcons" href="https://discord.gg/mE2u9YuA47" target="_blank">
+          <Image src="./icons/discord.svg" sx={colorMode === "darkGrey" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
         </Link>
-        <Link variant="socialIcons" href="https://github.com/Threshold-USD/dev" target="_blank">
-          <Image src="./icons/github.svg" sx={colorMode === "darkGrey" ? {filter: GREY_FILTER} : {}} />
+        <Link variant="socialIcons" href="https://github.com/LiquidEnergyDollar" target="_blank">
+          <Image src="./icons/github.svg" sx={colorMode === "darkGrey" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
         </Link>
       </Flex>
     </>

@@ -36,6 +36,7 @@ export const VaultCard = ({ variant = "mainCards" }: VaultCardProps): JSX.Elemen
         tooltip={`To mint and borrow thUSD you must open a vault and deposit a certain amount of collateral (${ symbol }) to it.`}
         action={vaultStatus(currentView.initialView)}
         token={ symbol }
+        tokenIcon="./icons/usd.png"
         path='/borrow'
       >
         {erc20TokenBalance.eq(0) ? '--' : erc20TokenBalance.prettify()}

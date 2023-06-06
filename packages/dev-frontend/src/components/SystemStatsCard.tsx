@@ -122,22 +122,10 @@ export const SystemStatsCard = ({ variant = "info", IsPriceEditable }: SystemSta
             tooltip={`The total ${ COIN } currently held in the Stability Pool, expressed as an amount and a fraction of the ${ COIN } supply.`}
           >
             {thusdInSP.shorten()}
-          </SystemStat> */}
-          <SystemStat
-            info={`${ COIN } in B.AMM`}
-            tooltip={`The total ${ COIN } currently held in the Backstop AMM, expressed as an amount and a fraction of the ${ COIN } supply.`}
-          >
-            {thusdInBammm.shorten()}
-          </SystemStat>
-          <SystemStat
-            info={`${ COIN } in PCV`}
-            tooltip={`The total ${ COIN } currently held in the PCV, expressed as an amount and a fraction of the ${ COIN } supply.`}
-          >
-            {pcvBal.prettify()}
-          </SystemStat>             
+          </SystemStat> */}           
           <SystemStat
             info={`${ COIN } Supply`}
-            tooltip={`The total ${ COIN } minted by the Threshold USD Protocol.`}
+            tooltip={`The total ${ COIN } minted by the LED Protocol.`}
           >
             {thusdSupply.shorten()}
           </SystemStat>

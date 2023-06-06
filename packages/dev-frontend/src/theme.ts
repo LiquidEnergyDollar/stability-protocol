@@ -172,7 +172,8 @@ const theme: Theme = {
   },
   
   colors: {
-    primary: baseColors.purple,
+    primary: baseColors.yellow,
+    title: baseColors.yellow,
     secondary: baseColors.blue,
     terciary: baseColors.lightBlue,
     accent: baseColors.cyan,
@@ -186,7 +187,7 @@ const theme: Theme = {
     greytext: baseColors.grey,
     invalid: "pink",
   
-    activeMenu: baseColors.purple,
+    activeMenu: baseColors.yellow,
     menu: "#939393",
     text: "#191d28",
     heading: "#6A7793",
@@ -199,7 +200,7 @@ const theme: Theme = {
     metaMaskInnerButtonBg: "#CBD5E0",  
     modes: {
       dark: {
-        primary: "#7D00FF",      
+        primary: "#7D00FF",
         info: baseColors.red,
         border: "#9974FF23",
         greytext: "#b1bccc",
@@ -216,7 +217,8 @@ const theme: Theme = {
         metaMaskInnerButtonBg: "#200c5a"
       },
       darkGrey: {
-        primary: "#4A5568",
+        primary: "#4A5568",  
+        title: baseColors.white,
         info: baseColors.red,
         border: "#72727223",
         greytext: "#B1BCCC",
@@ -245,6 +247,9 @@ const theme: Theme = {
     address: {
       fontFamily: "monospace",
       fontSize: 1
+    },
+    heading: {
+      color: "title"
     }
   },
 
@@ -607,7 +612,7 @@ const theme: Theme = {
       color: "slate",
       fontSize: 1,
       fontWeight: "body"
-    },
+    }
 
   },
 
@@ -683,8 +688,8 @@ const theme: Theme = {
       alignItems: "center",
       fontSize: "0.87rem", 
       fontWeight: "extrabold",
-      letterSpacing: -0.7,
-    },
+      letterSpacing: -0.7
+    }
   }
 };
 

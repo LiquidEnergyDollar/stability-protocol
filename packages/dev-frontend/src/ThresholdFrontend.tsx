@@ -39,7 +39,7 @@ const UnsupportedMainnetFallback = (): JSX.Element => (
     </Heading>
 
     <Paragraph sx={{ mb: 3 }}>
-      Please change your network to Goerli.
+      Please change your network to Sepolia.
     </Paragraph>
   </Flex>
 );
@@ -56,10 +56,10 @@ export const ThresholdFrontend = ({ loader }: ThresholdFrontendProps): JSX.Eleme
       }}
     >
       <Heading sx={{ mb: 3 }}>
-        <Icon name="exclamation-triangle" /> Threshold USD is not yet deployed to{" "}
+        <Icon name="exclamation-triangle" /> LED is not yet deployed to{" "}
         {chainId === 1 ? "mainnet" : "this network"}.
       </Heading>
-      Please switch to Goerli.
+      Please switch to Sepolia.
     </Flex>
   );
 

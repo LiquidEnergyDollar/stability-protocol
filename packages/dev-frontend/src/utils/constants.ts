@@ -1,4 +1,4 @@
-export const COIN = "thUSD";
+export const COIN = "LED";
 
 const generateFilter = (brightness: number, saturate: number, invert: number, sepia: number, secondSaturate: number, hueRotate: number, secondBrightness: number, contrast: number): string => {
  return `brightness(${brightness}%) saturate(${saturate}%) invert(${invert}%) sepia(${sepia}%) saturate(${secondSaturate}%) hue-rotate(${hueRotate}deg) brightness(${secondBrightness}%) contrast(${contrast}%)`;

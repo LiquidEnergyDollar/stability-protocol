@@ -69,7 +69,7 @@ export const NoVault = (props: NoVaultProps): JSX.Element => {
           </ActionDescription>
           { symbol } available
           <Flex variant="layout.balanceRow">
-            <GenericIcon imgSrc="./icons/threshold-icon.svg" height={"18px"} />
+            <GenericIcon imgSrc="./icons/led-icon.png" height={"18px"} />
             <Box sx={{ fontSize: 3 }}>
               {!erc20TokenBalance.eq(0) ? erc20TokenBalance.prettify() : '--'}
             </Box>
@@ -88,7 +88,8 @@ export const NoVault = (props: NoVaultProps): JSX.Element => {
             fontWeight: "body",
             justifyContent: "space-between",
             width: "100%",
-            px: "1em"
+            px: "1em",
+            display: "none !important"
           }}>
             <Flex>
               <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>

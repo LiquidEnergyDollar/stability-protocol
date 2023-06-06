@@ -39,7 +39,7 @@ const liquidatableInRecoveryMode = (
   if (collateralRatio.gte(MINIMUM_COLLATERAL_RATIO) && collateralRatio.lt(totalCollateralRatio)) {
     return [
       vault.debt.lte(thusdInStabilityPool),
-      "There's not enough thUSD in the Stability pool to cover the debt"
+      `There's not enough ${COIN} in the Stability pool to cover the debt`
     ] as const;
   } else {
     return liquidatableInNormalMode(vault, price);
@@ -344,7 +344,8 @@ export const RiskyVaults = ({ version, collateral, isMintList }: RiskyVaultsProp
             justifyContent: "space-between",
             width: "100%",
             px: "1em",
-            mt: 3
+            mt: 3,
+            display: "none !important"
           }}>
             <Flex>
               <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>

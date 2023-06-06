@@ -138,7 +138,7 @@ export const oracleAddresses: INetworkOracles = {
       chainlink: "0x694AA1769357215DE4FAC081bf1f309aDC325306",
       tellor: "0x20374E579832859f180536A69093A126Db1c8aE9" // Wrong address
     },
-    tst: {
+    usd: {
       chainlink: "0x694AA1769357215DE4FAC081bf1f309aDC325306", // Just using ETH for now
       tellor: "0x20374E579832859f180536A69093A126Db1c8aE9" // Wrong address
     }

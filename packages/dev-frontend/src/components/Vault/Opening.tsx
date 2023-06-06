@@ -298,7 +298,8 @@ export const Opening = (props: OpeningProps): JSX.Element => {
             justifyContent: "space-between",
             width: "100%",
             px: "1em",
-            pt: "1em"
+            pt: "1em",
+            display: "none !important"
           }}>
             <Flex>
               <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>

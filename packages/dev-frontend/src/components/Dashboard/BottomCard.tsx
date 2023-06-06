@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, Card, Flex, Link, Text, useColorMode } from "theme-ui";
 import { NavLink } from "react-router-dom";
 
-import { COIN, DARK_FILTER } from "../../utils/constants";
+import { COIN } from "../../utils/constants";
 import { GenericIcon } from "../GenericIcon";
 import { InfoIcon } from "../InfoIcon";
 
@@ -11,6 +11,7 @@ type BottomCardProps = {
   tooltip: string;
   action: string;
   token: string;
+  tokenIcon: string;
   path: string;
   isPoweredByBProtocol?: boolean;
   disabled?: boolean;
@@ -20,7 +21,8 @@ type BottomCardProps = {
 export const BottomCard = ({
   title,
   action, 
-  token, 
+  token,
+  tokenIcon,
   path, 
   isPoweredByBProtocol,
   disabled,
@@ -45,12 +47,6 @@ export const BottomCard = ({
                 You can earn {COIN} rewards by depositing {COIN} .
               </Card>} />
           </Flex>
-          {isPoweredByBProtocol && (
-            <Flex sx={{ gap: "0.7rem", justifyContent: "center", alignContent: "center" }}>
-              <Text sx={{ mt: "-0.1rem" }}>Powered By</Text>
-              <GenericIcon imgSrc={colorMode === "dark" || colorMode === "darkGrey" ? "./icons/white-b-protocol.png" : "./icons/black-b-protocol.png"} height="18px" />
-            </Flex>
-          )}
         </Flex>
         <Flex sx={{
           width: "100%",
@@ -61,7 +57,7 @@ export const BottomCard = ({
         }}>
           {token} available 
           <Flex variant="layout.balanceRow" sx={{ color: "inputText"}}>
-            <GenericIcon imgSrc="./icons/threshold-icon.svg" sx={colorMode === "darkGrey" ? {filter: DARK_FILTER} : {}} height={"18px"} />
+            <GenericIcon imgSrc={tokenIcon} height={"18px"} />
             <Box sx={{ fontSize: 3 }}>
               {children}
             </Box>
@@ -78,7 +74,8 @@ export const BottomCard = ({
             alignSelf: "center",
             fontSize: 11,
             fontWeight: "body",
-            pb: "2.4em"
+            pb: "2.4em",
+            visibility: "hidden"
           }}>
             <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>
             in the documentation
