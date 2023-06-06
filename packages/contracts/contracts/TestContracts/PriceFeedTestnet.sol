@@ -32,4 +32,8 @@ contract PriceFeedTestnet is Ownable, IPriceFeed {
         _price = price;
         return true;
     }
+
+    function setAddresses(address a1, address a2, address a3) public {
+       // do nothing
+    }
 }

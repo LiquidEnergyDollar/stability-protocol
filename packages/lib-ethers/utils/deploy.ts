@@ -20,6 +20,12 @@ export const setSilent = (s: boolean): void => {
   silent = s;
 };
 
+// TODO: Set when LED Oracle is deployed
+const LEDOracleAddress = "0x0";
+
+// TODO: Set when Uniswap V2 pair is deployed
+const uniV2PairAddress = "0x0";
+
 const deployContractAndGetBlockNumber = async (
   deployer: Signer,
   getContractFactory: (name: string, signer: Signer) => Promise<ContractFactory>,
@@ -137,12 +143,29 @@ const deployContracts = async (
   //   { ...overrides }
   // );
 
+  const piCalculator = await deployContract(
+    deployer,
+    getContractFactory,
+    "PICalculator",
+    // These are taken from the production RAI deployment
+    // Strings are used for BigNum conversion
+    "222002205862",                                   // Kp
+    "16442",                                          // Ki
+    "999999711200000000000000000",                    // perSecondCumulativeLeak
+    "21600",                                          // integralPeriodSize
+    "1000000000000000000",                            // noiseBarrier
+    "1000000000000000000000000000000000000000000000", // feedbackOutputUpperBound
+    "-999999999999999999999999999",                   // feedbackOutputLowerBound
+    []                                                // importedState (start empty)
+  )
+
   return [
     {
       ...addresses,
       bamm: bamm,
       thusdToken: thusdToken,
       chainlink: chainlink as string,
+      piCalculator: piCalculator,
       multiTroveGetter: await deployContract(
         deployer,
         getContractFactory,
@@ -181,7 +204,8 @@ const connectContracts = async (
     bLens,
     chainlink,
     gasPool,
-    erc20
+    erc20,
+    piCalculator
   }: _LiquityContracts,
   deployer: Signer,
   overrides?: Overrides
@@ -282,6 +306,14 @@ const connectContracts = async (
     //     erc20.address,
     //     { ...overrides, nonce }
     //   )
+
+    nonce =>
+      priceFeed.setAddresses(
+        LEDOracleAddress,
+        piCalculator.address,
+        uniV2PairAddress,
+        {...overrides, nonce}
+      )
   ];
 
   const txs = await Promise.all(connections.map((connect, i) => connect(txCount + i)));

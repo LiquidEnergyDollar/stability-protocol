@@ -30,6 +30,7 @@ import bLensAbi from "../abi/BLens.json";
 import chainlinkTestnetAbi from "../abi/ChainlinkTestnet.json";
 import gasPoolAbi from "../abi/GasPool.json";
 import erc20Abi from "../abi/ERC20Test.json";
+import piCalculatorAbi from "../abi/PIScaledPerSecondCalculator.json";
 
 import {
   ActivePool,
@@ -50,6 +51,7 @@ import {
   ChainlinkTestnet,
   GasPool,
   ERC20Test,
+  PIScaledPerSecondCalculator
 } from "../types";
 
 import { EthersProvider, EthersSigner } from "./types";
@@ -178,6 +180,7 @@ export interface _LiquityContracts {
   chainlink: ChainlinkTestnet;
   gasPool: GasPool;
   erc20: ERC20Test;
+  piCalculator: PIScaledPerSecondCalculator
 }
 
 /** @internal */
@@ -211,6 +214,7 @@ const getAbi = (priceFeedIsTestnet: boolean): LiquityContractAbis => ({
   gasPool: gasPoolAbi,
   collSurplusPool: collSurplusPoolAbi,
   erc20: erc20Abi,
+  piCalculator: piCalculatorAbi
 });
 
 /** @internal */

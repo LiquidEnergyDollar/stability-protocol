@@ -499,38 +499,108 @@ export interface MultiTroveGetter
   };
 }
 
+interface PIScaledPerSecondCalculatorCalls {
+  adat(_overrides?: CallOverrides): Promise<BigNumber>;
+  ag(_overrides?: CallOverrides): Promise<BigNumber>;
+  allReaderToggle(_overrides?: CallOverrides): Promise<BigNumber>;
+  authorities(arg0: string, _overrides?: CallOverrides): Promise<BigNumber>;
+  breaksNoiseBarrier(piSum: BigNumberish, redemptionPrice: BigNumberish, _overrides?: CallOverrides): Promise<boolean>;
+  dgt(_overrides?: CallOverrides): Promise<BigNumber>;
+  dos(i: BigNumberish, _overrides?: CallOverrides): Promise<[BigNumber, BigNumber, BigNumber]>;
+  drr(_overrides?: CallOverrides): Promise<BigNumber>;
+  folb(_overrides?: CallOverrides): Promise<BigNumber>;
+  foub(_overrides?: CallOverrides): Promise<BigNumber>;
+  getBoundedRedemptionRate(piOutput: BigNumberish, _overrides?: CallOverrides): Promise<[BigNumber, BigNumber]>;
+  getGainAdjustedPIOutput(proportionalTerm: BigNumberish, integralTerm: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  getGainAdjustedTerms(proportionalTerm: BigNumberish, integralTerm: BigNumberish, _overrides?: CallOverrides): Promise<[BigNumber, BigNumber]>;
+  getLastIntegralTerm(_overrides?: CallOverrides): Promise<BigNumber>;
+  getLastProportionalTerm(_overrides?: CallOverrides): Promise<BigNumber>;
+  getNextPriceDeviationCumulative(proportionalTerm: BigNumberish, accumulatedLeak: BigNumberish, _overrides?: CallOverrides): Promise<[BigNumber, BigNumber]>;
+  getNextRedemptionRate(marketPrice: BigNumberish, redemptionPrice: BigNumberish, accumulatedLeak: BigNumberish, _overrides?: CallOverrides): Promise<[BigNumber, BigNumber, BigNumber, BigNumber]>;
+  hcd(i: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  ips(_overrides?: CallOverrides): Promise<BigNumber>;
+  lut(_overrides?: CallOverrides): Promise<BigNumber>;
+  nb(_overrides?: CallOverrides): Promise<BigNumber>;
+  oll(_overrides?: CallOverrides): Promise<BigNumber>;
+  pdc(_overrides?: CallOverrides): Promise<BigNumber>;
+  pscl(_overrides?: CallOverrides): Promise<BigNumber>;
+  readers(arg0: string, _overrides?: CallOverrides): Promise<BigNumber>;
+  rt(marketPrice: BigNumberish, redemptionPrice: BigNumberish, accumulatedLeak: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  seedProposer(_overrides?: CallOverrides): Promise<string>;
+  sg(_overrides?: CallOverrides): Promise<BigNumber>;
+  tlv(_overrides?: CallOverrides): Promise<BigNumber>;
+}
+
+interface PIScaledPerSecondCalculatorTransactions {
+  addAuthority(account: string, _overrides?: Overrides): Promise<void>;
+  addReader(account: string, _overrides?: Overrides): Promise<void>;
+  computeRate(marketPrice: BigNumberish, redemptionPrice: BigNumberish, accumulatedLeak: BigNumberish, _overrides?: Overrides): Promise<BigNumber>;
+  modifyParameters(parameter: BytesLike, val: BigNumberish, _overrides?: Overrides): Promise<void>;
+  modifyParameters(parameter: BytesLike, addr: string, _overrides?: Overrides): Promise<void>;
+  modifyParameters(parameter: BytesLike, val: BigNumberish, _overrides?: Overrides): Promise<void>;
+  removeAuthority(account: string, _overrides?: Overrides): Promise<void>;
+  removeReader(account: string, _overrides?: Overrides): Promise<void>;
+}
+
+export interface PIScaledPerSecondCalculator
+  extends _TypedLiquityContract<PIScaledPerSecondCalculatorCalls, PIScaledPerSecondCalculatorTransactions> {
+  readonly filters: {
+  };
+}
+
 interface PriceFeedCalls {
   DECIMAL_PRECISION(_overrides?: CallOverrides): Promise<BigNumber>;
-  MAX_PRICE_DEVIATION_FROM_PREVIOUS_ROUND(_overrides?: CallOverrides): Promise<BigNumber>;
-  MAX_PRICE_DIFFERENCE_BETWEEN_ORACLES(_overrides?: CallOverrides): Promise<BigNumber>;
+  LEDPrice(_overrides?: CallOverrides): Promise<BigNumber>;
+  LEDPriceUpdateTime(_overrides?: CallOverrides): Promise<BigNumber>;
   NAME(_overrides?: CallOverrides): Promise<string>;
-  TARGET_DIGITS(_overrides?: CallOverrides): Promise<BigNumber>;
-  TELLOR_DIGITS(_overrides?: CallOverrides): Promise<BigNumber>;
-  TIMEOUT(_overrides?: CallOverrides): Promise<BigNumber>;
+  RAY(_overrides?: CallOverrides): Promise<BigNumber>;
+  WAD(_overrides?: CallOverrides): Promise<BigNumber>;
+  addition(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  deviationFactor(_overrides?: CallOverrides): Promise<BigNumber>;
+  deviationFactorUpdateTime(_overrides?: CallOverrides): Promise<BigNumber>;
   isOwner(_overrides?: CallOverrides): Promise<boolean>;
-  lastGoodPrice(_overrides?: CallOverrides): Promise<BigNumber>;
+  led(_overrides?: CallOverrides): Promise<string>;
+  minimum(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  multiply(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
   owner(_overrides?: CallOverrides): Promise<string>;
-  priceAggregator(_overrides?: CallOverrides): Promise<string>;
-  status(_overrides?: CallOverrides): Promise<number>;
-  tellorCaller(_overrides?: CallOverrides): Promise<string>;
+  pidCalculator(_overrides?: CallOverrides): Promise<string>;
+  rad(x: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  ray(x: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  rdivide(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  redemptionRate(_overrides?: CallOverrides): Promise<BigNumber>;
+  redemptionRateUpdateTime(_overrides?: CallOverrides): Promise<BigNumber>;
+  rmultiply(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  rpower(x: BigNumberish, n: BigNumberish, base: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  subtract(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  uniV2Pair(_overrides?: CallOverrides): Promise<string>;
+  wdivide(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
+  wmultiply(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
 }
 
 interface PriceFeedTransactions {
   fetchPrice(_overrides?: Overrides): Promise<BigNumber>;
-  setAddresses(_priceAggregatorAddress: string, _tellorCallerAddress: string, _overrides?: Overrides): Promise<void>;
+  setAddresses(_ledAddress: string, _pidCalculatorAddress: string, _uniV2Pair: string, _overrides?: Overrides): Promise<void>;
   transferOwnership(newOwner: string, _overrides?: Overrides): Promise<void>;
+  updateAll(_overrides?: Overrides): Promise<void>;
+  updateDeviationFactor(_overrides?: Overrides): Promise<void>;
+  updateLEDPrice(_overrides?: Overrides): Promise<void>;
+  updateRate(_overrides?: Overrides): Promise<void>;
 }
 
 export interface PriceFeed
   extends _TypedLiquityContract<PriceFeedCalls, PriceFeedTransactions> {
   readonly filters: {
-    LastGoodPriceUpdated(_lastGoodPrice?: null): EventFilter;
+    LastGoodPrice(newPrice?: null): EventFilter;
     OwnershipTransferred(previousOwner?: string | null, newOwner?: string | null): EventFilter;
-    PriceFeedStatusChanged(newStatus?: null): EventFilter;
+    UpdateDeviationFactor(deviationFactor?: null): EventFilter;
+    UpdateLEDPrice(ledPrice?: null): EventFilter;
+    UpdateRedemptionRate(marketPrice?: null, redemptionPrice?: null, redemptionRate?: null): EventFilter;
   };
-  extractEvents(logs: Log[], name: "LastGoodPriceUpdated"): _TypedLogDescription<{ _lastGoodPrice: BigNumber }>[];
+  extractEvents(logs: Log[], name: "LastGoodPrice"): _TypedLogDescription<{ newPrice: BigNumber }>[];
   extractEvents(logs: Log[], name: "OwnershipTransferred"): _TypedLogDescription<{ previousOwner: string; newOwner: string }>[];
-  extractEvents(logs: Log[], name: "PriceFeedStatusChanged"): _TypedLogDescription<{ newStatus: number }>[];
+  extractEvents(logs: Log[], name: "UpdateDeviationFactor"): _TypedLogDescription<{ deviationFactor: BigNumber }>[];
+  extractEvents(logs: Log[], name: "UpdateLEDPrice"): _TypedLogDescription<{ ledPrice: BigNumber }>[];
+  extractEvents(logs: Log[], name: "UpdateRedemptionRate"): _TypedLogDescription<{ marketPrice: BigNumber; redemptionPrice: BigNumber; redemptionRate: BigNumber }>[];
 }
 
 interface PriceFeedTestnetCalls {
@@ -541,6 +611,7 @@ interface PriceFeedTestnetCalls {
 
 interface PriceFeedTestnetTransactions {
   fetchPrice(_overrides?: Overrides): Promise<BigNumber>;
+  setAddresses(a1: string, a2: string, a3: string, _overrides?: Overrides): Promise<void>;
   setPrice(price: BigNumberish, _overrides?: Overrides): Promise<boolean>;
   transferOwnership(newOwner: string, _overrides?: Overrides): Promise<void>;
 }

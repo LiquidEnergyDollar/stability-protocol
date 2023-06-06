@@ -54,8 +54,16 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         uint ledPrice
     );
 
+    event LastGoodPrice(
+        uint newPrice
+    );
+
     function fetchPrice() public returns (uint) {
-        return wmultiply(LEDPrice, deviationFactor);
+        uint newPrice = wmultiply(LEDPrice, deviationFactor);
+
+        emit LastGoodPrice(newPrice);
+
+        return newPrice;
     }
 
     function setAddresses(
