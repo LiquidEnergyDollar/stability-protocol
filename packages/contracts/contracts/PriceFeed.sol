@@ -4,7 +4,8 @@ pragma solidity ^0.8.17;
 
 import "./Interfaces/IPriceFeed.sol";
 import "./Interfaces/IUniswapV2Pair.sol";
-import "./Dependencies/SafeMath.sol";
+import "./Interfaces/IPIScaledPerSecondCalculator.sol";
+import "./Interfaces/ILedOracle.sol";
 import "./Dependencies/Ownable.sol";
 import "./Dependencies/CheckContract.sol";
 import "./Dependencies/BaseMath.sol";
@@ -22,25 +23,11 @@ import "./rai/GebMath.sol";
 * - updateDeviationFactor
 */
 
-abstract contract LEDLike {
-    function getUSDPerLED() virtual external returns (uint256);
-}
-
-abstract contract PIDCalculator {
-    function computeRate(uint256, uint256, uint256) virtual external returns (uint256);
-    function rt(uint256, uint256, uint256) virtual external view returns (uint256);
-    function pscl() virtual external view returns (uint256);
-    function tlv() virtual external view returns (uint256);
-}
-
 contract PriceFeed is GebMath, Ownable, BaseMath {
-    using SafeMath for uint256;
-
-    address public _owner;
     string constant public NAME = "PriceFeed";
 
-    LEDLike public led;
-    PIDCalculator public pidCalculator;
+    ILedOracle public led;
+    IPIScaledPerSecondCalculator public pidCalculator;
     IUniswapV2Pair public uniV2Pair;
 
     uint256 public deviationFactor;
@@ -67,29 +54,6 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         uint ledPrice
     );
 
-    constructor(
-        address _led,
-        address _pidCalculator,
-        address _uniV2Pair
-    ) Ownable() public {
-        // Assign addresses
-        led = LEDLike(_led);
-        pidCalculator = PIDCalculator(_pidCalculator);
-        uniV2Pair = IUniswapV2Pair(_uniV2Pair);
-
-        // 1 = 10 ** 27
-        redemptionRate = RAY;
-        redemptionRateUpdateTime = block.timestamp;
-
-        // 1 = 10 ** 18
-        deviationFactor = WAD;
-        deviationFactorUpdateTime = block.timestamp;
-
-        // 1 = 10 ** 18
-        LEDPrice = WAD;
-        LEDPriceUpdateTime = block.timestamp;
-    }
-
     function fetchPrice() public returns (uint) {
         return wmultiply(LEDPrice, deviationFactor);
     }
@@ -102,9 +66,12 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         external
         onlyOwner
     {
-        led = LEDLike(_ledAddress);
-        pidCalculator = PIDCalculator(_pidCalculatorAddress);
+        led = ILedOracle(_ledAddress);
+        pidCalculator = IPIScaledPerSecondCalculator(_pidCalculatorAddress);
         uniV2Pair = IUniswapV2Pair(_uniV2Pair);
+
+        // update everything after setting addresses
+        updateAll();
     }
 
     // calculate price based on pair reserves
@@ -118,7 +85,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         return((amount*res0)/Res1); // return amount of token0 needed to buy token1
     }
 
-    function updateRate() external {
+    function updateRate() public {
         // Get price feed updates
         uint256 marketPrice = getTokenPrice(1);
         // If the price is non-zero
@@ -141,7 +108,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         );
     }
 
-    function updateLEDPrice() external {
+    function updateLEDPrice() public {
         // Get price feed updates
         uint256 _LEDPrice = led.getUSDPerLED();
         // If the price is non-zero
@@ -151,7 +118,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         LEDPriceUpdateTime = block.timestamp;
     }
 
-    function updateDeviationFactor() external {
+    function updateDeviationFactor() public {
         // Update deviation factor
         deviationFactor = rmultiply(
           rpower(redemptionRate, subtract(block.timestamp, deviationFactorUpdateTime), RAY),
@@ -159,5 +126,12 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         );
         deviationFactorUpdateTime = block.timestamp;
         emit UpdateDeviationFactor(deviationFactor);
+    }
+
+    // update all parameters
+    function updateAll() public {
+        updateRate();
+        updateLEDPrice();
+        updateDeviationFactor();
     }
 }
