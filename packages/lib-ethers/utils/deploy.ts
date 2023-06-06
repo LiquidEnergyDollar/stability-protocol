@@ -300,7 +300,6 @@ export const deployAndSetupContracts = async (
   stablecoinAddress: string,
   _priceFeedIsTestnet = true,
   _isDev = true,
-  _testingAddress: string | undefined,
   overrides?: Overrides
 ): Promise<_LiquityDeploymentJSON> => {
   if (!deployer.provider) {
@@ -330,35 +329,10 @@ export const deployAndSetupContracts = async (
 
   const contracts = _connectToContracts(deployer, deployment);
 
-  if (_testingAddress) {
-    // await fundTestAccount(contracts, deployer, _testingAddress, overrides);
-  }
-
   log("Connecting contracts...");
   await connectContracts(contracts, deployer, overrides);
 
   return {
     ...deployment
   };
-};
-
-const fundTestAccount = async (
-  {
-    erc20
-  }: _LiquityContracts,
-  deployer: Signer,
-  testingAdress: string,
-  overrides?: Overrides
-) => {
-  if (!deployer.provider) {
-    throw new Error("Signer must have a provider.");
-  }
-
-  log(`Funding test account ${testingAdress} with collateral`);
-  log();
-  const nonce = await deployer.provider.getTransactionCount(deployer.getAddress()) + 1;
-  await erc20.mint(testingAdress, "10000000000000000000", {
-    ...overrides,
-    nonce
-  });
 };
