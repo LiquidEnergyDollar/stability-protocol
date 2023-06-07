@@ -130,7 +130,8 @@ export const LiquidationManager = ({ version, collateral, isMintList }: Liquidat
             justifyContent: "space-between",
             width: "100%",
             px: "1em",
-            mt: 2
+            mt: 2,
+            display: "none !important"
           }}>
             <Flex>
               <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>

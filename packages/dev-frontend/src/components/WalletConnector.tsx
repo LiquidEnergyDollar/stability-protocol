@@ -127,7 +127,7 @@ export const WalletConnector = ({ children, loader }: WalletConnectorProps): JSX
           alignItems: "center",
           mb: "2.5rem"
         }}>
-          <GenericIcon imgSrc={colorMode === "dark" || colorMode === "darkGrey" ? "./dark-main-thresholdusd-logo.svg" : "./light-main-thresholdusd-logo.svg"} height={"66px"} />
+          <GenericIcon imgSrc={colorMode === "dark" || colorMode === "darkGrey" ? "./dark-led-logo.png" : "./light-led-logo.png"} height={"66px"} />
         </Flex>
         <Paragraph sx={{
           fontWeight: "bold",

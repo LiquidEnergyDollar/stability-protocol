@@ -31,7 +31,7 @@ type ThresholdContextValue = {
 };
 
 type SupportedNetworks = {
-  [key: string]: "homestead" | "goerli" | "sepolia";
+  [key: string]: "sepolia"; //"homestead" | "goerli" | 
 };
 
 const ThresholdContext = createContext<ThresholdContextValue | undefined>(undefined);
@@ -48,7 +48,7 @@ const wsParams = (network: string, infuraApiKey: string): [string, string] => [
   network
 ];
 
-const supportedNetworks: SupportedNetworks = { 1: "homestead", 5: "goerli", 11155111: "sepolia"};
+const supportedNetworks: SupportedNetworks = { 11155111: "sepolia"}// { 1: "homestead", 5: "goerli", 11155111: "sepolia"};
 
 const getCollateralVersions = async (chainId: number): Promise<CollateralsVersionedDeployments> => {
   return await getCollateralsDeployments(supportedNetworks[chainId]);

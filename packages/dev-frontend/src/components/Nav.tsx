@@ -33,10 +33,6 @@ export const Nav = (): JSX.Element => {
           <Icon name="chart-line" />
           Earn
         </Link>
-        <Link to="/redemption">
-          <Icon name="check" />
-          Redeem
-        </Link>
         <Link to="/risky-vaults">
           <Icon name="exclamation-triangle" />
           Risky Vaults

@@ -3,7 +3,7 @@ import { Card, Box, Flex, Button, Text, Link, useColorMode } from "theme-ui";
 import { useStabilityView } from "./context/StabilityViewContext";
 import { useTransactionFunction } from "../Transaction";
 import { useThreshold } from "./../../hooks/ThresholdContext";
-import { COIN, DARK_FILTER } from "../../utils/constants";
+import { COIN } from "../../utils/constants";
 import { InfoIcon } from "../InfoIcon";
 import { LiquityStoreState as ThresholdStoreState } from "@liquity/lib-base";
 import { useThresholdSelector } from "@liquity/lib-react";
@@ -112,7 +112,7 @@ export const NoDeposit = (props: NoDepositProps): JSX.Element => {
             </ActionDescription>
             { COIN } available
           <Flex variant="layout.balanceRow" sx={{ color: "inputText"}}>
-            <GenericIcon imgSrc="./icons/threshold-icon.svg" sx={colorMode === "darkGrey" ? {filter: DARK_FILTER} : {}} height={"18px"} />
+            <GenericIcon imgSrc="./icons/led-icon.png" height={"18px"} />
             <Box sx={{ fontSize: 3 }}>
               {(!thusdBalance.eq(0) ? thusdBalance.prettify() : '--')}
             </Box>
@@ -129,7 +129,8 @@ export const NoDeposit = (props: NoDepositProps): JSX.Element => {
             fontWeight: "body",
             justifyContent: "space-between",
             width: "100%",
-            px: "1em"
+            px: "1em",
+            display: "none !important"
           }}>
             <Flex>
               <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>

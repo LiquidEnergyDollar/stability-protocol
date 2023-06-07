@@ -195,7 +195,8 @@ export const RedemptionManager = ({ version, collateral }: RedemptionManagerProp
             justifyContent: "space-between",
             width: "100%",
             px: "1em",
-            mt: 3
+            mt: 3,
+            display: "none !important"
           }}>
             <Flex>
               <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>

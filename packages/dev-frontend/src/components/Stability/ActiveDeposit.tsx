@@ -152,7 +152,8 @@ export const ActiveDeposit = (props: ActiveDepositProps): JSX.Element => {
               fontWeight: "body",
               justifyContent: "space-between",
               width: "100%",
-              px: "1em"
+              px: "1em",
+              display: "none !important"
             }}>
               <Flex>
                 <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>
