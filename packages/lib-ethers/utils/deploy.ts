@@ -55,7 +55,7 @@ const deployContracts = async (
   getContractFactory: (name: string, signer: Signer) => Promise<ContractFactory>,
   delay: number,
   stablecoinAddress: string,
-  priceFeedIsTestnet = true,
+  priceFeedIsTestnet = false,
   overrides?: Overrides
 ): Promise<[addresses: _LiquityContractAddresses, startBlock: number]> => {
   const [activePoolAddress, startBlock] = await deployContractAndGetBlockNumber(

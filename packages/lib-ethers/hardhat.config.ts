@@ -235,6 +235,7 @@ extendEnvironment(env => {
     const deployment = await deployAndSetupContracts(
       deployer,
       oracleAddresses,
+      oracleReqAddresses,
       collateralSymbol,
       collateralAddress,
       getContractFactory(env),
