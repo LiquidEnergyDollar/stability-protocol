@@ -59,7 +59,10 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     );
 
     function fetchPrice() public returns (uint) {
-        uint newPrice = wmultiply(LEDPrice, deviationFactor);
+        // Need to convert LEDPrice from WAD to RAY
+        uint newPrice = rmultiply(ray(LEDPrice), deviationFactor);
+        // Convert back to WAD
+        newPrice = newPrice / (10 ** 9);
 
         emit LastGoodPrice(newPrice);
 
@@ -94,23 +97,33 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     }
 
     function updateRate() public {
-        // Get price feed updates
-        uint256 marketPrice = getTokenPrice(1);
-        // If the price is non-zero
-        require(marketPrice > 0, "PriceFeed/null-uniswap-price");
+        // If uniV2Pair isn't set yet, we use a redemption rate of 1
+        // This means we track the LED oracle price
+        uint256 marketPrice;
+        uint256 redemptionPrice;
+        if (address(uniV2Pair) == address(0)) {
+            // 1 = 10 ** 27
+            redemptionRate = RAY;
+        } else {
+            // Get price feed updates
+            marketPrice = getTokenPrice(1);
+            // If the price is non-zero
+            require(marketPrice > 0, "PriceFeed/null-uniswap-price");
 
-        uint256 redemptionPrice = fetchPrice();
-        // Calculate the rate
-        redemptionRate = pidCalculator.computeRate(
-            marketPrice,
-            redemptionPrice,
-            RAY
-        );
+            redemptionPrice = fetchPrice();
+            // Calculate the rate
+            redemptionRate = pidCalculator.computeRate(
+                marketPrice,
+                redemptionPrice,
+                RAY
+            );
+        }
+
         // Store the timestamp of the update
         redemptionRateUpdateTime = block.timestamp;
         // Emit success event
         emit UpdateRedemptionRate(
-            ray(marketPrice),
+            marketPrice,
             redemptionPrice,
             redemptionRate
         );
