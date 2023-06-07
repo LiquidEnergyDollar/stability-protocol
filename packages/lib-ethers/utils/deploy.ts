@@ -1,6 +1,6 @@
 import { Signer } from "@ethersproject/abstract-signer";
 import { ContractTransaction, ContractFactory, Overrides } from "@ethersproject/contracts";
-import { IAssets, INetworkOracles } from "../hardhat.config";
+import { IAssets, INetworkOracleReqs, INetworkOracles } from "../hardhat.config";
 import {
   _LiquityContractAddresses,
   _LiquityContracts,
@@ -19,12 +19,6 @@ export const log = (...args: unknown[]): void => {
 export const setSilent = (s: boolean): void => {
   silent = s;
 };
-
-// TODO: Set when LED Oracle is deployed
-const LEDOracleAddress = "0x0";
-
-// TODO: Set when Uniswap V2 pair is deployed
-const uniV2PairAddress = "0x0";
 
 const deployContractAndGetBlockNumber = async (
   deployer: Signer,
@@ -207,6 +201,7 @@ const connectContracts = async (
     erc20,
     piCalculator
   }: _LiquityContracts,
+  oracleReqAddresses: INetworkOracleReqs,
   deployer: Signer,
   overrides?: Overrides
 ) => {
@@ -309,9 +304,9 @@ const connectContracts = async (
 
     nonce =>
       priceFeed.setAddresses(
-        LEDOracleAddress,
+        oracleReqAddresses.sepolia.led,
         piCalculator.address,
-        uniV2PairAddress,
+        oracleReqAddresses.sepolia.uniV2Pool,
         {...overrides, nonce}
       )
   ];
@@ -325,6 +320,7 @@ const connectContracts = async (
 export const deployAndSetupContracts = async (
   deployer: Signer,
   oracleAddresses: INetworkOracles,
+  oracleReqAddresses: INetworkOracleReqs,
   collateralSymbol: keyof IAssets,
   collateralAddress: string | undefined,
   getContractFactory: (name: string, signer: Signer) => Promise<ContractFactory>,
@@ -362,7 +358,7 @@ export const deployAndSetupContracts = async (
   const contracts = _connectToContracts(deployer, deployment);
 
   log("Connecting contracts...");
-  await connectContracts(contracts, deployer, overrides);
+  await connectContracts(contracts, oracleReqAddresses, deployer, overrides);
 
   return {
     ...deployment

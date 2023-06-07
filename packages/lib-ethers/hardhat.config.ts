@@ -39,6 +39,15 @@ export interface INetworkOracles {
   sepolia: IAssets,
 }
 
+export interface IOracleReqs {
+  led: string,
+  uniV2Pool: string
+}
+
+export interface INetworkOracleReqs {
+  sepolia: IOracleReqs
+}
+
 dotenv.config();
 
 const numAccounts = 100;
@@ -144,6 +153,13 @@ export const oracleAddresses: INetworkOracles = {
     }
   }
 };
+
+export const oracleReqAddresses: INetworkOracleReqs = {
+  sepolia: {
+    led: "0x0",
+    uniV2Pool: "0x0"
+  }
+}
 
 const hasOracles = (network: string): network is keyof typeof oracleAddresses =>
   network in oracleAddresses;
