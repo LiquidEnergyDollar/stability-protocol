@@ -157,7 +157,7 @@ export const oracleAddresses: INetworkOracles = {
 export const oracleReqAddresses: INetworkOracleReqs = {
   sepolia: {
     led: "0x637Da92c06a9c1c9Fc0Ae3700aCe13fE8e1d74E7",
-    uniV2Pool: "0x0"
+    uniV2Pool: "0x0000000000000000000000000000000000000000"
   }
 }
 

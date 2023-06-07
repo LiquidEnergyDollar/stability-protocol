@@ -180,7 +180,7 @@ export interface _LiquityContracts {
   chainlink: ChainlinkTestnet;
   gasPool: GasPool;
   erc20: ERC20Test;
-  piCalculator: PIScaledPerSecondCalculator
+  piCalculator: PIScaledPerSecondCalculator;
 }
 
 /** @internal */

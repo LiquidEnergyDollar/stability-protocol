@@ -165,6 +165,12 @@ contract PIScaledPerSecondCalculator {
         }
         else revert("PIScaledPerSecondCalculator/modify-unrecognized-param");
     }
+
+    function setSeedProposer(address addr) external isAuthority {
+        readers[seedProposer] = 0;
+        seedProposer = addr;
+        readers[seedProposer] = 1;
+    }
     /*
     * @notify Modify an uint256 parameter
     * @param parameter The name of the parameter to change

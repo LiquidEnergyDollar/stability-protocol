@@ -540,6 +540,7 @@ interface PIScaledPerSecondCalculatorTransactions {
   modifyParameters(parameter: BytesLike, val: BigNumberish, _overrides?: Overrides): Promise<void>;
   removeAuthority(account: string, _overrides?: Overrides): Promise<void>;
   removeReader(account: string, _overrides?: Overrides): Promise<void>;
+  setSeedProposer(addr: string, _overrides?: Overrides): Promise<void>;
 }
 
 export interface PIScaledPerSecondCalculator

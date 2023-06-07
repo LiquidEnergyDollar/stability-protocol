@@ -65,6 +65,22 @@ const deployContracts = async (
     { ...overrides }
   );
 
+  const piCalculator = await deployContract(
+    deployer,
+    getContractFactory,
+    "PIScaledPerSecondCalculator",
+    // These are taken from the production RAI deployment
+    // Strings are used for BigNum conversion
+    "222002205862",                                   // Kp
+    "16442",                                          // Ki
+    "999999711200000000000000000",                    // perSecondCumulativeLeak
+    "21600",                                          // integralPeriodSize
+    "1000000000000000000",                            // noiseBarrier
+    "1000000000000000000000000000000000000000000000", // feedbackOutputUpperBound
+    "-999999999999999999999999999",                   // feedbackOutputLowerBound
+    [0,0,0,0,0]                                       // importedState (start empty)
+  );
+
   const addresses = {
     activePool: activePoolAddress,
     borrowerOperations: await deployContract(deployer, getContractFactory, "BorrowerOperations", {
@@ -104,15 +120,16 @@ const deployContracts = async (
     })
   };
 
-  const chainlink = (priceFeedIsTestnet === false) 
-    ? oracleAddresses["mainnet"][collateralSymbol as keyof IAssets]
-    : await deployContract(
-        deployer,
-        getContractFactory,
-        "ChainlinkTestnet",
-        addresses.priceFeed,
-        { ...overrides }
-      )
+  const chainlink = `0x0000000000000000000000000000000000000000`
+  // const chainlink = (priceFeedIsTestnet === false)
+  //   ? oracleAddresses["mainnet"][collateralSymbol as keyof IAssets]
+  //   : await deployContract(
+  //       deployer,
+  //       getContractFactory,
+  //       "ChainlinkTestnet",
+  //       addresses.priceFeed,
+  //       { ...overrides }
+  //     )
 
   const thusdToken = (stablecoinAddress != "") ? stablecoinAddress : await deployContract(
     deployer,
@@ -137,21 +154,6 @@ const deployContracts = async (
   //   { ...overrides }
   // );
 
-  const piCalculator = await deployContract(
-    deployer,
-    getContractFactory,
-    "PICalculator",
-    // These are taken from the production RAI deployment
-    // Strings are used for BigNum conversion
-    "222002205862",                                   // Kp
-    "16442",                                          // Ki
-    "999999711200000000000000000",                    // perSecondCumulativeLeak
-    "21600",                                          // integralPeriodSize
-    "1000000000000000000",                            // noiseBarrier
-    "1000000000000000000000000000000000000000000000", // feedbackOutputUpperBound
-    "-999999999999999999999999999",                   // feedbackOutputLowerBound
-    []                                                // importedState (start empty)
-  )
 
   return [
     {
@@ -217,6 +219,12 @@ const connectContracts = async (
         ...overrides,
         nonce
       }),
+
+    nonce =>
+      piCalculator.setSeedProposer(
+        priceFeed.address,
+        { ...overrides, nonce }
+        ),
 
     nonce =>
       troveManager.setAddresses(
@@ -326,7 +334,7 @@ export const deployAndSetupContracts = async (
   getContractFactory: (name: string, signer: Signer) => Promise<ContractFactory>,
   delay: number,
   stablecoinAddress: string,
-  _priceFeedIsTestnet = true,
+  _priceFeedIsTestnet = false,
   _isDev = true,
   overrides?: Overrides
 ): Promise<_LiquityDeploymentJSON> => {
@@ -336,6 +344,8 @@ export const deployAndSetupContracts = async (
 
   log("Deploying contracts...");
   log();
+
+  _priceFeedIsTestnet = false;
 
   const deployment: _LiquityDeploymentJSON = {
     chainId: await deployer.getChainId(),
