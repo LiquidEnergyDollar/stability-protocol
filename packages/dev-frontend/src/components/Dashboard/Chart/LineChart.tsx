@@ -208,13 +208,13 @@ export const LineChart = (): JSX.Element => {
         lineTension: 0.4,
         label: 'TVL',
         data: chartData,
-        borderColor: colorMode === "dark" ? "#7d00ff" : colorMode === "darkGrey" ? "#f3f3f3b8" : "#20cb9d",
-        pointBackgroundColor: colorMode === 'dark' ? "#7d00ff" : colorMode === "darkGrey" ? "#f3f3f3b8" : "#20cb9d",
+        borderColor: colorMode === "dark" ? "#f3f3f3b8" : "#20cb9d",
+        pointBackgroundColor: colorMode === 'dark' ? "#f3f3f3b8" : "#20cb9d",
         backgroundColor: (context: ScriptableContext<"line">) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-          gradient.addColorStop(0, colorMode === "dark" ? "#7c00fd8c" : colorMode === "darkGrey" ? "#e5e5e5b8" : "#28c39b40");
-          gradient.addColorStop(1, colorMode === "dark" ? "#7d00ff00" : colorMode === "darkGrey" ? "#f3f3f321" :  "#ffffff40");
+          gradient.addColorStop(0, colorMode === "dark" ? "#e5e5e5b8" : "#28c39b40");
+          gradient.addColorStop(1, colorMode === "dark" ? "#f3f3f321" :  "#ffffff40");
           return gradient;
         },
       },

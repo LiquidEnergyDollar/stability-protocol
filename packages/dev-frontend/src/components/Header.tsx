@@ -17,7 +17,7 @@ export const Header = ({ children }: HeaderProps): JSX.Element => {
   return (
     <Container variant="header">
       <Link variant="logo" to="/">
-        <GenericIcon imgSrc={colorMode === "dark" || colorMode === "darkGrey" ? "./favicon.png" : "./favicon.png"} height={logoHeight} />
+        <GenericIcon imgSrc="./favicon.png" height={logoHeight} />
         <Heading as="h1" sx={{ ml: ".5em" }}>
           LED
         </Heading>
@@ -37,12 +37,12 @@ export const Header = ({ children }: HeaderProps): JSX.Element => {
               width: "1.5em"
             }}
             onClick={() => {
-              setColorMode(colorMode === 'default' ? 'darkGrey' : 'default')
+              setColorMode(colorMode === 'default' ? 'dark' : 'default')
             }}
           >
             <GenericIcon 
               justifyContent="center" 
-              imgSrc={colorMode === "darkGrey" ? "./icons/sun.svg" : "./icons/moon.svg"} 
+              imgSrc={colorMode === "dark" ? "./icons/sun.svg" : "./icons/moon.svg"} 
               sx={colorMode === "dark" ? {filter: WHITE_FILTER} : {}} 
             />
           </Flex>

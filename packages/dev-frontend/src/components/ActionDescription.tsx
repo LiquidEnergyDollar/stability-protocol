@@ -29,7 +29,7 @@ export const ActionDescription = ({ title, children }: ActionDescriptionProps): 
     >
       <Flex sx={{ alignItems: "center", fontSize: "0.9em" }}>
         <GenericIcon imgSrc="./icons/rounded-info.svg" 
-            sx={colorMode === "dark" ? {filter: PURPLE_FILTER} : colorMode === "darkGrey" ? {filter: WHITE_FILTER} : {}} height={"18px"} />
+            sx={colorMode === "dark" ? {filter: WHITE_FILTER} : {}} height={"18px"} />
         <Flex sx={{ alignItems: "start", flexDirection: "column", ml: "1.8em", gap: "0.5em" }}>
           <Text sx={{ color: "text" }}>{title}</Text>
           <Text sx={{ color: "greytext" }}>{children}</Text>
