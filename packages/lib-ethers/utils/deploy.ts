@@ -211,6 +211,8 @@ const connectContracts = async (
     throw new Error("Signer must have a provider.");
   }
 
+  overrides!.gasLimit = 600000;
+
   const txCount = await deployer.provider.getTransactionCount(deployer.getAddress());
 
   const connections: ((nonce: number) => Promise<ContractTransaction>)[] = [

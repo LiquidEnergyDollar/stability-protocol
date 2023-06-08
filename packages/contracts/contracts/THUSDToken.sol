@@ -16,20 +16,20 @@ import "./Dependencies/console.sol";
 * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/53516bc555a454862470e7860a9b5254db4d00f5/contracts/token/ERC20/ERC20Permit.sol
 *
 *
-* --- Functionality added specific to the THUSDToken ---
+* --- Functionality added specific to the LEDToken ---
 *
 * 1) Transfer protection: blacklist of addresses that are invalid recipients (i.e. core Liquity contracts) in external
-* transfer() and transferFrom() calls. The purpose is to protect users from losing tokens by mistakenly sending THUSD directly to a Liquity
+* transfer() and transferFrom() calls. The purpose is to protect users from losing tokens by mistakenly sending LED directly to a Liquity
 * core contract, when they should rather call the right function.
 *
-* 2) sendToPool() and returnFromPool(): functions callable only Liquity core contracts, which move THUSD tokens between Liquity <-> user.
+* 2) sendToPool() and returnFromPool(): functions callable only Liquity core contracts, which move LED tokens between Liquity <-> user.
 */
 
 contract THUSDToken is Ownable, CheckContract, ITHUSDToken {
 
     uint256 private _totalSupply;
-    string constant internal _NAME = "thUSD Stablecoin";
-    string constant internal _SYMBOL = "thUSD";
+    string constant internal _NAME = "LED Stablecoin";
+    string constant internal _SYMBOL = "LED";
     string constant internal _VERSION = "1";
     uint8 constant internal _DECIMALS = 18;
 
@@ -50,7 +50,7 @@ contract THUSDToken is Ownable, CheckContract, ITHUSDToken {
 
     mapping (address => uint256) private _nonces;
 
-    // User data for THUSD token
+    // User data for LED token
     mapping (address => uint256) private _balances;
     mapping (address => mapping (address => uint256)) private _allowances;
 
@@ -197,7 +197,7 @@ contract THUSDToken is Ownable, CheckContract, ITHUSDToken {
     // --- Functions for intra-Liquity calls ---
 
     function mint(address _account, uint256 _amount) external override {
-        require(mintList[msg.sender], "THUSDToken: Caller not allowed to mint");
+        require(mintList[msg.sender], "LEDToken: Caller not allowed to mint");
         _mint(_account, _amount);
     }
 
@@ -206,20 +206,20 @@ contract THUSDToken is Ownable, CheckContract, ITHUSDToken {
             isBorrowerOperations[msg.sender] ||
             isTroveManager[msg.sender] ||
             isStabilityPools[msg.sender],
-            "THUSD: Caller is neither BorrowerOperations nor TroveManager nor StabilityPool"
+            "LED: Caller is neither BorrowerOperations nor TroveManager nor StabilityPool"
         );
         _burn(_account, _amount);
     }
 
     function sendToPool(address _sender,  address _poolAddress, uint256 _amount) external override {
-        require(isStabilityPools[msg.sender], "THUSD: Caller is not the StabilityPool");
+        require(isStabilityPools[msg.sender], "LED: Caller is not the StabilityPool");
         _transfer(_sender, _poolAddress, _amount);
     }
 
     function returnFromPool(address _poolAddress, address _receiver, uint256 _amount) external override {
         require(
             isTroveManager[msg.sender] || isStabilityPools[msg.sender],
-            "THUSD: Caller is neither TroveManager nor StabilityPool"
+            "LED: Caller is neither TroveManager nor StabilityPool"
         );
         _transfer(_poolAddress, _receiver, _amount);
     }
@@ -293,13 +293,13 @@ contract THUSDToken is Ownable, CheckContract, ITHUSDToken {
         external
         override
     {
-        require(deadline >= block.timestamp, 'THUSD: expired deadline');
+        require(deadline >= block.timestamp, 'LED: expired deadline');
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01',
                          domainSeparator(), keccak256(abi.encode(
                          _PERMIT_TYPEHASH, owner, spender, amount,
                          _nonces[owner]++, deadline))));
         address recoveredAddress = ecrecover(digest, v, r, s);
-        require(recoveredAddress == owner, 'THUSD: invalid signature');
+        require(recoveredAddress == owner, 'LED: invalid signature');
         _approve(owner, spender, amount);
     }
 
@@ -381,7 +381,7 @@ contract THUSDToken is Ownable, CheckContract, ITHUSDToken {
         require(
             _recipient != address(0) &&
             _recipient != address(this),
-            "THUSD: Cannot transfer tokens directly to the THUSD token contract or the zero address"
+            "LED: Cannot transfer tokens directly to the LED token contract or the zero address"
         );
     }
 

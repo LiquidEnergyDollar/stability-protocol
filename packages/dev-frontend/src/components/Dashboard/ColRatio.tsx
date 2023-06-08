@@ -77,7 +77,7 @@ export const ColRatio = ({ variant = "mainCards" }: SystemStatsProps): JSX.Eleme
     <Card {...{ variant }} sx={{ width:"100%"}}>
       <TopCard 
         name={`${collateralData.collateralsQty > 1 ? "Col. Ratio Avg." : "Total Col. Ratio"}`}
-        tooltip="The ratio of the Dollar value of the entire system collateral at the current collateral : USD price, to the entire system debt." 
+        tooltip="The ratio of the LED value of the entire system collateral at the current collateral : LED price, to the entire system debt." 
         imgSrc="./icons/col-ratio.svg" 
       >
         {collateralData.collateralRatioAvgPct.prettify()}

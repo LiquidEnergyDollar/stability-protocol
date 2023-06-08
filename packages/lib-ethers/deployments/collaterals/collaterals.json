@@ -27,16 +27,6 @@
       ]
     },
     {
-      "path": "deployments/default/tst",
-      "name": "tst",
-      "subfolders": [
-        {
-          "path": "deployments/default/tst/v0",
-          "name": "v0"
-        }
-      ]
-    },
-    {
       "path": "deployments/default/usd",
       "name": "usd",
       "subfolders": [

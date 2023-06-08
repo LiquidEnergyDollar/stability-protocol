@@ -1,5 +1,6 @@
 import { Container, Heading } from "theme-ui";
 
+import { PriceCard } from "../components/Dashboard/PriceCard";
 import { BorrowingFee } from "../components/Dashboard/BorrowingFee";
 import { OpenedVaults } from "../components/Dashboard/OpenedVaults";
 import { ColRatio } from "../components/Dashboard/ColRatio";
@@ -16,6 +17,9 @@ export const Dashboard = (): JSX.Element => (
         Dashboard
       </Heading>
       <Container variant="dashboardGrid">
+        <Container variant="oneThird">
+          <PriceCard />
+        </Container>
         <Container variant="oneThird">
           <BorrowingFee />
         </Container>
