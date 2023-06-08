@@ -376,4 +376,40 @@ task("deploy", "Deploys the contracts to the network")
     }
   );
 
+task("updatepricefeed", "Updates price feed with info from LED/markets and calculates new rate")
+  .addParam("pricefeedaddress", "Address of price feed contract")
+  .setAction(async (taskargs, env) => {
+    const factory = await env.ethers.getContractFactory(`PriceFeed`);
+    const priceFeed = factory.attach(taskargs.pricefeedaddress);
+    await priceFeed.updateAll({ gasLimit: 250000 });
+    await priceFeed.fetchPrice({ gasLimit: 250000 });
+  })
+
+task("getpricefeedattrs", "Prints out deployed price feed attributes")
+  .addParam("pricefeedaddress", "Address of price feed contract")
+  .setAction(async (taskargs, env) => {
+    const factory = await env.ethers.getContractFactory(`PriceFeed`);
+    const priceFeed = factory.attach(taskargs.pricefeedaddress);
+
+    console.log("Deviation factor: ")
+    console.log(await priceFeed.deviationFactor());
+
+    console.log("Redemption rate: ")
+    console.log(await priceFeed.redemptionRate());
+
+    console.log("LED price: ")
+    console.log(await priceFeed.LEDPrice());
+
+    console.log("LED oracle: ")
+    console.log(await priceFeed.led());
+
+    console.log("PI Calculator: ")
+    console.log(await priceFeed.pidCalculator());
+
+    console.log("uniV2Pair: ")
+    console.log(await priceFeed.uniV2Pair());
+
+    console.log("lastGoodPrice: ")
+    console.log(await priceFeed.lastGoodPrice());
+  })
 export default config;

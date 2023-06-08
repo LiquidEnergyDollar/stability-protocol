@@ -560,6 +560,7 @@ interface PriceFeedCalls {
   deviationFactor(_overrides?: CallOverrides): Promise<BigNumber>;
   deviationFactorUpdateTime(_overrides?: CallOverrides): Promise<BigNumber>;
   isOwner(_overrides?: CallOverrides): Promise<boolean>;
+  lastGoodPrice(_overrides?: CallOverrides): Promise<BigNumber>;
   led(_overrides?: CallOverrides): Promise<string>;
   minimum(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
   multiply(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
