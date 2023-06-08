@@ -200,23 +200,6 @@ const theme: Theme = {
     metaMaskInnerButtonBg: "#CBD5E0",  
     modes: {
       dark: {
-        primary: "#7D00FF",
-        info: baseColors.red,
-        border: "#9974FF23",
-        greytext: "#b1bccc",
-        
-        activeMenu: baseColors.white,
-        menu: "#b1bccc",
-        text: "#FCF9FF",
-        heading: "#9974FF",
-        background: "#200c5a",
-        muted: "#9974FF23",
-        systemStatsBackGround: "#200c5a",
-        wrapperBackground: "#150640",
-        metaMaskButtonBg: "#7D00FF", 
-        metaMaskInnerButtonBg: "#200c5a"
-      },
-      darkGrey: {
         primary: "#4A5568",  
         title: baseColors.white,
         info: baseColors.red,

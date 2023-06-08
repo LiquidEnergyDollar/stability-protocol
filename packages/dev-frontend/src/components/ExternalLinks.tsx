@@ -18,10 +18,10 @@ export const ExternalLinks = (): JSX.Element => {
         bottom: 0
       }}>
         <Link variant="socialIcons" href="https://discord.gg/mE2u9YuA47" target="_blank">
-          <Image src="./icons/discord.svg" sx={colorMode === "darkGrey" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
+          <Image src="./icons/discord.svg" sx={colorMode === "dark" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
         </Link>
         <Link variant="socialIcons" href="https://github.com/LiquidEnergyDollar" target="_blank">
-          <Image src="./icons/github.svg" sx={colorMode === "darkGrey" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
+          <Image src="./icons/github.svg" sx={colorMode === "dark" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
         </Link>
       </Flex>
     </>

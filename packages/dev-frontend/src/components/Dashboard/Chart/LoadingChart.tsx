@@ -8,11 +8,11 @@ export const LoadingChart = (): JSX.Element => {
       <svg width='100%' preserveAspectRatio='xMinYMin slice' viewBox='0 0 766 300'>
         <defs>
           <linearGradient id='linear-gradient'>
-            <stop offset='0%' stopColor={colorMode === "dark" ? "#7d00ff" : colorMode === "darkGrey" ? "#e4e5e7b8" :  "#e2e9ef"} />
-            <stop offset='33%' stopColor={colorMode === "dark" ? "#7d00ff" : colorMode === "darkGrey" ? "#e4e5e7b8" :  "#e2e9ef"} />
-            <stop offset='50%' stopColor={colorMode === "dark" ? "#000" : colorMode === "darkGrey" ? "#fff" :  "#aebcc9"} />
-            <stop offset='67%' stopColor={colorMode === "dark" ? "#7d00ff" : colorMode === "darkGrey" ? "#e4e5e7b8" :  "#e2e9ef"} />
-            <stop offset='100%' stopColor={colorMode === "dark" ? "#7d00ff" : colorMode === "darkGrey" ? "#e4e5e7b8" :  "#e2e9ef"} />
+            <stop offset='0%' stopColor={colorMode === "dark" ? "#e4e5e7b8" :  "#e2e9ef"} />
+            <stop offset='33%' stopColor={colorMode === "dark" ? "#e4e5e7b8" :  "#e2e9ef"} />
+            <stop offset='50%' stopColor={colorMode === "dark" ? "#fff" :  "#aebcc9"} />
+            <stop offset='67%' stopColor={colorMode === "dark" ? "#e4e5e7b8" :  "#e2e9ef"} />
+            <stop offset='100%' stopColor={colorMode === "dark" ? "#e4e5e7b8" :  "#e2e9ef"} />
             <animateTransform
               attributeName='gradientTransform'
               type='translate'
@@ -24,8 +24,8 @@ export const LoadingChart = (): JSX.Element => {
             />
           </linearGradient>
           <linearGradient id='area' x1='50%' y1='-104.497044%' x2='50%' y2='85.1203676%'>
-            <stop offset='0%' stopColor={colorMode === "dark" ? "#7d00ff00" : colorMode === "darkGrey" ? "#f3f3f321" :  "#fff"} />
-            <stop offset='100%' stopColor={colorMode === "dark" ? "#7c00fd8c" : colorMode === "darkGrey" ? "#e4e5e7b8" : "#e8eef5"} />
+            <stop offset='0%' stopColor={colorMode === "dark" ? "#f3f3f321" :  "#fff"} />
+            <stop offset='100%' stopColor={colorMode === "dark" ? "#e4e5e7b8" : "#e8eef5"} />
           </linearGradient>
         </defs>
         <g fill='none' fillRule='evenodd' className='graph-example'>
