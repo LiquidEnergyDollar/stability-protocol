@@ -9,7 +9,6 @@ import "./Interfaces/ILedOracle.sol";
 import "./Dependencies/Ownable.sol";
 import "./Dependencies/CheckContract.sol";
 import "./Dependencies/BaseMath.sol";
-import "./Dependencies/LiquityMath.sol";
 import "./Dependencies/IERC20.sol";
 import "./rai/GebMath.sol";
 
@@ -39,6 +38,8 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     uint256 public LEDPrice;
     uint256 public LEDPriceUpdateTime;
 
+    uint256 public lastGoodPrice;
+
     // --- Events ---
     event UpdateRedemptionRate(
         uint marketPrice,
@@ -63,6 +64,12 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         uint newPrice = rmultiply(ray(LEDPrice), deviationFactor);
         // Convert back to WAD
         newPrice = newPrice / (10 ** 9);
+
+        // Invert price - Liquity expects price in terms of
+        // debtToken per unit of collateral
+        newPrice = (10 ** 36) / newPrice;
+
+        lastGoodPrice = newPrice;
 
         emit LastGoodPrice(newPrice);
 
@@ -101,7 +108,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         // This means we track the LED oracle price
         uint256 marketPrice;
         uint256 redemptionPrice;
-        if (address(uniV2Pair) == address(0)) {
+        if (address(uniV2Pair) == address(0) || redemptionRate == 0) {
             // 1 = 10 ** 27
             redemptionRate = RAY;
         } else {
@@ -130,6 +137,11 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     }
 
     function updateLEDPrice() public {
+        // Initialize LED update time if needed
+        if (LEDPriceUpdateTime == 0) {
+            LEDPriceUpdateTime = block.timestamp - 1;
+        }
+
         // Get price feed updates
         uint256 _LEDPrice = led.getUSDPerLED();
         // If the price is non-zero
@@ -137,9 +149,21 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         LEDPrice = _LEDPrice;
 
         LEDPriceUpdateTime = block.timestamp;
+
+        emit UpdateLEDPrice(LEDPriceUpdateTime);
     }
 
     function updateDeviationFactor() public {
+        // Initialize deviation factor if needed
+        if (deviationFactor == 0) {
+            deviationFactor = RAY;
+        }
+
+        // Initialize update time if needed
+        if (deviationFactorUpdateTime == 0) {
+            deviationFactorUpdateTime = block.timestamp - 1;
+        }
+
         // Update deviation factor
         deviationFactor = rmultiply(
           rpower(redemptionRate, subtract(block.timestamp, deviationFactorUpdateTime), RAY),
