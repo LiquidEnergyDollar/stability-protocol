@@ -1,6 +1,6 @@
 import { Signer } from "@ethersproject/abstract-signer";
 import { ContractTransaction, ContractFactory, Overrides } from "@ethersproject/contracts";
-import { IAssets, INetworkOracles } from "../hardhat.config";
+import { IAssets, INetworkOracleReqs, INetworkOracles } from "../hardhat.config";
 import {
   _LiquityContractAddresses,
   _LiquityContracts,
@@ -55,7 +55,7 @@ const deployContracts = async (
   getContractFactory: (name: string, signer: Signer) => Promise<ContractFactory>,
   delay: number,
   stablecoinAddress: string,
-  priceFeedIsTestnet = true,
+  priceFeedIsTestnet = false,
   overrides?: Overrides
 ): Promise<[addresses: _LiquityContractAddresses, startBlock: number]> => {
   const [activePoolAddress, startBlock] = await deployContractAndGetBlockNumber(
@@ -63,6 +63,22 @@ const deployContracts = async (
     getContractFactory,
     "ActivePool",
     { ...overrides }
+  );
+
+  const piCalculator = await deployContract(
+    deployer,
+    getContractFactory,
+    "PIScaledPerSecondCalculator",
+    // These are taken from the production RAI deployment
+    // Strings are used for BigNum conversion
+    "222002205862",                                   // Kp
+    "16442",                                          // Ki
+    "999999711200000000000000000",                    // perSecondCumulativeLeak
+    "21600",                                          // integralPeriodSize
+    "1000000000000000000",                            // noiseBarrier
+    "1000000000000000000000000000000000000000000000", // feedbackOutputUpperBound
+    "-999999999999999999999999999",                   // feedbackOutputLowerBound
+    [0,0,0,0,0]                                       // importedState (start empty)
   );
 
   const addresses = {
@@ -104,15 +120,16 @@ const deployContracts = async (
     })
   };
 
-  const chainlink = (priceFeedIsTestnet === false) 
-    ? oracleAddresses["mainnet"][collateralSymbol as keyof IAssets]
-    : await deployContract(
-        deployer,
-        getContractFactory,
-        "ChainlinkTestnet",
-        addresses.priceFeed,
-        { ...overrides }
-      )
+  const chainlink = `0x0000000000000000000000000000000000000000`
+  // const chainlink = (priceFeedIsTestnet === false)
+  //   ? oracleAddresses["mainnet"][collateralSymbol as keyof IAssets]
+  //   : await deployContract(
+  //       deployer,
+  //       getContractFactory,
+  //       "ChainlinkTestnet",
+  //       addresses.priceFeed,
+  //       { ...overrides }
+  //     )
 
   const thusdToken = (stablecoinAddress != "") ? stablecoinAddress : await deployContract(
     deployer,
@@ -137,12 +154,14 @@ const deployContracts = async (
   //   { ...overrides }
   // );
 
+
   return [
     {
       ...addresses,
       bamm: bamm,
       thusdToken: thusdToken,
       chainlink: chainlink as string,
+      piCalculator: piCalculator,
       multiTroveGetter: await deployContract(
         deployer,
         getContractFactory,
@@ -181,8 +200,10 @@ const connectContracts = async (
     bLens,
     chainlink,
     gasPool,
-    erc20
+    erc20,
+    piCalculator
   }: _LiquityContracts,
+  oracleReqAddresses: INetworkOracleReqs,
   deployer: Signer,
   overrides?: Overrides
 ) => {
@@ -198,6 +219,12 @@ const connectContracts = async (
         ...overrides,
         nonce
       }),
+
+    nonce =>
+      piCalculator.setSeedProposer(
+        priceFeed.address,
+        { ...overrides, nonce }
+        ),
 
     nonce =>
       troveManager.setAddresses(
@@ -282,6 +309,14 @@ const connectContracts = async (
     //     erc20.address,
     //     { ...overrides, nonce }
     //   )
+
+    nonce =>
+      priceFeed.setAddresses(
+        oracleReqAddresses.sepolia.led,
+        piCalculator.address,
+        oracleReqAddresses.sepolia.uniV2Pool,
+        {...overrides, nonce}
+      )
   ];
 
   const txs = await Promise.all(connections.map((connect, i) => connect(txCount + i)));
@@ -293,12 +328,13 @@ const connectContracts = async (
 export const deployAndSetupContracts = async (
   deployer: Signer,
   oracleAddresses: INetworkOracles,
+  oracleReqAddresses: INetworkOracleReqs,
   collateralSymbol: keyof IAssets,
   collateralAddress: string | undefined,
   getContractFactory: (name: string, signer: Signer) => Promise<ContractFactory>,
   delay: number,
   stablecoinAddress: string,
-  _priceFeedIsTestnet = true,
+  _priceFeedIsTestnet = false,
   _isDev = true,
   overrides?: Overrides
 ): Promise<_LiquityDeploymentJSON> => {
@@ -308,6 +344,8 @@ export const deployAndSetupContracts = async (
 
   log("Deploying contracts...");
   log();
+
+  _priceFeedIsTestnet = false;
 
   const deployment: _LiquityDeploymentJSON = {
     chainId: await deployer.getChainId(),
@@ -330,7 +368,7 @@ export const deployAndSetupContracts = async (
   const contracts = _connectToContracts(deployer, deployment);
 
   log("Connecting contracts...");
-  await connectContracts(contracts, deployer, overrides);
+  await connectContracts(contracts, oracleReqAddresses, deployer, overrides);
 
   return {
     ...deployment

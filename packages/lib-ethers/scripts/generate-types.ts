@@ -14,6 +14,7 @@ import IERC20 from "../../contracts/artifacts/contracts/Dependencies/IERC20.sol/
 import THUSDToken from "../../contracts/artifacts/contracts/THUSDToken.sol/THUSDToken.json";
 import PCV from "../../contracts/artifacts/contracts/PCV.sol/PCV.json";
 import MultiTroveGetter from "../../contracts/artifacts/contracts/MultiTroveGetter.sol/MultiTroveGetter.json";
+import PIScaledPerSecondCalculator from "../../contracts/artifacts/contracts/rai/PIScaledPerSecondCalculator.sol/PIScaledPerSecondCalculator.json";
 import PriceFeed from "../../contracts/artifacts/contracts/PriceFeed.sol/PriceFeed.json";
 import PriceFeedTestnet from "../../contracts/artifacts/contracts/TestContracts/PriceFeedTestnet.sol/PriceFeedTestnet.json";
 import SortedTroves from "../../contracts/artifacts/contracts/SortedTroves.sol/SortedTroves.json";
@@ -153,6 +154,7 @@ const contractArtifacts = [
   THUSDToken,
   PCV,
   MultiTroveGetter,
+  PIScaledPerSecondCalculator,
   PriceFeed,
   PriceFeedTestnet,
   SortedTroves,

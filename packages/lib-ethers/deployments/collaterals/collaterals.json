@@ -35,6 +35,16 @@
           "name": "v0"
         }
       ]
+    },
+    {
+      "path": "deployments/default/usd",
+      "name": "usd",
+      "subfolders": [
+        {
+          "path": "deployments/default/usd/v0",
+          "name": "v0"
+        }
+      ]
     }
   ]
 }
