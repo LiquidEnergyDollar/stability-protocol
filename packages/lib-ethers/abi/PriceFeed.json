@@ -491,11 +491,24 @@
       },
       {
         "internalType": "address",
-        "name": "_uniV2Pair",
+        "name": "_uniV3ReaderAddress",
         "type": "address"
       }
     ],
     "name": "setAddresses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_uniV3PoolAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setUniV3PoolAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -539,10 +552,23 @@
   },
   {
     "inputs": [],
-    "name": "uniV2Pair",
+    "name": "uniV3PoolAddress",
     "outputs": [
       {
-        "internalType": "contract IUniswapV2Pair",
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "uniV3Reader",
+    "outputs": [
+      {
+        "internalType": "contract IUniV3Reader",
         "name": "",
         "type": "address"
       }

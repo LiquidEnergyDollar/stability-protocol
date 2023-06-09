@@ -574,14 +574,16 @@ interface PriceFeedCalls {
   rmultiply(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
   rpower(x: BigNumberish, n: BigNumberish, base: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
   subtract(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
-  uniV2Pair(_overrides?: CallOverrides): Promise<string>;
+  uniV3PoolAddress(_overrides?: CallOverrides): Promise<string>;
+  uniV3Reader(_overrides?: CallOverrides): Promise<string>;
   wdivide(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
   wmultiply(x: BigNumberish, y: BigNumberish, _overrides?: CallOverrides): Promise<BigNumber>;
 }
 
 interface PriceFeedTransactions {
   fetchPrice(_overrides?: Overrides): Promise<BigNumber>;
-  setAddresses(_ledAddress: string, _pidCalculatorAddress: string, _uniV2Pair: string, _overrides?: Overrides): Promise<void>;
+  setAddresses(_ledAddress: string, _pidCalculatorAddress: string, _uniV3ReaderAddress: string, _overrides?: Overrides): Promise<void>;
+  setUniV3PoolAddress(_uniV3PoolAddress: string, _overrides?: Overrides): Promise<void>;
   transferOwnership(newOwner: string, _overrides?: Overrides): Promise<void>;
   updateAll(_overrides?: Overrides): Promise<void>;
   updateDeviationFactor(_overrides?: Overrides): Promise<void>;

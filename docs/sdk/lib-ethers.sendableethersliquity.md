@@ -34,6 +34,7 @@ export declare class SendableEthersLiquity implements SendableLiquity<EthersTran
 |  [depositTHUSDInStabilityPool(amount, overrides)](./lib-ethers.sendableethersliquity.depositthusdinstabilitypool.md) |  | Make a new Stability Deposit, or top up existing one. |
 |  [liquidate(address, overrides)](./lib-ethers.sendableethersliquity.liquidate.md) |  | Liquidate one or more undercollateralized Troves. |
 |  [liquidateUpTo(maximumNumberOfTrovesToLiquidate, overrides)](./lib-ethers.sendableethersliquity.liquidateupto.md) |  | Liquidate the least collateralized Troves up to a maximum number. |
+|  [mintErc20(toAddress, amount, overrides)](./lib-ethers.sendableethersliquity.minterc20.md) |  |  |
 |  [openTrove(params, maxBorrowingRateOrOptionalParams, overrides)](./lib-ethers.sendableethersliquity.opentrove.md) |  | Open a new Trove by depositing collateral and borrowing thUSD. |
 |  [redeemTHUSD(amount, maxRedemptionRate, overrides)](./lib-ethers.sendableethersliquity.redeemthusd.md) |  | Redeem thUSD to native currency (e.g. Ether) at face value. |
 |  [repayTHUSD(amount, overrides)](./lib-ethers.sendableethersliquity.repaythusd.md) |  | Adjust existing Trove by repaying some of its debt. |

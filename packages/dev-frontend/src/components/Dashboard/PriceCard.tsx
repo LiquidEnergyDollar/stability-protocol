@@ -31,7 +31,7 @@ export const PriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Elem
         imgSrc="./icons/price-chart.png"
       >
         
-        {inversePrice.prettify(2)}
+        {inversePrice.prettify(4)}
       </TopCard>
     </Card>
   );

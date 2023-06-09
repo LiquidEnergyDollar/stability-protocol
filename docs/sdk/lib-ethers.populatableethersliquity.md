@@ -34,6 +34,7 @@ export declare class PopulatableEthersLiquity implements PopulatableLiquity<Ethe
 |  [depositTHUSDInStabilityPool(amount, overrides)](./lib-ethers.populatableethersliquity.depositthusdinstabilitypool.md) |  | Make a new Stability Deposit, or top up existing one. |
 |  [liquidate(address, overrides)](./lib-ethers.populatableethersliquity.liquidate.md) |  | Liquidate one or more undercollateralized Troves. |
 |  [liquidateUpTo(maximumNumberOfTrovesToLiquidate, overrides)](./lib-ethers.populatableethersliquity.liquidateupto.md) |  | Liquidate the least collateralized Troves up to a maximum number. |
+|  [mintErc20(toAddress, amount, overrides)](./lib-ethers.populatableethersliquity.minterc20.md) |  |  |
 |  [openTrove(params, maxBorrowingRateOrOptionalParams, overrides)](./lib-ethers.populatableethersliquity.opentrove.md) |  | Open a new Trove by depositing collateral and borrowing thUSD. |
 |  [redeemTHUSD(amount, maxRedemptionRate, overrides)](./lib-ethers.populatableethersliquity.redeemthusd.md) |  | Redeem thUSD to native currency (e.g. Ether) at face value. |
 |  [repayTHUSD(amount, overrides)](./lib-ethers.populatableethersliquity.repaythusd.md) |  | Adjust existing Trove by repaying some of its debt. |

@@ -47,7 +47,7 @@ export const EditPrice = ({ version, collateral }: EditPriceProps): JSX.Element 
   })!;
   
   const canSetPrice = collateralThreshold.store.connection._priceFeedIsTestnet
-  const [editedPrice, setEditedPrice] = useState(inversePrice.toString(2))
+  const [editedPrice, setEditedPrice] = useState(inversePrice.toString(4))
 
   return (
     <Flex sx={{ flexDirection: "column", gridColumn: "span 2", gap: 2 }}>
@@ -58,7 +58,7 @@ export const EditPrice = ({ version, collateral }: EditPriceProps): JSX.Element 
         borderBottom: 1,
         borderColor: "border"
       }}>
-        { symbol }/{ COIN } - {version}
+        { COIN }/{ symbol } - {version}
       </Flex>
         {canSetPrice ? (
           <Flex sx={{ mb:1, textAlign:"left", height: "1.2em", }}>

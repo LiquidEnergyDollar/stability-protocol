@@ -316,7 +316,7 @@ const connectContracts = async (
       priceFeed.setAddresses(
         oracleReqAddresses.sepolia.led,
         piCalculator.address,
-        oracleReqAddresses.sepolia.uniV2Pool,
+        oracleReqAddresses.sepolia.uniV3Reader,
         {...overrides, nonce}
       )
   ];

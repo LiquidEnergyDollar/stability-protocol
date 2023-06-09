@@ -3,7 +3,7 @@
 pragma solidity ^0.8.17;
 
 import "./Interfaces/IPriceFeed.sol";
-import "./Interfaces/IUniswapV2Pair.sol";
+import "./Interfaces/IUniV3Reader.sol";
 import "./Interfaces/IPIScaledPerSecondCalculator.sol";
 import "./Interfaces/ILedOracle.sol";
 import "./Dependencies/Ownable.sol";
@@ -27,7 +27,8 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
 
     ILedOracle public led;
     IPIScaledPerSecondCalculator public pidCalculator;
-    IUniswapV2Pair public uniV2Pair;
+    address public uniV3PoolAddress = address(0);
+    IUniV3Reader public uniV3Reader;
 
     uint256 public deviationFactor;
     uint256 public deviationFactorUpdateTime;
@@ -67,6 +68,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
 
         // Invert price - Liquity expects price in terms of
         // debtToken per unit of collateral
+        // TODO Check if newPrice is zero
         newPrice = (10 ** 36) / newPrice;
 
         lastGoodPrice = newPrice;
@@ -79,41 +81,39 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     function setAddresses(
         address _ledAddress,
         address _pidCalculatorAddress,
-        address _uniV2Pair
+        address _uniV3ReaderAddress
     )
         external
         onlyOwner
     {
         led = ILedOracle(_ledAddress);
         pidCalculator = IPIScaledPerSecondCalculator(_pidCalculatorAddress);
-        uniV2Pair = IUniswapV2Pair(_uniV2Pair);
+        uniV3Reader = IUniV3Reader(_uniV3ReaderAddress);
 
         // update everything after setting addresses
         updateAll();
     }
 
-    // calculate price based on pair reserves
-    function getTokenPrice(uint amount) internal view returns(uint)
+    function setUniV3PoolAddress(address _uniV3PoolAddress)
+        external
+        onlyOwner
     {
-        IERC20 token1 = IERC20(uniV2Pair.token1());
-        (uint Res0, uint Res1,) = uniV2Pair.getReserves();
+        uniV3PoolAddress = _uniV3PoolAddress;
 
-        // decimals
-        uint res0 = Res0*(10**token1.decimals());
-        return((amount*res0)/Res1); // return amount of token0 needed to buy token1
+        _renounceOwnership();
     }
 
     function updateRate() public {
-        // If uniV2Pair isn't set yet, we use a redemption rate of 1
+        // If uniV3PoolAddress isn't set yet, we use a redemption rate of 1
         // This means we track the LED oracle price
         uint256 marketPrice;
         uint256 redemptionPrice;
-        if (address(uniV2Pair) == address(0) || redemptionRate == 0) {
+        if (address(uniV3PoolAddress) == address(0) || redemptionRate == 0) {
             // 1 = 10 ** 27
             redemptionRate = RAY;
         } else {
             // Get price feed updates
-            marketPrice = getTokenPrice(1);
+            marketPrice = uniV3Reader.getTWAP(uniV3PoolAddress);
             // If the price is non-zero
             require(marketPrice > 0, "PriceFeed/null-uniswap-price");
 
@@ -121,7 +121,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
             // Calculate the rate
             redemptionRate = pidCalculator.computeRate(
                 marketPrice,
-                redemptionPrice,
+                ray(redemptionPrice),
                 RAY
             );
         }
