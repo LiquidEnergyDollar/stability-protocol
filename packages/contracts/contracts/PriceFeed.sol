@@ -103,6 +103,11 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         _renounceOwnership();
     }
 
+    function getMarketPrice() public view returns(uint)
+    {
+        return uniV3Reader.getTWAP(uniV3PoolAddress);
+    }
+
     function updateRate() public {
         // If uniV3PoolAddress isn't set yet, we use a redemption rate of 1
         // This means we track the LED oracle price
@@ -113,7 +118,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
             redemptionRate = RAY;
         } else {
             // Get price feed updates
-            marketPrice = uniV3Reader.getTWAP(uniV3PoolAddress);
+            marketPrice = getMarketPrice();
             // If the price is non-zero
             require(marketPrice > 0, "PriceFeed/null-uniswap-price");
 
