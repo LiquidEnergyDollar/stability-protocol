@@ -211,6 +211,8 @@ const connectContracts = async (
     throw new Error("Signer must have a provider.");
   }
 
+  overrides!.gasLimit = 600000;
+
   const txCount = await deployer.provider.getTransactionCount(deployer.getAddress());
 
   const connections: ((nonce: number) => Promise<ContractTransaction>)[] = [
@@ -314,7 +316,7 @@ const connectContracts = async (
       priceFeed.setAddresses(
         oracleReqAddresses.sepolia.led,
         piCalculator.address,
-        oracleReqAddresses.sepolia.uniV2Pool,
+        oracleReqAddresses.sepolia.uniV3Reader,
         {...overrides, nonce}
       )
   ];

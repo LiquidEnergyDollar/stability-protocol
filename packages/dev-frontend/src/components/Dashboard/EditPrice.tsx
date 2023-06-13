@@ -5,6 +5,7 @@ import { Button, Flex, Input, ThemeUICSSProperties } from "theme-ui";
 import { useThreshold } from "../../hooks/ThresholdContext";
 import { SystemStat } from "../SystemStat";
 import { Transaction } from "../Transaction";
+import { COIN } from "../../utils/constants";
 
 const editableStyle: ThemeUICSSProperties = {
   bg: "white",
@@ -38,6 +39,7 @@ export const EditPrice = ({ version, collateral }: EditPriceProps): JSX.Element 
   const store = thresholdStore?.store!;
   const symbol = store.symbol;
   const price = store.price;
+  const inversePrice = Decimal.ONE.div(price);
   
   const { threshold } = useThreshold()
   const collateralThreshold = threshold.find((versionedThreshold) => {
@@ -45,7 +47,7 @@ export const EditPrice = ({ version, collateral }: EditPriceProps): JSX.Element 
   })!;
   
   const canSetPrice = collateralThreshold.store.connection._priceFeedIsTestnet
-  const [editedPrice, setEditedPrice] = useState(price.toString(2))
+  const [editedPrice, setEditedPrice] = useState(inversePrice.toString(4))
 
   return (
     <Flex sx={{ flexDirection: "column", gridColumn: "span 2", gap: 2 }}>
@@ -56,7 +58,7 @@ export const EditPrice = ({ version, collateral }: EditPriceProps): JSX.Element 
         borderBottom: 1,
         borderColor: "border"
       }}>
-        { symbol } Price - {version}
+        { COIN }/{ symbol } - {version}
       </Flex>
         {canSetPrice ? (
           <Flex sx={{ mb:1, textAlign:"left", height: "1.2em", }}>

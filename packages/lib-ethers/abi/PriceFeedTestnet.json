@@ -86,6 +86,29 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "a1",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "a2",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "a3",
+        "type": "address"
+      }
+    ],
+    "name": "setAddresses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"

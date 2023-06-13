@@ -41,7 +41,7 @@ export interface INetworkOracles {
 
 export interface IOracleReqs {
   led: string,
-  uniV2Pool: string
+  uniV3Reader: string
 }
 
 export interface INetworkOracleReqs {
@@ -157,7 +157,7 @@ export const oracleAddresses: INetworkOracles = {
 export const oracleReqAddresses: INetworkOracleReqs = {
   sepolia: {
     led: "0x637Da92c06a9c1c9Fc0Ae3700aCe13fE8e1d74E7",
-    uniV2Pool: "0x0000000000000000000000000000000000000000"
+    uniV3Reader: "0x1780a629518ECC50ae25B99A02Aed0fcdEa1F56A"
   }
 }
 
@@ -375,13 +375,38 @@ task("deploy", "Deploys the contracts to the network")
       console.log();
     }
   );
+  
+task("pricefeedsetaddress", "Updates price feed with info from LED/markets and calculates new rate")
+.addParam("pricefeedaddress", "Address of price feed contract")
+.addParam("ledaddress", "Address of price feed contract")
+.addParam("pidaddress", "Address of price feed contract")
+.addParam("univ3readeraddress", "Address of the UniV3 Pool")
+.setAction(async (taskargs, env) => {
+  const factory = await env.ethers.getContractFactory(`PriceFeed`);
+  const priceFeed = factory.attach(taskargs.pricefeedaddress);
+  await priceFeed.setAddresses(
+    taskargs.ledaddress, 
+    taskargs.pidaddress, 
+    taskargs.univ3readeraddress, 
+    { gasLimit: 250000 }
+  );
+})
+  
+task("pricefeedsetuniv3pooladdress", "Updates price feed with info from LED/markets and calculates new rate")
+.addParam("pricefeedaddress", "Address of price feed contract")
+.addParam("univ3pooladdress", "Address of the UniV3 Pool")
+.setAction(async (taskargs, env) => {
+  const factory = await env.ethers.getContractFactory(`PriceFeed`);
+  const priceFeed = factory.attach(taskargs.pricefeedaddress);
+  await priceFeed.setUniV3PoolAddress(taskargs.univ3pooladdress, { gasLimit: 250000 });
+})
 
 task("updatepricefeed", "Updates price feed with info from LED/markets and calculates new rate")
   .addParam("pricefeedaddress", "Address of price feed contract")
   .setAction(async (taskargs, env) => {
     const factory = await env.ethers.getContractFactory(`PriceFeed`);
     const priceFeed = factory.attach(taskargs.pricefeedaddress);
-    await priceFeed.updateAll({ gasLimit: 250000 });
+    await priceFeed.updateAll({ gasLimit: 1250000 });
     await priceFeed.fetchPrice({ gasLimit: 250000 });
   })
 
@@ -406,8 +431,11 @@ task("getpricefeedattrs", "Prints out deployed price feed attributes")
     console.log("PI Calculator: ")
     console.log(await priceFeed.pidCalculator());
 
-    console.log("uniV2Pair: ")
-    console.log(await priceFeed.uniV2Pair());
+    console.log("uniV3PoolAddress: ")
+    console.log(await priceFeed.uniV3PoolAddress());
+
+    console.log("uniV3Reader: ")
+    console.log(await priceFeed.uniV3Reader());
 
     console.log("lastGoodPrice: ")
     console.log(await priceFeed.lastGoodPrice());

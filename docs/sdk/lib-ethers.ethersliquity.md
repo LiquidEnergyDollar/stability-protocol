@@ -67,6 +67,7 @@ The constructor for this class is marked as internal. Third-party code should no
 |  [isTroveManager(overrides)](./lib-ethers.ethersliquity.istrovemanager.md) |  | Check if the deployment trove manager address was added to the thUSD token. |
 |  [liquidate(address, overrides)](./lib-ethers.ethersliquity.liquidate.md) |  | Liquidate one or more undercollateralized Troves. |
 |  [liquidateUpTo(maximumNumberOfTrovesToLiquidate, overrides)](./lib-ethers.ethersliquity.liquidateupto.md) |  | Liquidate the least collateralized Troves up to a maximum number. |
+|  [mintErc20(toAddress, amount, overrides)](./lib-ethers.ethersliquity.minterc20.md) |  |  |
 |  [openTrove(params, maxBorrowingRateOrOptionalParams, overrides)](./lib-ethers.ethersliquity.opentrove.md) |  | Open a new Trove by depositing collateral and borrowing thUSD. |
 |  [redeemTHUSD(amount, maxRedemptionRate, overrides)](./lib-ethers.ethersliquity.redeemthusd.md) |  | Redeem thUSD to native currency (e.g. Ether) at face value. |
 |  [repayTHUSD(amount, overrides)](./lib-ethers.ethersliquity.repaythusd.md) |  | Adjust existing Trove by repaying some of its debt. |

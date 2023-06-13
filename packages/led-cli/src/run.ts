@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import inquirerPrompt from 'inquirer-autocomplete-prompt';
 import { EthersLiquity } from '../../lib-ethers/src/EthersLiquity';
 import { _connectToDeployment } from '../../lib-ethers/src/EthersLiquityConnection';
-import { DEFAULT_COLLATERAL_FOR_TESTING, DEFAULT_VERSION_FOR_TESTING } from '../../lib-ethers/src/_utils';
+import { DEFAULT_VERSION_FOR_TESTING } from '../../lib-ethers/src/_utils';
 import path from 'path';
 import fs from "fs";
 import fuzzy from 'fuzzy';
@@ -73,6 +73,7 @@ dotenv.config({path: __dirname + '/.env'})
 inquirer.registerPrompt('autocomplete', inquirerPrompt);
 
 let NETWORK = "sepolia";
+let COLLATERAL = "usd";
 
 async function run() {    
     // Get the methods of EthersLiquity
@@ -114,7 +115,7 @@ async function run() {
 
         // TODO: Take some of these as command line inputs
         const deploymentString = fs.readFileSync(
-            path.join("..", "lib-ethers", "deployments", "default", DEFAULT_COLLATERAL_FOR_TESTING, "v0", `${NETWORK}.json`), 
+            path.join("..", "lib-ethers", "deployments", "default", COLLATERAL, "v0", `${NETWORK}.json`), 
             'utf8'
             );
         const deployment = JSON.parse(deploymentString);
@@ -129,7 +130,7 @@ async function run() {
         const signer = new Wallet(deployerAccount, provider);
         console.log("Calling contract from " + await signer.getAddress());
         const ethersLiquity: Record<string, any> = EthersLiquity._from(
-            _connectToDeployment(DEFAULT_COLLATERAL_FOR_TESTING, DEFAULT_VERSION_FOR_TESTING, deployment, signer, {
+            _connectToDeployment(COLLATERAL, DEFAULT_VERSION_FOR_TESTING, deployment, signer, {
                 userAddress: await signer.getAddress()
             })
         );
