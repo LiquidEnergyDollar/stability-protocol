@@ -15,9 +15,9 @@ import {
 } from "./validation/validateStabilityDepositChange";
 import { checkTransactionCollateral } from "../../utils/checkTransactionCollateral";
 
-const init = ({ bammDeposit }: LiquityStoreState) => ({
-  originalDeposit: bammDeposit,
-  editedUSD: bammDeposit.currentUSD,
+const init = ({ stabilityDeposit }: LiquityStoreState) => ({
+  originalDeposit: stabilityDeposit,
+  editedUSD: stabilityDeposit.currentTHUSD,
   changePending: false
 });
 
@@ -51,10 +51,10 @@ const reduce = (
     case "setDeposit":
       return { ...state, editedUSD: Decimal.from(action.newValue) };
     case "revert":
-      return { ...state, editedUSD: originalDeposit.currentUSD };
+      return { ...state, editedUSD: originalDeposit.currentTHUSD };
     case "updateStore": {
       const {
-        stateChange: { bammDeposit: updatedDeposit }
+        stateChange: { stabilityDeposit: updatedDeposit }
       } = action;
       if (!updatedDeposit) {
         return state;
@@ -63,14 +63,9 @@ const reduce = (
       const newState = { ...state, originalDeposit: updatedDeposit };
 
       const changeCommitted =
-        !updatedDeposit.bammPoolShare.eq(originalDeposit.bammPoolShare) ||
-        updatedDeposit.poolShare.gt(originalDeposit.poolShare) ||
-        updatedDeposit.currentUSD.lt(originalDeposit.currentUSD) ||
         updatedDeposit.initialTHUSD.lt(originalDeposit.initialTHUSD) ||
         updatedDeposit.currentTHUSD.lt(originalDeposit.currentTHUSD) ||
-        updatedDeposit.collateralGain.lt(originalDeposit.collateralGain) ||
-        updatedDeposit.totalCollateralInBamm.lt(originalDeposit.totalCollateralInBamm) ||
-        updatedDeposit.totalThusdInBamm.lt(originalDeposit.totalThusdInBamm);
+        updatedDeposit.collateralGain.lt(originalDeposit.collateralGain);
 
       if (changePending && changeCommitted) {
         return finishChange(revert(newState));

@@ -1,7 +1,9 @@
 import {
   Decimal,
   BammDeposit,
-  BammDepositChange
+  BammDepositChange,
+  StabilityDeposit,
+  StabilityDepositChange
 } from "@liquity/lib-base";
 
 import {
@@ -36,17 +38,16 @@ export const validateStabilityDepositChange = (
   version: string,
   collateral: string,
   isMintList: boolean,
-  originalDeposit: BammDeposit,
+  originalDeposit: StabilityDeposit,
   editedTHUSD: Decimal,
   {
     thusdBalance,
     haveUndercollateralizedTroves,
-    bammAllowance
   }: StabilityDepositChangeValidationContext,
   thusdDiff: Difference| undefined,
   collateralDiff: Difference| undefined,
 ): [
-  validChange: BammDepositChange<Decimal> | undefined,
+  validChange: StabilityDepositChange<Decimal> | undefined,
   description: JSX.Element | undefined
 ] => {
   const change = originalDeposit.whatChanged(editedTHUSD);
@@ -55,27 +56,11 @@ export const validateStabilityDepositChange = (
     return [undefined, undefined];
   }
 
-  if (change.depositTHUSD?.gt(thusdBalance)) {
+  if (change.depositTHUSD && thusdBalance == 0) {
     return [
       undefined,
       <ErrorDescription>
-        The amount you're trying to deposit exceeds your balance by{" "}
-        <Amount>
-          {change.depositTHUSD.sub(thusdBalance).prettify()} {COIN}
-        </Amount>
-        .
-      </ErrorDescription>
-    ];
-  }
-
-  if(change && change.depositTHUSD?.gt(bammAllowance)) {
-    return [
-      undefined,
-      <ErrorDescription>
-        You have no allowance. {" "}
-        <UnlockButton version={version} collateral={collateral} isMintList={isMintList}>
-          click here to unlock.
-        </UnlockButton>
+        You must first have a {COIN} balance to deposit into the stability pool.
       </ErrorDescription>
     ];
   }

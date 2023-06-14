@@ -15,11 +15,11 @@ import { useStabilityView } from "./context/StabilityViewContext";
 import { InfoIcon } from "../InfoIcon";
 import { checkTransactionCollateral } from "../../utils/checkTransactionCollateral";
 
-const selector = ({ bammDeposit, trove, symbol, isStabilityPools }: ThresholdStoreState) => ({
-  bammDeposit,
+const selector = ({ stabilityDeposit, trove, symbol, thusdInStabilityPool }: ThresholdStoreState) => ({
+  stabilityDeposit,
   trove,
   symbol,
-  isStabilityPools
+  thusdInStabilityPool
 });
 
 type ActiveDepositProps = {
@@ -36,17 +36,16 @@ export const ActiveDeposit = (props: ActiveDepositProps): JSX.Element => {
     return store.version === version && store.collateral === collateral;
   });
   const store = thresholdStore?.store!;
-  const bammDeposit = store.bammDeposit;
+  const stabilityDeposit = store.stabilityDeposit;
   const collateralSymbol = store.symbol;
-  const isStabilityPools = store.isStabilityPools;
-
-  const {poolShare, bammPoolShare} = bammDeposit
+  const thusdInStabilityPool = store.thusdInStabilityPool;
+  const poolShare = stabilityDeposit.currentTHUSD.mulDiv(100, thusdInStabilityPool);
 
   const handleAdjustDeposit = useCallback(() => {
     dispatchEvent("ADJUST_DEPOSIT_PRESSED", version, collateral);
   }, [version, collateral, dispatchEvent]);
 
-  const hasGain = !bammDeposit.collateralGain.isZero;
+  const hasGain = !stabilityDeposit.collateralGain.isZero;
 
   const transactionId = "stability-deposit";
   const transactionState = useMyTransactionState(transactionId, version, collateral);
@@ -65,9 +64,6 @@ export const ActiveDeposit = (props: ActiveDepositProps): JSX.Element => {
       dispatchEvent("REWARDS_CLAIMED", version, collateral);
     }
   }, [version, collateral, transactionState.type, dispatchEvent]);
-
-  const collateralDiffInUsd = bammDeposit.currentUSD.sub(bammDeposit.currentTHUSD)
-  const collateralIsImportant = (collateralDiffInUsd.div(bammDeposit.currentUSD)).gt(1/1000)
 
   return (
     <Card variant="mainCards">
@@ -97,33 +93,16 @@ export const ActiveDeposit = (props: ActiveDepositProps): JSX.Element => {
             <DisabledEditableRow
               label="Deposit"
               inputId="deposit-lusd"
-              amount={bammDeposit.currentUSD.prettify()}
+              amount={stabilityDeposit.currentTHUSD.prettify()}
               unit={COIN}
             />
             <Flex sx={{ justifyContent: 'space-between', flexWrap: "wrap" }}>
               <StaticRow
-                label="thUSD balance"
+                label="Liquidation gain"
                 inputId="deposit-gain"
-                amount={bammDeposit.currentTHUSD.prettify(2)}
+                amount={stabilityDeposit.collateralGain.prettify(2)}
                 unit={COIN}
               />
-              {collateralIsImportant &&
-                <StaticRow
-                  label={`${collateralSymbol} balance`}
-                  inputId="deposit-gain"
-                  amount={bammDeposit.collateralGain.prettify(4)}
-                  unit={collateralSymbol}
-                  infoIcon={
-                    <InfoIcon
-                      tooltip={
-                        <Card variant="tooltip" sx={{ width: "240px" }}>
-                          Temporary {collateralSymbol} balance until rebalance takes place
-                        </Card>
-                      }
-                    />
-                  }
-                />
-              }
             </Flex>
             <StaticRow
               label="Pool share"
@@ -131,17 +110,9 @@ export const ActiveDeposit = (props: ActiveDepositProps): JSX.Element => {
               amount={poolShare.prettify(4)}
               unit="%"
             />
-            <div className="hide" >
-              <StaticRow
-                label="BAMM Pool share"
-                inputId="deposit-share"
-                amount={bammPoolShare.prettify(4)}
-                unit="%"
-              />
-            </div>
           </Box>
           <Flex variant="layout.actions" sx={{ flexDirection: "column", gap: "1em" }}>
-            <Button variant="outline" disabled={!isStabilityPools} onClick={handleAdjustDeposit} sx={{ borderRadius: "12px", mt: 2 }}>
+            <Button onClick={handleAdjustDeposit} sx={{ borderRadius: "12px", mt: 2 }}>
               <Icon name="pen" size="sm" />
               &nbsp;Adjust
             </Button>

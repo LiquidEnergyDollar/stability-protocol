@@ -75,6 +75,11 @@ export interface ReadableLiquity {
    */
   getPrice(): Promise<Decimal>;
 
+  // /**
+  //  * Get the current market price of the native currency (e.g. Ether) in USD.
+  //  */
+  // getMarketPrice(): Promise<Decimal>;
+
   /**
    * Get the total amount of collateral and debt in the Liquity system.
    */

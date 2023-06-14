@@ -11,7 +11,7 @@ import { useMyTransactionState } from "../Transaction";
 import {
   Decimal,
   Decimalish,
-  BammDeposit,
+  StabilityDeposit,
   LiquityStoreState as ThresholdStoreState,
   Difference
 } from "@liquity/lib-base";
@@ -25,10 +25,10 @@ import { LoadingOverlay } from "../LoadingOverlay";
 import { InfoIcon } from "../InfoIcon";
 import { checkTransactionCollateral } from "../../utils/checkTransactionCollateral";
 
-const select = ({ thusdBalance, thusdInStabilityPool, bammDeposit, symbol }: ThresholdStoreState) => ({
+const select = ({ thusdBalance, thusdInStabilityPool, stabilityDeposit, symbol }: ThresholdStoreState) => ({
   thusdBalance,
   thusdInStabilityPool,
-  bammDeposit,
+  stabilityDeposit,
   symbol
 });
 
@@ -36,7 +36,7 @@ type StabilityDepositEditorProps = {
   version: string;
   collateral: string;
   isMintList: boolean;
-  originalDeposit: BammDeposit;
+  originalDeposit: StabilityDeposit;
   editedUSD: Decimal;
   changePending: boolean;
   dispatch: (action: { type: "setDeposit"; newValue: Decimalish } | { type: "revert" }) => void;
@@ -60,7 +60,7 @@ export const StabilityDepositEditor = ({
   const store = thresholdStore?.store!;
   const thusdBalance = store.thusdBalance;
   const thusdInStabilityPool = store.thusdInStabilityPool;
-  const bammDeposit = store.bammDeposit;
+  const stabilityDeposit = store.stabilityDeposit;
   const collateralSymbol = store.symbol;
 
   const editingState = useState<string>();
@@ -69,84 +69,32 @@ export const StabilityDepositEditor = ({
     return store.version === version && store.collateral === collateral;
   });
 
-  const maxAmount = bammDeposit.currentUSD.add(thusdBalance);
+  const maxAmount = stabilityDeposit.currentTHUSD.add(thusdBalance);
   const maxedOut = editedUSD.eq(maxAmount);
+  const thusdInStabilityPoolAfterChange = thusdInStabilityPool
+  .sub(originalDeposit.currentTHUSD)
+  .add(editedUSD);
 
   const originalPoolShare = originalDeposit.currentTHUSD.mulDiv(100, thusdInStabilityPool);
 
-  const { bammPoolShare } = bammDeposit;
-
-  const userTotalUsdInBamm = bammDeposit.currentUSD
-  const totalUsdInBamm = userTotalUsdInBamm.mulDiv(100, bammPoolShare);
-  const editedUserUsd = userTotalUsdInBamm.sub(bammDeposit.currentUSD).add(editedUSD);
-  const editedTotalUsdInBamm = totalUsdInBamm.infinite ? Decimal.from(0) : totalUsdInBamm.sub(bammDeposit.currentUSD).add(editedUSD);
-  const editedBammPoolShare = editedTotalUsdInBamm.nonZero ? editedUserUsd.mulDiv(100, editedTotalUsdInBamm) : Decimal.from(0)
-
-  /* USD balance
-  ====================================================================*/
-  const usdDiff = Difference.between(editedUSD, bammDeposit.currentUSD)
-
-  const bammPoolShareChange =
-  bammDeposit.currentUSD.nonZero &&
-    Difference.between(editedBammPoolShare, bammPoolShare).nonZero;
-
-  let newTotalThusd, newTotalCollateral;
-  if(bammPoolShareChange && (!bammPoolShareChange?.nonZero || bammPoolShareChange?.positive)){
-    newTotalThusd = bammDeposit.totalThusdInBamm.add(Decimal.from(usdDiff.absoluteValue||0));
-    newTotalCollateral = bammDeposit.totalCollateralInBamm;
-  } else {
-    newTotalThusd = bammDeposit.totalThusdInBamm.mul((editedTotalUsdInBamm.div(totalUsdInBamm)))
-    newTotalCollateral = bammDeposit.totalCollateralInBamm.mul((editedTotalUsdInBamm.div(totalUsdInBamm)))
-  }
-
-  const allowanceTxState = useMyTransactionState("bamm-unlock", version, collateral);
-  const isCollateralChecked = checkTransactionCollateral(
-    useMyTransactionState,
-    version,
-    collateral
-  );
-
-  const waitingForTransaction = isCollateralChecked &&
-    (allowanceTxState.type === "waitingForApproval" ||
-    allowanceTxState.type === "waitingForConfirmation");
-
-  /* Collateral balance
-  ====================================================================*/
-  const newCollateralBalance = editedBammPoolShare.mul(newTotalCollateral).div(100)
-  const collateralDiff = Difference.between(newCollateralBalance, bammDeposit.collateralGain).nonZero
-
-  /* THUSD balance
-  ====================================================================*/
-  const newThusdBalance = editedBammPoolShare.mul(newTotalThusd).div(100)
-  const thusdDiff = Difference.between(newThusdBalance, bammDeposit.currentTHUSD).nonZeroish(15)
-  
-  const [, description] = validateStabilityDepositChange(
-    version,
-    collateral,
-    isMintList,
-    originalDeposit,
-    editedUSD,
-    validationContextStore?.store!,
-    thusdDiff,
-    collateralDiff,
-  );
-  const makingNewDeposit = originalDeposit.isEmpty;
-
-  /* pool share
-  ====================================================================*/
-  const thusdInStabilityPoolAfterChange = thusdInStabilityPool
-    .add(newTotalThusd)
-    .sub(bammDeposit.totalThusdInBamm);
-
-  const newPoolShare = (newTotalThusd.mulDiv(editedBammPoolShare, 100)).mulDiv(100, thusdInStabilityPoolAfterChange);
+  const newPoolShare = editedUSD.mulDiv(100, thusdInStabilityPoolAfterChange);
   const poolShareChange =
     originalDeposit.currentTHUSD.nonZero &&
     Difference.between(newPoolShare, originalPoolShare).nonZero;
 
-  const collateralDiffInUsd = bammDeposit.currentUSD.sub(bammDeposit.currentTHUSD)
-  const collateralIsImportant = (collateralDiffInUsd.div(bammDeposit.currentUSD)).gt(1/1000)
+  // const [, description] = validateStabilityDepositChange(
+  //   version,
+  //   collateral,
+  //   isMintList,
+  //   originalDeposit,
+  //   editedUSD,
+  //   validationContextStore?.store!,
+  //   thusdDiff,
+  //   collateralDiff,
+  // );
+  const makingNewDeposit = originalDeposit.isEmpty;
 
-  const showOverlay = changePending || waitingForTransaction
+  const showOverlay = changePending
   return (
     <Card variant="mainCards">
       <Card variant="layout.columns">
@@ -182,71 +130,56 @@ export const StabilityDepositEditor = ({
             editedAmount={editedUSD.toString(2)}
             setEditedAmount={newValue => dispatch({ type: "setDeposit", newValue })}
           />
+          {newPoolShare.infinite ? (
+            <StaticRow label="Pool share" inputId="deposit-share" amount="N/A" />
+          ) : (
+            <StaticRow
+              label="Pool share"
+              inputId="deposit-share"
+              amount={newPoolShare.prettify(4)}
+              pendingAmount={poolShareChange?.prettify(4).concat("%")}
+              pendingColor={poolShareChange?.positive ? "success" : "danger"}
+              unit="%"
+            />
+          )}
+
           {!originalDeposit.isEmpty && (
             <>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: "wrap" }}>
               <StaticRow
-                  label={`${COIN} balance`}
+                  label={`Liquidation gain`}
                   inputId="deposit-gain"
-                  amount={newThusdBalance.prettify(2)}
                   unit={COIN}
-                  pendingAmount={thusdDiff?.prettify(2).concat(COIN)}
-                  pendingColor={thusdDiff?.positive ? "success" : "danger"}
+                  amount={originalDeposit.collateralGain.prettify(4)}
+                  color={originalDeposit.collateralGain.nonZero && "success"}
               />
 
-              {collateralIsImportant && <StaticRow
-                label={`${collateralSymbol} balance`}
-                inputId="deposit-gain"
-                amount={newCollateralBalance.prettify(4)}
-                unit={collateralSymbol}
-                pendingAmount={collateralDiff?.prettify(4).concat(collateralSymbol)}
-                pendingColor={collateralDiff?.positive ? "success" : "danger"}
+              {/* <StaticRow
+                label="Reward"
+                inputId="deposit-reward"
+                amount={originalDeposit.lqtyReward.prettify()}
+                color={originalDeposit.lqtyReward.nonZero && "success"}
+                unit={GT}
                 infoIcon={
                   <InfoIcon
                     tooltip={
                       <Card variant="tooltip" sx={{ width: "240px" }}>
-                      Temporary {collateralSymbol} balance until rebalance takes place
+                        Although the LQTY rewards accrue every minute, the value on the UI only updates
+                        when a user transacts with the Stability Pool. Therefore you may receive more
+                        rewards than is displayed when you claim or adjust your deposit.
                       </Card>
                     }
                   />
                 }
-              />
-            }
+              /> */}
             </Flex>
-            {newPoolShare.infinite ? (
-              <StaticRow label="Pool share" inputId="deposit-share" amount="N/A" />
-            ) : (
-              <StaticRow
-                label="Pool share"
-                inputId="deposit-share"
-                amount={newPoolShare.prettify(4)}
-                pendingAmount={poolShareChange?.prettify(4).concat("%")}
-                pendingColor={poolShareChange?.positive ? "success" : "danger"}
-                unit="%"
-              />
-            )}
-            <div className="hide" >
-              {bammPoolShare.infinite ? (
-                <StaticRow label="BAMM Pool share" inputId="deposit-share" amount="N/A" />
-              ) : (
-                <StaticRow
-                  label="BAMM Pool share"
-                  inputId="deposit-share"
-                  amount={editedBammPoolShare.prettify(4)}
-                  pendingAmount={bammPoolShareChange?.prettify(4).concat("%")}
-                  pendingColor={bammPoolShareChange?.positive ? "success" : "danger"}
-                  unit="%"
-                />
-              )}
-            </div>
             </>
           )}
-          {description ??
-            (makingNewDeposit ? (
+          {makingNewDeposit ? (
               <ActionDescription>Enter the amount of {COIN} you'd like to deposit.</ActionDescription>
             ) : (
               <ActionDescription>Adjust the {COIN} amount to deposit or withdraw.</ActionDescription>
-            ))}
+            )}
           {children}
         </Flex>
         {showOverlay && <LoadingOverlay />}

@@ -222,6 +222,13 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     return priceFeed.callStatic.fetchPrice({ ...overrides }).then(decimalify);
   }
 
+  // /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getMarketPrice} */
+  // getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
+  //   const { priceFeed } = _getContracts(this.connection);
+
+  //   return priceFeed.getMarketPrice({ ...overrides }).then(decimalify);
+  // }
+
   /** @internal */
   async _getActivePool(overrides?: EthersCallOverrides): Promise<Trove> {
     const { activePool } = _getContracts(this.connection);

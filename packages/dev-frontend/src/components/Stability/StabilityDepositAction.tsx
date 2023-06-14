@@ -1,5 +1,5 @@
 import { Button } from "theme-ui";
-import { Decimal, BammDepositChange } from "@liquity/lib-base";
+import { Decimal, StabilityDepositChange } from "@liquity/lib-base";
 
 import { useThreshold } from "../../hooks/ThresholdContext";
 import { useTransactionFunction } from "../Transaction";
@@ -8,7 +8,7 @@ type StabilityDepositActionProps = {
   version: string;
   collateral: string;
   transactionId: string;
-  change: BammDepositChange<Decimal>;
+  change: StabilityDepositChange<Decimal>;
   isStabilityPools: boolean,
   children: React.ReactNode
 };
@@ -31,8 +31,8 @@ export const StabilityDepositAction: React.FC<StabilityDepositActionProps> = ({
   const [sendTransaction] = useTransactionFunction(
     transactionId,
     change.depositTHUSD
-      ? send.depositTHUSDInBammPool.bind(send, change.depositTHUSD)
-      : send.withdrawTHUSDFromBammPool.bind(send, change.withdrawTHUSD),
+      ? send.depositTHUSDInStabilityPool.bind(send, change.depositTHUSD)
+      : send.withdrawTHUSDFromStabilityPool.bind(send, change.withdrawTHUSD),
     version,
     collateral,
   );

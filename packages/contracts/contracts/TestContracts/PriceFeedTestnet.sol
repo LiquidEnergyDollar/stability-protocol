@@ -19,6 +19,11 @@ contract PriceFeedTestnet is Ownable, IPriceFeed {
     function getPrice() external view returns (uint256) {
         return _price;
     }
+    
+    // View price getter for simplicity in tests
+    function getMarketPrice() external view returns (uint256) {
+        return _price;
+    }
 
     function fetchPrice() external override returns (uint256) {
         // Fire an event just like the mainnet version would.

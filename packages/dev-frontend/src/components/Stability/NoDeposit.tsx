@@ -27,6 +27,13 @@ export const UnlockButton = (props: UnlockButtonProps): JSX.Element => {
   const { version, collateral, children } = props;
   const { threshold } = useThreshold();
 
+  const thresholdSelectorStores = useThresholdSelector(select);
+  const thresholdStore = thresholdSelectorStores.find((store) => {
+    return store.version === version && store.collateral === collateral;
+  });
+  const store = thresholdStore?.store!;
+  const thusdBalance = store.thusdBalance;
+
   const collateralThreshold = threshold.find((versionedThreshold) => {
     return versionedThreshold.version === version && versionedThreshold.collateral === collateral;
   })!;
@@ -34,8 +41,8 @@ export const UnlockButton = (props: UnlockButtonProps): JSX.Element => {
   const send = collateralThreshold.store.send;
 
   const [sendTransaction] = useTransactionFunction(
-    "bamm-unlock",
-    send.bammUnlock.bind(send),
+    "insurance-deposit",
+    send.depositTHUSDInStabilityPool.bind(send, thusdBalance),
     version,
     collateral
   );

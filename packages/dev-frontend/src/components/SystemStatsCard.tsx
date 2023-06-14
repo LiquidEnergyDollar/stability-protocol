@@ -21,7 +21,7 @@ const selector = ({
   redemptionRate,
   pcvBalance,
   symbol,
-  bammDeposit
+  stabilityDeposit
 }: ThresholdStoreState) => ({
   numberOfTroves,
   price,
@@ -31,7 +31,7 @@ const selector = ({
   redemptionRate,
   pcvBalance,
   symbol,
-  bammDeposit
+  stabilityDeposit
 });
 
 export const SystemStatsCard = ({ variant = "info", IsPriceEditable }: SystemStatsCardProps): JSX.Element => {
@@ -62,7 +62,6 @@ export const SystemStatsCard = ({ variant = "info", IsPriceEditable }: SystemSta
       // setThusdInSP(prev => prev.add(thresholdStore?.store.thusdInStabilityPool!))
       setPcvBal(prev => prev.add(thresholdStore?.store.pcvBalance!))
       thusdSupply = thusdSupply.add(thresholdStore?.store.total.debt!)
-      thusdInBamm = thusdInBamm.add(thresholdStore?.store.bammDeposit.totalThusdInBamm!)
     })
 
     const borrowingfeeAvg = borrowingFee.div(thresholdSelectorStores.length)

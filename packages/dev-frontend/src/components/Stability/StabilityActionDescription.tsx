@@ -1,4 +1,4 @@
-import { Decimal, BammDeposit, BammDepositChange, Difference, LiquityStoreState as ThresholdStoreState} from "@liquity/lib-base";
+import { Decimal, Difference, LiquityStoreState as ThresholdStoreState, StabilityDeposit, StabilityDepositChange} from "@liquity/lib-base";
 
 import { COIN } from "../../utils/constants";
 import { ActionDescription, Amount } from "../ActionDescription";
@@ -14,8 +14,8 @@ export const select = ({
 type StabilityActionDescriptionProps = {
   version: string;
   collateral: string;
-  originalDeposit: BammDeposit;
-  change: BammDepositChange<Decimal>;
+  originalDeposit: StabilityDeposit;
+  change: StabilityDepositChange<Decimal>;
   thusdDiff: Difference | undefined
   collateralDiff: Difference | undefined
 };

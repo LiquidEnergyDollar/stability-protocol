@@ -609,6 +609,7 @@ export interface PriceFeed
 }
 
 interface PriceFeedTestnetCalls {
+  getMarketPrice(_overrides?: CallOverrides): Promise<BigNumber>;
   getPrice(_overrides?: CallOverrides): Promise<BigNumber>;
   isOwner(_overrides?: CallOverrides): Promise<boolean>;
   owner(_overrides?: CallOverrides): Promise<string>;
