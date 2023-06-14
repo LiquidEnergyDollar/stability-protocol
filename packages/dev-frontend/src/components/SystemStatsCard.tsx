@@ -49,12 +49,14 @@ export const SystemStatsCard = ({ variant = "info", IsPriceEditable }: SystemSta
   const [pcvBal, setPcvBal] = useState(Decimal.from(0))
   const [isMounted, setIsMounted] = useState<boolean>(true);
   const singleCollateralStore = thresholdSelectorStores[0].store;
+
   const redemptionPrice = singleCollateralStore.price;
+    // TODO: Remove inverse after we switch methods
+  const inversePrice = Decimal.ONE.div(redemptionPrice);
   const marketPrice = singleCollateralStore.marketPrice;
   const piRedemptionRate = singleCollateralStore.piRedemptionRate;
   const deviationFactor = singleCollateralStore.deviationFactor;
   const symbol = singleCollateralStore.symbol;
-  const inversePrice = Decimal.ONE.div(redemptionPrice);
   const oraclePrice = inversePrice.div(deviationFactor);
 
   useEffect(() => {
@@ -157,7 +159,7 @@ export const SystemStatsCard = ({ variant = "info", IsPriceEditable }: SystemSta
                   info={`Redemption Price`}
                   tooltip={`The redemption price of ${ COIN } denominated in ${ symbol }.`}
                 >
-                  {redemptionPrice.prettify(6)}
+                  {inversePrice.prettify(6)}
                 </SystemStat>
                 <SystemStat
                   info={`Oracle Price`}

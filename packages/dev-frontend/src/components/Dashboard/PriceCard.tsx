@@ -27,6 +27,7 @@ export const RedemptionPriceCard = ({ variant = "mainCards" }: SystemStatsProps)
   const thresholdSelectorStores = useThresholdSelector(selector);
     const store = thresholdSelectorStores[0].store;
     const price = store.price;
+    // TODO: Remove inverse after we switch methods
     const inversePrice = Decimal.ONE.div(price);
   
   return (
