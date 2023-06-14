@@ -218,16 +218,31 @@ export class ReadableEthersLiquity implements ReadableLiquity {
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getPrice} */
   getPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
     const { priceFeed } = _getContracts(this.connection);
-
     return priceFeed.callStatic.fetchPrice({ ...overrides }).then(decimalify);
+    // TODO Swap once we redeploy the contracts
+    //return priceFeed.callStatic.getRedemptionPrice({ ...overrides }).then(decimalify);
   }
 
-  // /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getMarketPrice} */
-  // getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
-  //   const { priceFeed } = _getContracts(this.connection);
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getMarketPrice} */
+  getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
+    const { priceFeed } = _getContracts(this.connection);
 
-  //   return priceFeed.getMarketPrice({ ...overrides }).then(decimalify);
-  // }
+    return priceFeed.getMarketPrice({ ...overrides }).then(decimalify);
+  }
+
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getRedemptionRate} */
+  getRedemptionRate(overrides?: EthersCallOverrides): Promise<Decimal> {
+    const { priceFeed } = _getContracts(this.connection);
+
+    return priceFeed.redemptionRate({ ...overrides }).then(bn=> decimalify(bn).div(1e9));
+  }
+
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getDeviationFactor} */
+  getDeviationFactor(overrides?: EthersCallOverrides): Promise<Decimal> {
+    const { priceFeed } = _getContracts(this.connection);
+
+    return priceFeed.deviationFactor({ ...overrides }).then(bn=> decimalify(bn).div(1e9));
+  }
 
   /** @internal */
   async _getActivePool(overrides?: EthersCallOverrides): Promise<Trove> {
@@ -674,6 +689,18 @@ class _BlockPolledReadableEthersLiquity
 
   async getPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
     return this._blockHit(overrides) ? this.store.state.price : this._readable.getPrice(overrides);
+  }
+
+  async getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
+    return this._readable.getMarketPrice(overrides);
+  }
+
+  async getRedemptionRate(overrides?: EthersCallOverrides): Promise<Decimal> {
+    return this._readable.getRedemptionRate(overrides);
+  }
+
+  async getDeviationFactor(overrides?: EthersCallOverrides): Promise<Decimal> {
+    return this._readable.getDeviationFactor(overrides);
   }
 
   async getTotal(overrides?: EthersCallOverrides): Promise<Trove> {

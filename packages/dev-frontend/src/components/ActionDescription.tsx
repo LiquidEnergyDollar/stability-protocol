@@ -1,7 +1,7 @@
 import { Box, Flex, Text, useColorMode } from "theme-ui";
 
 import { GenericIcon } from "./GenericIcon";
-import { PURPLE_FILTER, WHITE_FILTER } from "../utils/constants";
+import { WHITE_FILTER } from "../utils/constants";
 
 type ActionDescriptionProps = {
   children: React.ReactNode

@@ -198,6 +198,21 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
     return this._readable.getPrice(overrides);
   }
 
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getMarketPrice} */
+  getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
+    return this._readable.getMarketPrice(overrides);
+  }
+
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getRedemptionRate} */
+  getRedemptionRate(overrides?: EthersCallOverrides): Promise<Decimal> {
+    return this._readable.getRedemptionRate(overrides);
+  }
+
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getDeviationFactor} */
+  getDeviationFactor(overrides?: EthersCallOverrides): Promise<Decimal> {
+    return this._readable.getDeviationFactor(overrides);
+  }
+
   /** @internal */
   _getActivePool(overrides?: EthersCallOverrides): Promise<Trove> {
     return this._readable._getActivePool(overrides);

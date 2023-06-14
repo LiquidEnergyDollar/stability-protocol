@@ -160,6 +160,8 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
     // @internal (undocumented)
     _getDefaultPool(overrides?: EthersCallOverrides): Promise<Trove>;
     // (undocumented)
+    getDeviationFactor(overrides?: EthersCallOverrides): Promise<Decimal>;
+    // (undocumented)
     getErc20TokenAllowance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getErc20TokenBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal>;
@@ -168,11 +170,15 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
     // @internal (undocumented)
     _getFeesFactory(overrides?: EthersCallOverrides): Promise<(blockTimestamp: number, recoveryMode: boolean) => Fees>;
     // (undocumented)
+    getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal>;
+    // (undocumented)
     getNumberOfTroves(overrides?: EthersCallOverrides): Promise<number>;
     // (undocumented)
     getPCVBalance(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getPrice(overrides?: EthersCallOverrides): Promise<Decimal>;
+    // (undocumented)
+    getRedemptionRate(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getStabilityDeposit(address?: string, overrides?: EthersCallOverrides): Promise<StabilityDeposit>;
     // (undocumented)
@@ -502,6 +508,8 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     // @internal (undocumented)
     _getDefaultPool(overrides?: EthersCallOverrides): Promise<Trove>;
     // (undocumented)
+    getDeviationFactor(overrides?: EthersCallOverrides): Promise<Decimal>;
+    // (undocumented)
     getErc20TokenAllowance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getErc20TokenBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal>;
@@ -510,11 +518,15 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     // @internal (undocumented)
     _getFeesFactory(overrides?: EthersCallOverrides): Promise<(blockTimestamp: number, recoveryMode: boolean) => Fees>;
     // (undocumented)
+    getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal>;
+    // (undocumented)
     getNumberOfTroves(overrides?: EthersCallOverrides): Promise<number>;
     // (undocumented)
     getPCVBalance(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getPrice(overrides?: EthersCallOverrides): Promise<Decimal>;
+    // (undocumented)
+    getRedemptionRate(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getStabilityDeposit(address?: string, overrides?: EthersCallOverrides): Promise<StabilityDeposit>;
     // (undocumented)

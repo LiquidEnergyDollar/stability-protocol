@@ -11,13 +11,19 @@ type SystemStatsProps = {
 
 const selector = ({
     price,
+    marketPrice,
+    piRedemptionRate,
+    deviationFactor,
     symbol,
   }: ThresholdStoreState) => ({
     price,
+    marketPrice,
+    piRedemptionRate,
+    deviationFactor,
     symbol,
   });
 
-export const PriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
+export const RedemptionPriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
   const thresholdSelectorStores = useThresholdSelector(selector);
     const store = thresholdSelectorStores[0].store;
     const price = store.price;
@@ -26,12 +32,99 @@ export const PriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Elem
   return (
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
-        name={`${ COIN } Price`}
-        tooltip={`The price of ${ COIN } denominated in ${ thresholdSelectorStores[0].collateral }.`} 
+        name={`${ COIN } Redemption Price`}
+        tooltip={`The redemption price of ${ COIN } denominated in ${ thresholdSelectorStores[0].collateral }.`} 
         imgSrc="./icons/price-chart.png"
       >
         
         {inversePrice.prettify(4)}
+      </TopCard>
+    </Card>
+  );
+};
+
+export const MarketPriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
+  const thresholdSelectorStores = useThresholdSelector(selector);
+    const store = thresholdSelectorStores[0].store;
+    const price = store.marketPrice;
+  
+  return (
+    <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
+      <TopCard
+        name={`${ COIN } Market Price`}
+        tooltip={`The market price of ${ COIN } denominated in ${ thresholdSelectorStores[0].collateral }.`} 
+        imgSrc="./icons/price-chart.png"
+      >
+        
+        {price.prettify(4)}
+      </TopCard>
+    </Card>
+  );
+};
+
+export const RedemptionRateCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
+  const thresholdSelectorStores = useThresholdSelector(selector);
+    const store = thresholdSelectorStores[0].store;
+    const redemptionRate = store.piRedemptionRate;
+    const annualizedRate = annualizeInterestRate(redemptionRate);
+    const percentage = annualizedRate.mul(100);
+  
+  return (
+    <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
+      <TopCard
+        name={`${ COIN } APY`}
+        tooltip={`The annualized yield that ${ COIN } holders are currently earning.`} 
+        imgSrc="./icons/scale-icon.png"
+      >
+        
+        {percentage.prettify(2)}%
+      </TopCard>
+    </Card>
+  );
+};
+
+function annualizeInterestRate(redemptionRate: Decimal): Decimal {
+  const secondsPerYear = 31536000; // Approximate number of seconds in a year
+  const ratePerYear = redemptionRate.pow(secondsPerYear).sub(1);
+  return ratePerYear;
+}
+
+export const DeviationFactorCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
+  const thresholdSelectorStores = useThresholdSelector(selector);
+    const store = thresholdSelectorStores[0].store;
+    const factor = store.deviationFactor;
+  
+  return (
+    <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
+      <TopCard
+        name={`Deviation Factor`}
+        tooltip={`The accumulated interest rate of ${ COIN } since deployment. Initialized to 1.`} 
+        imgSrc="./icons/scale-icon.png"
+      >
+        
+        {factor.prettify(4)}
+      </TopCard>
+    </Card>
+  );
+};
+
+export const OraclePriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
+  const thresholdSelectorStores = useThresholdSelector(selector);
+    const store = thresholdSelectorStores[0].store;
+    const redemptionPrice = store.price;
+    const inversePrice = Decimal.ONE.div(redemptionPrice);
+    const factor = store.deviationFactor;
+    const oraclePrice = inversePrice.div(factor);
+  
+  return (
+    <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
+      <TopCard
+        name={`${ COIN } Oracle Price`}
+        tooltip={`The price returned by the ${ COIN } Oracle.`} 
+        imgSrc="./icons/price-chart.png"
+      >
+        
+        {oraclePrice.prettify(4)}
       </TopCard>
     </Card>
   );

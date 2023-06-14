@@ -297,6 +297,7 @@ export interface LiquityStoreBaseState {
     bammDeposit: BammDeposit;
     collateralAddress: string;
     collateralSurplusBalance: Decimal;
+    deviationFactor: Decimal;
     erc20TokenAllowance: Decimal;
     erc20TokenBalance: Decimal;
     // @internal (undocumented)
@@ -304,9 +305,11 @@ export interface LiquityStoreBaseState {
     isBorrowerOperations: boolean;
     isStabilityPools: boolean;
     isTroveManager: boolean;
+    marketPrice: Decimal;
     mintList: boolean;
     numberOfTroves: number;
     pcvBalance: Decimal;
+    piRedemptionRate: Decimal;
     price: Decimal;
     // @internal (undocumented)
     _riskiestTroveBeforeRedistribution: TroveWithPendingRedistribution;

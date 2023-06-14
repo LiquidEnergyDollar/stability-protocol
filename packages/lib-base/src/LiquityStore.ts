@@ -48,6 +48,15 @@ export interface LiquityStoreBaseState {
   /** Current price of the native currency (e.g. Ether) in USD. */
   price: Decimal;
 
+  /** Current market price of the native currency (e.g. Ether) in USD. */
+  marketPrice: Decimal;
+
+  /** Current redemption rate of for LED holders. */
+  piRedemptionRate: Decimal;
+
+  /** Accumulated redemption rate */
+  deviationFactor: Decimal;
+
   /** Total amount of thUSD currently deposited in the Stability Pool. */
   thusdInStabilityPool: Decimal;
 
@@ -361,6 +370,12 @@ export abstract class LiquityStore<T = unknown> {
       ),
 
       price: this._updateIfChanged(eq, "price", baseState.price, baseStateUpdate.price),
+
+      marketPrice: this._updateIfChanged(eq, "marketPrice", baseState.marketPrice, baseStateUpdate.marketPrice),
+
+      piRedemptionRate: this._updateIfChanged(eq, "piRedemptionRate", baseState.piRedemptionRate, baseStateUpdate.piRedemptionRate),
+
+      deviationFactor: this._updateIfChanged(eq, "deviationFactor", baseState.deviationFactor, baseStateUpdate.deviationFactor),
 
       thusdInStabilityPool: this._updateIfChanged(
         eq,

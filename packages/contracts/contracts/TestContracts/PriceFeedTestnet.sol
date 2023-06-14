@@ -12,6 +12,8 @@ import "../Dependencies/Ownable.sol";
 contract PriceFeedTestnet is Ownable, IPriceFeed {
     
     uint256 private _price = 200 * 1e18;
+    uint256 public deviationFactor;
+    uint256 public redemptionRate;
 
     // --- Functions ---
 
@@ -22,6 +24,11 @@ contract PriceFeedTestnet is Ownable, IPriceFeed {
     
     // View price getter for simplicity in tests
     function getMarketPrice() external view returns (uint256) {
+        return _price;
+    }
+    
+    // View price getter for simplicity in tests
+    function getRedemptionPrice() external view returns (uint256) {
         return _price;
     }
 

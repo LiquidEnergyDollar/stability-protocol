@@ -1,6 +1,6 @@
 import { Flex, Image, Link, useColorMode } from "theme-ui";
 import { Icon } from "./Icon";
-import { DARK_FILTER, GREY_FILTER } from "../utils/constants";
+import { DARK_FILTER, WHITE_FILTER } from "../utils/constants";
 
 export const ExternalLinks = (): JSX.Element => {
   const [colorMode] = useColorMode();
@@ -18,10 +18,10 @@ export const ExternalLinks = (): JSX.Element => {
         bottom: 0
       }}>
         <Link variant="socialIcons" href="https://discord.gg/mE2u9YuA47" target="_blank">
-          <Image src="./icons/discord.svg" sx={colorMode === "dark" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
+          <Image src="./icons/discord.svg" sx={colorMode === "dark" ? {filter: WHITE_FILTER} : {filter: DARK_FILTER}} />
         </Link>
         <Link variant="socialIcons" href="https://github.com/LiquidEnergyDollar" target="_blank">
-          <Image src="./icons/github.svg" sx={colorMode === "dark" ? {filter: GREY_FILTER} : {filter: DARK_FILTER}} />
+          <Image src="./icons/github.svg" sx={colorMode === "dark" ? {filter: WHITE_FILTER} : {filter: DARK_FILTER}} />
         </Link>
       </Flex>
     </>

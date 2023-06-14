@@ -530,6 +530,11 @@ const theme: Theme = {
       width: ["100%", "100%", "50%"]
     },
 
+    full: {
+      pr: cardGapX,
+      width: ["100%", "100%", "100%"]
+    },
+
     actions: {
       width: "100%",
       justifyContent: "center",

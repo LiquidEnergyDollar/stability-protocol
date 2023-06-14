@@ -61,15 +61,19 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     );
 
     function fetchPrice() public returns (uint) {
+        // Invert price - Liquity expects price in terms of
+        // debtToken per unit of collateral
+        return (10 ** 36) /  getRedemptionPrice();
+    }
+
+    function getRedemptionPrice() public returns (uint) {
         // Need to convert LEDPrice from WAD to RAY
         uint newPrice = rmultiply(ray(LEDPrice), deviationFactor);
         // Convert back to WAD
         newPrice = newPrice / (10 ** 9);
 
-        // Invert price - Liquity expects price in terms of
-        // debtToken per unit of collateral
         // TODO Check if newPrice is zero
-        newPrice = (10 ** 36) / newPrice;
+        newPrice = newPrice;
 
         lastGoodPrice = newPrice;
 
@@ -122,7 +126,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
             // If the price is non-zero
             require(marketPrice > 0, "PriceFeed/null-uniswap-price");
 
-            redemptionPrice = fetchPrice();
+            redemptionPrice = getRedemptionPrice();
             // Calculate the rate
             redemptionRate = pidCalculator.computeRate(
                 marketPrice,
