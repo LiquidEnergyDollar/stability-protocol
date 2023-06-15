@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, Flex, Button, Link, Input, ThemeUICSSProperties } from "theme-ui";
-import { StaticAmounts, Row } from "./Vault/Editor";
+import { StaticAmounts, Row, AutoSelectInput } from "./Vault/Editor";
 import { useThreshold } from "../hooks/ThresholdContext";
 import { Transaction } from "./Transaction";
 import { InfoIcon } from "./InfoIcon";
@@ -9,6 +9,7 @@ import { useThresholdSelector } from "@liquity/lib-react";
 
 const editableStyle: ThemeUICSSProperties = {
   backgroundColor: "terciary",
+  color: "inputText",
   px: "1.1em",
   py: "0.45em",
   border: 1,
@@ -49,7 +50,8 @@ export const LiquidationManager = ({ version, collateral, isMintList }: Liquidat
 
   const inputId: string = "liquidate-vaults";
   const [numberOfVaultsToLiquidate, setNumberOfVaultsToLiquidate] = useState("90");
-  const [editing, setEditing] = useState<string>();
+  const editingState = useState<string>();
+  const [editing, setEditing] = editingState;
 
   return (
     <Card variant="mainCards">
@@ -79,20 +81,13 @@ export const LiquidationManager = ({ version, collateral, isMintList }: Liquidat
           {editing === inputId ? (
             <>
               <Row labelId={`${inputId}-label`} {...{ label: "Up to", unit: "Vaults" }} />
-              <Input
-                type="number"
+              <AutoSelectInput
+                inputId={inputId}
                 min="1"
                 step="1"
-                value={numberOfVaultsToLiquidate}
-                onChange={e => setNumberOfVaultsToLiquidate(e.target.value)}
-                onBlur={() => {
-                  setEditing(undefined);
-                }}
-                variant="layout.balanceRow"
-                sx={{
-                  ...editableStyle,
-                  fontWeight: "medium"
-                }} 
+                editedAmount={numberOfVaultsToLiquidate}
+                setEditedAmount={setNumberOfVaultsToLiquidate}
+                editingState={editingState}
               />
             </>) 
           : (

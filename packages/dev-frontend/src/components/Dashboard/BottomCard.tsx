@@ -7,7 +7,8 @@ import { GenericIcon } from "../GenericIcon";
 import { InfoIcon } from "../InfoIcon";
 
 type BottomCardProps = {
-  title: string ;
+  title: string;
+  stats: JSX.Element;
   tooltip: string;
   action: string;
   token: string;
@@ -20,6 +21,7 @@ type BottomCardProps = {
 
 export const BottomCard = ({
   title,
+  stats,
   action, 
   token,
   tokenIcon,
@@ -47,6 +49,16 @@ export const BottomCard = ({
                 You can earn {COIN} rewards by depositing {COIN} .
               </Card>} />
           </Flex>
+        </Flex>
+        
+        <Flex sx={{
+          width: "100%",
+          flexDirection: "column",
+          pt: "3.4em",
+          px: ["1em", 0, 0, "1.6em"],
+          gap: "1em"
+        }}>
+          {stats} 
         </Flex>
         
           <Flex sx={{

@@ -134,7 +134,7 @@ export const SystemStatsCard = ({ variant = "info", IsPriceEditable }: SystemSta
                 {thresholdSelectorStores.map((collateralStore, index) => (
                   <SystemStat
                     key={index}
-                    info={`${ collateralStore.store.symbol } deposited collateral`}
+                    info={`Total collateral`}
                     tooltip={`The Total Value Locked (TVL) is the total value of ${ collateralStore.store.symbol } locked as collateral in the system.`}
                   >
                     { collateralStore.store.total.collateral.shorten() } { collateralStore.store.symbol }

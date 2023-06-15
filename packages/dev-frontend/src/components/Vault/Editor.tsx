@@ -102,12 +102,12 @@ export const StaticAmounts = ({
       }}
     >
       <Flex sx={{ alignItems: "center" }}>
-        <Text sx={{ color: "inputText", fontWeight: "semibold" }}>{amount}</Text>
+        <Text sx={{ fontWeight: "semibold" }}>{amount}</Text>
 
         {unit && (
           <>
             &nbsp;
-            <Text sx={{ color: "text",fontWeight: "light" }}>{unit}</Text>
+            <Text sx={{ fontWeight: "light" }}>{unit}</Text>
           </>
         )}
 
@@ -127,6 +127,8 @@ export const StaticAmounts = ({
 };
 
 const staticStyle: ThemeUICSSProperties = {
+  backgroundColor: "background",
+  color: "text",
   flexGrow: 1,
 
   mb: 0,
@@ -141,6 +143,7 @@ const staticStyle: ThemeUICSSProperties = {
 
 const editableStyle: ThemeUICSSProperties = {
   backgroundColor: "terciary",
+  color: "inputText",
 
   px: "1.1em",
   py: "0.45em",
@@ -186,7 +189,7 @@ export const DisabledEditableRow = ({
 }: DisabledEditableRowProps): JSX.Element => (
   <Row labelId={`${inputId}-label`} {...{ label, unit }}>
     <StaticAmounts
-      sx={{ ...editableStyle, boxShadow: 0 }}
+      sx={{ ...staticStyle, boxShadow: 0 }}
       labelledBy={`${inputId}-label`}
       {...{ inputId, amount, unit, color, pendingAmount, pendingColor }}
     />
@@ -198,6 +201,8 @@ type AutoSelectInputProps = {
   editingState: [string | undefined, (editing: string | undefined) => void];
   editedAmount: string;
   setEditedAmount: (editedAmount: string) => void;
+  min: string;
+  step: string;
 };
 
 export const AutoSelectInput = ({
@@ -205,6 +210,8 @@ export const AutoSelectInput = ({
   editingState,
   editedAmount,
   setEditedAmount,
+  min,
+  step
 }: AutoSelectInputProps): JSX.Element => {
   const [editing, setEditing] = editingState;
   const [invalid, setInvalid] = useState(false);
@@ -220,7 +227,8 @@ export const AutoSelectInput = ({
     ref={inputRef}
     id={inputId}
     type="number"
-    step="any"
+    step={step}
+    min={min ?? 0}
     defaultValue={editedAmount}
     {...{ invalid }}
     onChange={e => {
@@ -279,6 +287,7 @@ export const EditableRow = ({
 
       <AutoSelectInput
         inputId={inputId}
+        step="any"
         editingState={editingState}
         editedAmount={editedAmount}
         setEditedAmount={setEditedAmount}
