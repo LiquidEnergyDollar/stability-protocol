@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Text, Flex, Label, Input, SxProp, Button, ThemeUICSSProperties } from "theme-ui";
 
 import { Icon } from "../Icon";
@@ -102,12 +102,12 @@ export const StaticAmounts = ({
       }}
     >
       <Flex sx={{ alignItems: "center" }}>
-        <Text sx={{ color: "inputText", fontWeight: "semibold" }}>{amount}</Text>
+        <Text sx={{ fontWeight: "semibold" }}>{amount}</Text>
 
         {unit && (
           <>
             &nbsp;
-            <Text sx={{ color: "text",fontWeight: "light" }}>{unit}</Text>
+            <Text sx={{ fontWeight: "light" }}>{unit}</Text>
           </>
         )}
 
@@ -127,6 +127,8 @@ export const StaticAmounts = ({
 };
 
 const staticStyle: ThemeUICSSProperties = {
+  backgroundColor: "background",
+  color: "text",
   flexGrow: 1,
 
   mb: 0,
@@ -141,6 +143,7 @@ const staticStyle: ThemeUICSSProperties = {
 
 const editableStyle: ThemeUICSSProperties = {
   backgroundColor: "terciary",
+  color: "inputText",
 
   px: "1.1em",
   py: "0.45em",
@@ -186,12 +189,70 @@ export const DisabledEditableRow = ({
 }: DisabledEditableRowProps): JSX.Element => (
   <Row labelId={`${inputId}-label`} {...{ label, unit }}>
     <StaticAmounts
-      sx={{ ...editableStyle, boxShadow: 0 }}
+      sx={{ ...staticStyle, boxShadow: 0 }}
       labelledBy={`${inputId}-label`}
       {...{ inputId, amount, unit, color, pendingAmount, pendingColor }}
     />
   </Row>
 );
+
+type AutoSelectInputProps = {
+  inputId: string;
+  editingState: [string | undefined, (editing: string | undefined) => void];
+  editedAmount: string;
+  setEditedAmount: (editedAmount: string) => void;
+  min: string;
+  step: string;
+};
+
+export const AutoSelectInput = ({
+  inputId,
+  editingState,
+  editedAmount,
+  setEditedAmount,
+  min,
+  step
+}: AutoSelectInputProps): JSX.Element => {
+  const [editing, setEditing] = editingState;
+  const [invalid, setInvalid] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.select();
+    }
+  }, []);
+
+  return <Input 
+    ref={inputRef}
+    id={inputId}
+    type="number"
+    step={step}
+    min={min ?? 0}
+    defaultValue={editedAmount}
+    {...{ invalid }}
+    onChange={e => {
+      try {
+        setEditedAmount(e.target.value);
+        setInvalid(false);
+      } catch {
+        setInvalid(true);
+      }
+    }}
+    onWheel={e => {
+      setEditing(undefined);
+    }}
+    onBlur={() => {
+      setEditing(undefined);
+      setInvalid(false);
+    }}
+    variant="layout.balanceRow"
+    sx={{
+      ...editableStyle,
+      fontWeight: "medium"
+    }}
+  />;
+};
 
 type EditableRowProps = DisabledEditableRowProps & {
   editingState: [string | undefined, (editing: string | undefined) => void];
@@ -218,37 +279,19 @@ export const EditableRow = ({
   infoIcon
 }: EditableRowProps): JSX.Element => {
   const [editing, setEditing] = editingState;
-  const [invalid, setInvalid] = useState(false);
+  const [invalid] = useState(false);
 
   return editing === inputId ? (
-    <Flex sx={{ flexDirection: "column", flexWrap: "wrap", }}>
+   <Flex sx={{ flexDirection: "column", flexWrap: "wrap", }}>
       <Row {...{ label, labelFor: inputId, unit, infoIcon }} />
-      <Input
-        id={inputId}
-        type="number"
+
+      <AutoSelectInput
+        inputId={inputId}
         step="any"
-        defaultValue={editedAmount}
+        editingState={editingState}
+        editedAmount={editedAmount}
+        setEditedAmount={setEditedAmount}
         {...{ invalid }}
-        onChange={e => {
-          try {
-            setEditedAmount(e.target.value);
-            setInvalid(false);
-          } catch {
-            setInvalid(true);
-          }
-        }}
-        onWheel={e => {
-          setEditing(undefined);
-        }}
-        onBlur={() => {
-          setEditing(undefined);
-          setInvalid(false);
-        }}
-        variant="layout.balanceRow"
-        sx={{
-          ...editableStyle,
-          fontWeight: "medium"
-        }}
       />
   </Flex>
   ) : (
