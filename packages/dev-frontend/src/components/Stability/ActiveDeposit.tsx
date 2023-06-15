@@ -89,7 +89,7 @@ export const ActiveDeposit = (props: ActiveDepositProps): JSX.Element => {
           pb: "1em",
           mt: 2
         }}>
-          <Box>
+          <Box onClick={handleAdjustDeposit}>
             <DisabledEditableRow
               label="Deposit"
               inputId="deposit-lusd"

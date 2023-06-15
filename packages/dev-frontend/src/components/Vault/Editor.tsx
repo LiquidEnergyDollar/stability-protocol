@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Text, Flex, Label, Input, SxProp, Button, ThemeUICSSProperties } from "theme-ui";
 
 import { Icon } from "../Icon";
@@ -193,6 +193,59 @@ export const DisabledEditableRow = ({
   </Row>
 );
 
+type AutoSelectInputProps = {
+  inputId: string;
+  editingState: [string | undefined, (editing: string | undefined) => void];
+  editedAmount: string;
+  setEditedAmount: (editedAmount: string) => void;
+};
+
+export const AutoSelectInput = ({
+  inputId,
+  editingState,
+  editedAmount,
+  setEditedAmount,
+}: AutoSelectInputProps): JSX.Element => {
+  const [editing, setEditing] = editingState;
+  const [invalid, setInvalid] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.select();
+    }
+  }, []);
+
+  return <Input 
+    ref={inputRef}
+    id={inputId}
+    type="number"
+    step="any"
+    defaultValue={editedAmount}
+    {...{ invalid }}
+    onChange={e => {
+      try {
+        setEditedAmount(e.target.value);
+        setInvalid(false);
+      } catch {
+        setInvalid(true);
+      }
+    }}
+    onWheel={e => {
+      setEditing(undefined);
+    }}
+    onBlur={() => {
+      setEditing(undefined);
+      setInvalid(false);
+    }}
+    variant="layout.balanceRow"
+    sx={{
+      ...editableStyle,
+      fontWeight: "medium"
+    }}
+  />;
+};
+
 type EditableRowProps = DisabledEditableRowProps & {
   editingState: [string | undefined, (editing: string | undefined) => void];
   editedAmount: string;
@@ -218,37 +271,18 @@ export const EditableRow = ({
   infoIcon
 }: EditableRowProps): JSX.Element => {
   const [editing, setEditing] = editingState;
-  const [invalid, setInvalid] = useState(false);
+  const [invalid] = useState(false);
 
   return editing === inputId ? (
-    <Flex sx={{ flexDirection: "column", flexWrap: "wrap", }}>
+   <Flex sx={{ flexDirection: "column", flexWrap: "wrap", }}>
       <Row {...{ label, labelFor: inputId, unit, infoIcon }} />
-      <Input
-        id={inputId}
-        type="number"
-        step="any"
-        defaultValue={editedAmount}
+
+      <AutoSelectInput
+        inputId={inputId}
+        editingState={editingState}
+        editedAmount={editedAmount}
+        setEditedAmount={setEditedAmount}
         {...{ invalid }}
-        onChange={e => {
-          try {
-            setEditedAmount(e.target.value);
-            setInvalid(false);
-          } catch {
-            setInvalid(true);
-          }
-        }}
-        onWheel={e => {
-          setEditing(undefined);
-        }}
-        onBlur={() => {
-          setEditing(undefined);
-          setInvalid(false);
-        }}
-        variant="layout.balanceRow"
-        sx={{
-          ...editableStyle,
-          fontWeight: "medium"
-        }}
       />
   </Flex>
   ) : (
