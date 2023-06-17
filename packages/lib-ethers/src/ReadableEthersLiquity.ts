@@ -218,7 +218,8 @@ export class ReadableEthersLiquity implements ReadableLiquity {
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getPrice} */
   getPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
     const { priceFeed } = _getContracts(this.connection);
-    return priceFeed.callStatic.fetchPrice({ ...overrides }).then(decimalify);
+    return priceFeed.callStatic.fetchPrice({ ...overrides })
+      .then((value: { status: number, price: BigNumber}) => decimalify(value.price));
     // TODO Swap once we redeploy the contracts
     //return priceFeed.callStatic.getRedemptionPrice({ ...overrides }).then(decimalify);
   }
@@ -373,9 +374,9 @@ export class ReadableEthersLiquity implements ReadableLiquity {
       ? stake.mul(bammCollateralBalance).div(total) 
       : BigNumber.from(0)
     
-    const price = await priceFeed.callStatic.fetchPrice({ ...overrides })
+    const result = await priceFeed.callStatic.fetchPrice({ ...overrides })
 
-    const currentUSD = currentTHUSD.add(currentCollateral.mul(price).div(_1e18))
+    const currentUSD = currentTHUSD.add(currentCollateral.mul(result.price).div(_1e18))
 
     const bammPoolShare = isTotalGreaterThanZero 
       ? Decimal.fromBigNumber(stake).mulDiv(100, Decimal.fromBigNumber(total)) 

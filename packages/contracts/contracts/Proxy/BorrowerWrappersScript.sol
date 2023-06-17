@@ -127,10 +127,10 @@ contract BorrowerWrappersScript is BorrowerOperationsScript, ETHTransferScript, 
     }
 
     function _getNetTHUSDAmount(uint256 _collateral) internal returns (uint) {
-        uint256 price = priceFeed.fetchPrice();
-        uint256 ICR = troveManager.getCurrentICR(address(this), price);
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
+        uint256 ICR = troveManager.getCurrentICR(address(this), priceFeedResponse.price);
 
-        uint256 THUSDAmount = _collateral * price / ICR;
+        uint256 THUSDAmount = _collateral * priceFeedResponse.price / ICR;
         uint256 borrowingRate = troveManager.getBorrowingRateWithDecay();
         uint256 netDebt = THUSDAmount * LiquityMath.DECIMAL_PRECISION / (LiquityMath.DECIMAL_PRECISION + borrowingRate);
 

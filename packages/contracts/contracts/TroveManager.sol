@@ -479,7 +479,8 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
 
         LiquidationTotals memory totals;
 
-        vars.price = priceFeed.fetchPrice();
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
+        vars.price = priceFeedResponse.price;
         vars.THUSDInStabPool = stabilityPoolCached.getTotalTHUSDDeposits();
         vars.recoveryModeAtStart = _checkRecoveryMode(vars.price);
 
@@ -620,7 +621,8 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         LocalVariables_OuterLiquidationFunction memory vars;
         LiquidationTotals memory totals;
 
-        vars.price = priceFeed.fetchPrice();
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
+        vars.price = priceFeedResponse.price;
         vars.THUSDInStabPool = stabilityPoolCached.getTotalTHUSDDeposits();
         vars.recoveryModeAtStart = _checkRecoveryMode(vars.price);
 
@@ -915,7 +917,10 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         RedemptionTotals memory totals;
 
         _requireValidMaxFeePercentage(_maxFeePercentage);
-        totals.price = priceFeed.fetchPrice();
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
+        totals.price = priceFeedResponse.price;
+        // Only allow direct redemption if oracle is stale or disabled
+        _requirePriceFeedInactive(priceFeedResponse.status);
         _requireTCRoverMCR(totals.price);
         _requireAmountGreaterThanZero(_THUSDamount);
         _requireTHUSDBalanceCoversRedemption(contractsCache.thusdToken, msg.sender, _THUSDamount);
@@ -1472,6 +1477,10 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         require(_maxFeePercentage >= REDEMPTION_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
             "Max fee percentage must be between 0.5% and 100%");
     }
+
+    function _requirePriceFeedInactive(IPriceFeed.Status status) internal view {
+        require(status == IPriceFeed.Status.stale || status == IPriceFeed.Status.disabled, "TroveManager: Redemptions are only allowed if the price feed is stale or disabled");
+    }   
 
     // --- Trove property getters ---
 
