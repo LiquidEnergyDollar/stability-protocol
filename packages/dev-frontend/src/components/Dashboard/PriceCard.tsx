@@ -68,7 +68,6 @@ export const RedemptionRateCard = ({ variant = "mainCards" }: SystemStatsProps):
     const store = thresholdSelectorStores[0].store;
     const redemptionRate = store.piRedemptionRate;
     const annualizedRate = annualizeInterestRate(redemptionRate);
-    const percentage = annualizedRate.mul(100);
   
   return (
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
@@ -78,16 +77,16 @@ export const RedemptionRateCard = ({ variant = "mainCards" }: SystemStatsProps):
         imgSrc="./icons/scale-icon.png"
       >
         
-        {percentage.prettify(2)}%
+        {annualizedRate}%
       </TopCard>
     </Card>
   );
 };
 
-function annualizeInterestRate(redemptionRate: Decimal): Decimal {
+function annualizeInterestRate(redemptionRate: Decimal): string {
   const secondsPerYear = 31536000; // Approximate number of seconds in a year
-  const ratePerYear = redemptionRate.pow(secondsPerYear).sub(1);
-  return ratePerYear;
+  const ratePerYear = Number.parseFloat(redemptionRate.pow(secondsPerYear).prettify(2));
+  return ((ratePerYear * 100) - 100).toFixed(2);;
 }
 
 export const DeviationFactorCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {

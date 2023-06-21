@@ -228,7 +228,9 @@ export class ReadableEthersLiquity implements ReadableLiquity {
   getMarketPrice(overrides?: EthersCallOverrides): Promise<Decimal> {
     const { priceFeed } = _getContracts(this.connection);
 
-    return priceFeed.getMarketPrice({ ...overrides }).then(decimalify);
+    return priceFeed.getMarketPrice({ ...overrides })
+    .then(decimalify)
+    .catch(() => Decimal.ZERO);
   }
 
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getRedemptionRate} */
