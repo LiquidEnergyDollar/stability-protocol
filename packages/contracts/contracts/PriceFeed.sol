@@ -24,6 +24,8 @@ import "./rai/GebMath.sol";
 
 contract PriceFeed is GebMath, Ownable, BaseMath {
     string constant public NAME = "PriceFeed";
+    // Market should unwind if price hasn't been updated in over a week
+    uint256 oracleStaleDuration = 1 weeks;
 
     ILedOracle public led;
     IPIScaledPerSecondCalculator public pidCalculator;
@@ -60,10 +62,17 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
         uint newPrice
     );
 
-    function fetchPrice() public returns (uint) {
+    function fetchPrice() public returns (IPriceFeed.FetchPriceResponse memory) {
+        IPriceFeed.FetchPriceResponse memory response;
         // Invert price - Liquity expects price in terms of
         // debtToken per unit of collateral
-        return (10 ** 36) /  getRedemptionPrice();
+        response.price = (10 ** 36) /  getRedemptionPrice();
+        response.status = IPriceFeed.Status.active;
+        // Check if the price feed is stale
+        if (block.timestamp - LEDPriceUpdateTime > oracleStaleDuration) {
+            response.status = IPriceFeed.Status.stale;
+        }
+        return response;
     }
 
     function getRedemptionPrice() public returns (uint) {

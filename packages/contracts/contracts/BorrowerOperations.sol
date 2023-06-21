@@ -74,6 +74,17 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         ITHUSDToken thusdToken;
     }
 
+    struct LocalVariables_moveFromAdjustment {        
+        IActivePool activePool;
+        ITHUSDToken thusdToken;
+        address borrower;
+        uint256 collChange;
+        bool isCollIncrease;
+        uint256 THUSDChange;
+        bool isDebtIncrease;
+        uint256 netDebtChange;
+    }
+
     enum BorrowerOperation {
         openTrove,
         closeTrove,
@@ -164,7 +175,9 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         ContractsCache memory contractsCache = ContractsCache(troveManager, activePool, thusdToken);
         LocalVariables_openTrove memory vars;
 
-        vars.price = priceFeed.fetchPrice();
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
+        vars.price = priceFeedResponse.price;
+        _requirePriceFeedActive(priceFeedResponse.status);
         bool isRecoveryMode = _checkRecoveryMode(vars.price);
 
         _requireValidMaxFeePercentage(_maxFeePercentage, isRecoveryMode);
@@ -275,7 +288,8 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         ContractsCache memory contractsCache = ContractsCache(troveManager, activePool, thusdToken);
         LocalVariables_adjustTrove memory vars;
 
-        vars.price = priceFeed.fetchPrice();
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
+        vars.price = priceFeedResponse.price;
         bool isRecoveryMode = _checkRecoveryMode(vars.price);
 
         if (_isDebtIncrease) {
@@ -331,16 +345,16 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         emit THUSDBorrowingFeePaid(msg.sender,  vars.THUSDFee);
 
         // Use the unmodified _THUSDChange here, as we don't send the fee to the user
-        _moveTokensAndCollateralfromAdjustment(
-            contractsCache.activePool,
-            contractsCache.thusdToken,
-            msg.sender,
-            vars.collChange,
-            vars.isCollIncrease,
-            _THUSDChange,
-            _isDebtIncrease,
-            vars.netDebtChange
-        );
+        LocalVariables_moveFromAdjustment memory moveVars;
+        moveVars.activePool = contractsCache.activePool;
+        moveVars.thusdToken = contractsCache.thusdToken;
+        moveVars.borrower = msg.sender;
+        moveVars.collChange = vars.collChange;
+        moveVars.isCollIncrease = vars.isCollIncrease;
+        moveVars.THUSDChange = _THUSDChange;
+        moveVars.isDebtIncrease = _isDebtIncrease;
+        moveVars.netDebtChange = vars.netDebtChange;
+        _moveTokensAndCollateralfromAdjustment(moveVars);
     }
 
     function closeTrove() external override {
@@ -350,9 +364,9 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
         bool canMint = thusdTokenCached.mintList(address(this));
 
         _requireTroveisActive(troveManagerCached, msg.sender);
-        uint256 price = priceFeed.fetchPrice();
+        IPriceFeed.FetchPriceResponse memory priceFeedResponse = priceFeed.fetchPrice();
         if (canMint) {
-            _requireNotInRecoveryMode(price);
+            _requireNotInRecoveryMode(priceFeedResponse.price);
         }
 
         troveManagerCached.applyPendingRewards(msg.sender);
@@ -362,7 +376,7 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
 
         _requireSufficientTHUSDBalance(thusdTokenCached, msg.sender, debt - THUSD_GAS_COMPENSATION);
         if (canMint) {
-            uint256 newTCR = _getNewTCRFromTroveChange(coll, false, debt, false, price);
+            uint256 newTCR = _getNewTCRFromTroveChange(coll, false, debt, false, priceFeedResponse.price);
             _requireNewTCRisAboveCCR(newTCR);
         }
 
@@ -447,27 +461,20 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
 
     function _moveTokensAndCollateralfromAdjustment
     (
-        IActivePool _activePool,
-        ITHUSDToken _thusdToken,
-        address _borrower,
-        uint256 _collChange,
-        bool _isCollIncrease,
-        uint256 _THUSDChange,
-        bool _isDebtIncrease,
-        uint256 _netDebtChange
+        LocalVariables_moveFromAdjustment memory _vars
     )
         internal
     {
-        if (_isDebtIncrease) {
-            _withdrawTHUSD(_activePool, _thusdToken, _borrower, _THUSDChange, _netDebtChange);
+        if (_vars.isDebtIncrease) {
+            _withdrawTHUSD(_vars.activePool, _vars.thusdToken, _vars.borrower, _vars.THUSDChange, _vars.netDebtChange);
         } else {
-            _repayTHUSD(_activePool, _thusdToken, _borrower, _THUSDChange);
+            _repayTHUSD(_vars.activePool, _vars.thusdToken, _vars.borrower, _vars.THUSDChange);
         }
 
-        if (_isCollIncrease) {
-            _activePoolAddColl(_activePool, _collChange);
+        if (_vars.isCollIncrease) {
+            _activePoolAddColl(_vars.activePool, _vars.collChange);
         } else {
-            _activePool.sendCollateral(_borrower, _collChange);
+            _vars.activePool.sendCollateral(_vars.borrower, _vars.collChange);
         }
     }
 
@@ -612,6 +619,10 @@ contract BorrowerOperations is LiquityBase, Ownable, CheckContract, SendCollater
             require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
                 "Max fee percentage must be between 0.5% and 100%");
         }
+    }
+
+    function _requirePriceFeedActive(IPriceFeed.Status status) internal view {
+        require(status == IPriceFeed.Status.active, "BorrowerOps: PriceFeed is inactive");
     }
 
     // --- ICR and TCR getters ---

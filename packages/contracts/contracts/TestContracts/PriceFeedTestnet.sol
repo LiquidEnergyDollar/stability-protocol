@@ -32,11 +32,14 @@ contract PriceFeedTestnet is Ownable, IPriceFeed {
         return _price;
     }
 
-    function fetchPrice() external override returns (uint256) {
+    function fetchPrice() external override returns (IPriceFeed.FetchPriceResponse memory) {
+        IPriceFeed.FetchPriceResponse memory response;
         // Fire an event just like the mainnet version would.
         // This lets the subgraph rely on events to get the latest price even when developing locally.
         emit LastGoodPriceUpdated(_price);
-        return _price;
+        response.status = IPriceFeed.Status.active;
+        response.price = _price;
+        return response;
     }
 
     // Manual external price setter.

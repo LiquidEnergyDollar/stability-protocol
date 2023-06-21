@@ -582,7 +582,7 @@ interface PriceFeedCalls {
 }
 
 interface PriceFeedTransactions {
-  fetchPrice(_overrides?: Overrides): Promise<BigNumber>;
+  fetchPrice(_overrides?: Overrides): Promise<{ status: number; price: BigNumber }>;
   getRedemptionPrice(_overrides?: Overrides): Promise<BigNumber>;
   setAddresses(_ledAddress: string, _pidCalculatorAddress: string, _uniV3ReaderAddress: string, _overrides?: Overrides): Promise<void>;
   setUniV3PoolAddress(_uniV3PoolAddress: string, _overrides?: Overrides): Promise<void>;
@@ -620,7 +620,7 @@ interface PriceFeedTestnetCalls {
 }
 
 interface PriceFeedTestnetTransactions {
-  fetchPrice(_overrides?: Overrides): Promise<BigNumber>;
+  fetchPrice(_overrides?: Overrides): Promise<{ status: number; price: BigNumber }>;
   setAddresses(a1: string, a2: string, a3: string, _overrides?: Overrides): Promise<void>;
   setPrice(price: BigNumberish, _overrides?: Overrides): Promise<boolean>;
   transferOwnership(newOwner: string, _overrides?: Overrides): Promise<void>;
