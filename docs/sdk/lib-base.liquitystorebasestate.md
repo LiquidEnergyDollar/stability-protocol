@@ -20,14 +20,17 @@ export interface LiquityStoreBaseState
 |  [bammDeposit](./lib-base.liquitystorebasestate.bammdeposit.md) |  | [BammDeposit](./lib-base.bammdeposit.md) | User's bamm deposit. |
 |  [collateralAddress](./lib-base.liquitystorebasestate.collateraladdress.md) |  | string | BorrowersOperations contract collateral address. |
 |  [collateralSurplusBalance](./lib-base.liquitystorebasestate.collateralsurplusbalance.md) |  | [Decimal](./lib-base.decimal.md) | Amount of leftover collateral available for withdrawal to the user. |
+|  [deviationFactor](./lib-base.liquitystorebasestate.deviationfactor.md) |  | [Decimal](./lib-base.decimal.md) | Accumulated redemption rate |
 |  [erc20TokenAllowance](./lib-base.liquitystorebasestate.erc20tokenallowance.md) |  | [Decimal](./lib-base.decimal.md) | The borrower operation's allowance of user's collateral erc20 tokens. |
 |  [erc20TokenBalance](./lib-base.liquitystorebasestate.erc20tokenbalance.md) |  | [Decimal](./lib-base.decimal.md) | User's collateral erc20 token balance. |
 |  [isBorrowerOperations](./lib-base.liquitystorebasestate.isborroweroperations.md) |  | boolean | Check if the deployment borrower operations address was added to the thUSD token. |
 |  [isStabilityPools](./lib-base.liquitystorebasestate.isstabilitypools.md) |  | boolean | Check if the deployment stability pool address was added to the thUSD token. |
 |  [isTroveManager](./lib-base.liquitystorebasestate.istrovemanager.md) |  | boolean | Check if the deployment trove manager address was added to the thUSD token. |
+|  [marketPrice](./lib-base.liquitystorebasestate.marketprice.md) |  | [Decimal](./lib-base.decimal.md) | Current market price of the native currency (e.g. Ether) in USD. |
 |  [mintList](./lib-base.liquitystorebasestate.mintlist.md) |  | boolean | MintList validation. |
 |  [numberOfTroves](./lib-base.liquitystorebasestate.numberoftroves.md) |  | number | Number of Troves that are currently open. |
 |  [pcvBalance](./lib-base.liquitystorebasestate.pcvbalance.md) |  | [Decimal](./lib-base.decimal.md) | Total amount of LUSD currently deposited in the PCV Pool. |
+|  [piRedemptionRate](./lib-base.liquitystorebasestate.piredemptionrate.md) |  | [Decimal](./lib-base.decimal.md) | Current redemption rate of for LED holders. |
 |  [price](./lib-base.liquitystorebasestate.price.md) |  | [Decimal](./lib-base.decimal.md) | Current price of the native currency (e.g. Ether) in USD. |
 |  [stabilityDeposit](./lib-base.liquitystorebasestate.stabilitydeposit.md) |  | [StabilityDeposit](./lib-base.stabilitydeposit.md) | User's stability deposit. |
 |  [symbol](./lib-base.liquitystorebasestate.symbol.md) |  | string | token's ERC20 symbol. |

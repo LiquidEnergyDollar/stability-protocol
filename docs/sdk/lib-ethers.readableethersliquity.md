@@ -33,12 +33,15 @@ The constructor for this class is marked as internal. Third-party code should no
 |  [getBammDeposit(address, overrides)](./lib-ethers.readableethersliquity.getbammdeposit.md) |  | Get the current state of a Bamm Deposit. |
 |  [getCollateralAddress(overrides)](./lib-ethers.readableethersliquity.getcollateraladdress.md) |  | Get the collateral address of the BorrowersOperations contract. |
 |  [getCollateralSurplusBalance(address, overrides)](./lib-ethers.readableethersliquity.getcollateralsurplusbalance.md) |  | Get the amount of leftover collateral available for withdrawal by an address. |
+|  [getDeviationFactor(overrides)](./lib-ethers.readableethersliquity.getdeviationfactor.md) |  |  |
 |  [getErc20TokenAllowance(address, overrides)](./lib-ethers.readableethersliquity.geterc20tokenallowance.md) |  | Get the Borrowers Operations contract's allowance of a holder's Erc20 tokens. |
 |  [getErc20TokenBalance(address, overrides)](./lib-ethers.readableethersliquity.geterc20tokenbalance.md) |  | Get the amount of Erc20 tokens held by an address. |
 |  [getFees(overrides)](./lib-ethers.readableethersliquity.getfees.md) |  | Get a calculator for current fees. |
+|  [getMarketPrice(overrides)](./lib-ethers.readableethersliquity.getmarketprice.md) |  |  |
 |  [getNumberOfTroves(overrides)](./lib-ethers.readableethersliquity.getnumberoftroves.md) |  | Get number of Troves that are currently open. |
 |  [getPCVBalance(overrides)](./lib-ethers.readableethersliquity.getpcvbalance.md) |  | Get the total amount of thUSD currently deposited in the PCV Pool. |
 |  [getPrice(overrides)](./lib-ethers.readableethersliquity.getprice.md) |  | Get the current price of the native currency (e.g. Ether) in USD. |
+|  [getRedemptionRate(overrides)](./lib-ethers.readableethersliquity.getredemptionrate.md) |  |  |
 |  [getStabilityDeposit(address, overrides)](./lib-ethers.readableethersliquity.getstabilitydeposit.md) |  | Get the current state of a Stability Deposit. |
 |  [getSymbol(overrides)](./lib-ethers.readableethersliquity.getsymbol.md) |  | Get the ERC20 token's symbol . |
 |  [getTHUSDBalance(address, overrides)](./lib-ethers.readableethersliquity.getthusdbalance.md) |  | Get the amount of thUSD held by an address. |
