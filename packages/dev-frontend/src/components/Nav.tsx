@@ -29,6 +29,12 @@ export const Nav = (): JSX.Element => {
           </Flex>
           Borrow
         </Link>
+        <Link to="/swap" >
+          <Flex>
+            <Icon name="exchange-alt" />
+          </Flex>
+          Swap
+        </Link>
         <Link to="/earn">
           <Icon name="chart-line" />
           Earn
