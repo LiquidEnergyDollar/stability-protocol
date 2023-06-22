@@ -11,9 +11,11 @@ export const SwapPage = (): JSX.Element => {
   const selector = ({
     symbol,
     collateralAddress,
+    stableAddress
   }: ThresholdStoreState) => ({
     symbol,
     collateralAddress,
+    stableAddress
   });
 
   const thresholdSelectorStores = useThresholdSelector(selector);
@@ -21,6 +23,7 @@ export const SwapPage = (): JSX.Element => {
   const store = thresholdStore?.store!;
   const symbol = store.symbol;
   const collateralAddress = store.collateralAddress;
+  const stableAddress = store.stableAddress;
   const [colorMode] = useColorMode();
   
   return (
@@ -40,7 +43,7 @@ export const SwapPage = (): JSX.Element => {
           width: "95%",
           mt: "2em"
         }}
-        src={`https://app.uniswap.org/#/swap?inputCurrency=${collateralAddress}&outputCurrency=0x1091221BbF69ae494ae7d5fE7c794A361e89850c&theme=${colorMode == "default" ? "light" : "dark"}`}
+        src={`https://app.uniswap.org/#/swap?inputCurrency=${collateralAddress}&outputCurrency=${stableAddress}&theme=${colorMode == "default" ? "light" : "dark"}`}
       />
     </Container>
   );

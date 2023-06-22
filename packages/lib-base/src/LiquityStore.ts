@@ -89,6 +89,9 @@ export interface LiquityStoreBaseState {
   /** BorrowersOperations contract collateral address. */
   collateralAddress: string;
 
+  /** TroveManager contract stable address. */
+  stableAddress: string;
+
   /** User's stability deposit. */
   stabilityDeposit: StabilityDeposit;
 
@@ -403,6 +406,8 @@ export abstract class LiquityStore<T = unknown> {
       symbol: baseState.symbol,
 
       collateralAddress: baseState.collateralAddress,
+
+      stableAddress: baseState.stableAddress,
 
       mintList: baseState.mintList,
 

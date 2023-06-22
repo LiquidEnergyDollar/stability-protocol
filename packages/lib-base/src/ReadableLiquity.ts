@@ -96,6 +96,11 @@ export interface ReadableLiquity {
   getCollateralAddress(): Promise<string>;
 
   /**
+   * Get the stablecoin address.
+   */
+  getStableAddress(): Promise<string>;
+
+  /**
    * Get the current state of a Stability Deposit.
    *
    * @param address - Address that owns the Stability Deposit.

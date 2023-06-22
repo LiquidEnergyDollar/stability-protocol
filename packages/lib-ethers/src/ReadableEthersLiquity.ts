@@ -328,6 +328,13 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     return borrowerOperations.collateralAddress({ ...overrides });
   }
 
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getStableAddress} */
+  getStableAddress(overrides?: EthersCallOverrides): Promise<string> {
+    const { troveManager } = _getContracts(this.connection);
+
+    return troveManager.thusdToken({ ...overrides });
+  }
+
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getBammDeposit} */
   async getBammDeposit(
     address?: string,
@@ -728,6 +735,12 @@ class _BlockPolledReadableEthersLiquity
     return this._blockHit(overrides)
       ? this.store.state.collateralAddress
       : this._readable.getCollateralAddress(overrides);
+  }
+
+  async getStableAddress(
+    overrides?: EthersCallOverrides
+  ): Promise<string> {
+    return this._readable.getStableAddress(overrides);
   }
 
   async getStabilityDeposit(

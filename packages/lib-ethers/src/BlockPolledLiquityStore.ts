@@ -110,6 +110,7 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
       _riskiestTroveBeforeRedistribution: this._getRiskiestTroveBeforeRedistribution({ blockTag }),
       symbol: this._readable.getSymbol({ blockTag }),
       collateralAddress: this._readable.getCollateralAddress({ blockTag }),
+      stableAddress: this._readable.getStableAddress({ blockTag }),
       mintList: this._readable.checkMintList({ blockTag }),
       bammAllowance: Decimal.ZERO, // this._readable.getBammAllowance({ blockTag }),
       isStabilityPools: this._readable.isStabilityPools({ blockTag }),
