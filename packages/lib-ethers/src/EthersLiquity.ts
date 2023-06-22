@@ -238,6 +238,11 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
     return this._readable.getCollateralAddress(overrides);
   }
 
+  /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getStableAddress} */
+  getStableAddress(overrides?: EthersCallOverrides): Promise<string> {
+    return this._readable.getStableAddress(overrides);
+  }
+
   /** {@inheritDoc @liquity/lib-base#ReadableLiquity.getStabilityDeposit} */
   getStabilityDeposit(address?: string, overrides?: EthersCallOverrides): Promise<StabilityDeposit> {
     return this._readable.getStabilityDeposit(address, overrides);

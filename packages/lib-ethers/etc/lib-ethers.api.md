@@ -182,6 +182,8 @@ export class EthersLiquity implements ReadableEthersLiquity, TransactableLiquity
     // (undocumented)
     getStabilityDeposit(address?: string, overrides?: EthersCallOverrides): Promise<StabilityDeposit>;
     // (undocumented)
+    getStableAddress(overrides?: EthersCallOverrides): Promise<string>;
+    // (undocumented)
     getSymbol(overrides?: EthersCallOverrides): Promise<string>;
     // (undocumented)
     getTHUSDBalance(address?: string, overrides?: EthersCallOverrides): Promise<Decimal>;
@@ -529,6 +531,8 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     getRedemptionRate(overrides?: EthersCallOverrides): Promise<Decimal>;
     // (undocumented)
     getStabilityDeposit(address?: string, overrides?: EthersCallOverrides): Promise<StabilityDeposit>;
+    // (undocumented)
+    getStableAddress(overrides?: EthersCallOverrides): Promise<string>;
     // (undocumented)
     getSymbol(overrides?: EthersCallOverrides): Promise<string>;
     // (undocumented)

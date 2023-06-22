@@ -258,6 +258,10 @@ export class SubgraphLiquity implements ReadableLiquity, ObservableLiquity {
     throw new Error("Method not implemented.");
   }
 
+  getStableAddress(): Promise<string> {
+    throw new Error("Method not implemented.");
+  }
+
   getStabilityDeposit(address?: string): Promise<StabilityDeposit> {
     throw new Error("Method not implemented.");
   }

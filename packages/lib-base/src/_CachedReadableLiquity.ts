@@ -122,6 +122,13 @@ export class _CachedReadableLiquity<T extends unknown[]>
     );
   }
 
+  async getStableAddress(...extraParams: T): Promise<string> {
+    return (
+      this._cache.getStableAddress(...extraParams) ??
+      this._readable.getStableAddress(...extraParams)
+    );
+  }
+
   async getTHUSDInStabilityPool(...extraParams: T): Promise<Decimal> {
     return (
       this._cache.getTHUSDInStabilityPool(...extraParams) ??
