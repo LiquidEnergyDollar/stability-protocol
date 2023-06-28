@@ -4,12 +4,13 @@ import { LineChart } from "./LineChart";
 
 type ChartCardProps = {
   variant?: string;
+  dataTitle?: string;
 };
 
-export const Chart = ({ variant = "mainCards" }: ChartCardProps): JSX.Element => {
+export const Chart = ({ variant = "mainCards", dataTitle }: ChartCardProps): JSX.Element => {
   return (
     <Card {...{ variant }} sx={{ width: "100%" }}>
-      <LineChart />
+      <LineChart dataTitle={dataTitle} />
     </Card>
   );
 };

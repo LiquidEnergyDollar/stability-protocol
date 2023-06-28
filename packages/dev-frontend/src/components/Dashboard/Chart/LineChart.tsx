@@ -3,7 +3,6 @@ import { Box, Card, Flex, useColorMode } from "theme-ui";
 import { useHistoricalData } from "./context/ChartContext";
 import { HistoricalDataItem } from "./context/ChartProvider";
 import { BigNumber, utils } from "ethers"
-import { InfoIcon } from "../../InfoIcon"
 
 import {
   Chart as ChartJS,
@@ -54,7 +53,11 @@ ChartJS.register({
   }
 });
 
-export const LineChart = (): JSX.Element => {
+type LineChartProps = {
+  dataTitle?: string;
+};
+
+export const LineChart = ({ dataTitle }: LineChartProps): JSX.Element => {
   const [isMounted, setIsMounted] = useState<boolean>(true);
   const [hoverRef, isHovered] = useHover<HTMLDivElement>();
   const [colorMode] = useColorMode();
@@ -62,6 +65,22 @@ export const LineChart = (): JSX.Element => {
   const [historicalData, setHistoricalData] = useState<HistoricalDataItem[]>([]);
   const [loadedChart, setLoadedChart] = useState<boolean>(false);
   const [activeLabel, setActiveLabel] = useState<string>('-');
+
+  const formatData = (data: string) => {
+    if (dataTitle == 'LED APY') {
+      const redemptionRate = Decimal.from(data).div(Decimal.from(10).pow(27));
+      const secondsPerYear = 31536000; // Approximate number of seconds in a year
+      const ratePerYear = redemptionRate.pow(secondsPerYear);
+      return parseFloat(ratePerYear.toString()) * 100 - 100;
+    }
+    let multiplier = 27;
+    if (dataTitle == 'LED Oracle Price'
+      || dataTitle == 'LED Market Price'
+      || dataTitle == 'LED Redemption Price')
+      multiplier = 18;
+    const str = utils.formatUnits(BigNumber.from(data), multiplier)
+    return parseFloat(str);
+  }
 
   useHistoricalData()
     .then((result) => {
@@ -96,16 +115,6 @@ export const LineChart = (): JSX.Element => {
     };
   }, [isMounted, loadedChart, historicalData]);
 
-  // useEffect(() => {
-  //   if (lastTvlNumber.length > 0) {
-  //     setChartData(lastTvlNumber);
-  //     localStorage.setItem("chartData", JSON.stringify(lastTvlNumber));
-  //     // localStorage.setItem("chartLabels", JSON.stringify(timestamps));
-  //   }
-
-
-  // }, [isMounted, lastTvlNumber]);
-
   const labels: Array<{[date: string]: string}> = [];
 
   historicalData.map((item) => {
@@ -121,8 +130,7 @@ export const LineChart = (): JSX.Element => {
 
   const datapoints: Array<number> = [];
   historicalData.map((item) => {
-    const str = utils.formatUnits(BigNumber.from(item.value), 27)
-    const parsed = parseFloat(str);
+    const parsed = formatData(item.value);
     return datapoints.push(parsed);
   })
 
@@ -178,8 +186,8 @@ export const LineChart = (): JSX.Element => {
       const activePoint = chart.tooltip._active[0];
       const setIndex = activePoint?.datasetIndex;
       const index = activePoint?.index;
-      const activeData = chart.data?.datasets[setIndex] && 
-      Decimal.from(chart.data?.datasets[setIndex]?.data[index]).prettify(5);
+      const activeData = chart.data?.datasets[setIndex] &&
+        chart.data?.datasets[setIndex]?.data[index].toPrecision(5);
       const labelIndex = labels[index];
       const activeLabel = labelIndex && Object.values(labelIndex)[0];
       setActiveData(activeData ? activeData : '-');
@@ -195,7 +203,7 @@ export const LineChart = (): JSX.Element => {
       {
         fill: "start",
         lineTension: 0.4,
-        label: 'DeviationFactor',
+        label: dataTitle,
         data: datapoints,
         borderColor: colorMode === "dark" ? "#f3f3f3b8" : "#20cb9d",
         pointBackgroundColor: colorMode === 'dark' ? "#f3f3f3b8" : "#20cb9d",
@@ -219,8 +227,7 @@ export const LineChart = (): JSX.Element => {
         borderBottom: 1, 
         borderColor: "border"
       }}>
-        Historical Chart
-        <InfoIcon size="sm" tooltip={<Card variant="tooltip">"Test"</Card>} />
+        {dataTitle}
       </Flex>
       <Flex sx={{
         width: "100%",
@@ -249,7 +256,7 @@ export const LineChart = (): JSX.Element => {
               {loadedChart && (
                 isHovered
                 ? activeData
-                : 'Deviation Factor'
+                : dataTitle
               )}
             </Flex>
             <Flex sx={{ 

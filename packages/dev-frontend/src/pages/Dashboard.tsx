@@ -1,17 +1,12 @@
 import { Container, Heading } from "theme-ui";
 
 import { RedemptionPriceCard, OraclePriceCard, MarketPriceCard, RedemptionRateCard, DeviationFactorCard } from "../components/Dashboard/PriceCard";
-import { BorrowingFee } from "../components/Dashboard/BorrowingFee";
-import { OpenedVaults } from "../components/Dashboard/OpenedVaults";
 import { ColRatio } from "../components/Dashboard/ColRatio";
-import { Chart } from "../components/Dashboard/Chart/Chart";
 import { VaultCard } from "../components/Dashboard/VaultCard";
 import { StabilityPoolCard } from "../components/Dashboard/StabilityPoolCard";
 import { SystemStatsCard } from "../components/SystemStatsCard";
-import { ChartProvider } from "../components/Dashboard/Chart/context/ChartProvider";
 
 export const Dashboard = (): JSX.Element => (
-  <ChartProvider>
     <Container>
       <Heading as="h2" sx={{ mt: "2.5em", fontWeight: "semibold" }}>
         Dashboard
@@ -41,12 +36,6 @@ export const Dashboard = (): JSX.Element => (
         <Container variant="oneThird">
           <ColRatio />
         </Container>
-        {/* <Container variant="twoThirds">
-          <Chart />
-        </Container> */}
-        <Container variant="full">
-          <Chart />
-        </Container>
         <Container variant="full">
           <SystemStatsCard IsPriceEditable={true} />
         </Container>
@@ -58,5 +47,4 @@ export const Dashboard = (): JSX.Element => (
         </Container>
       </Container>
     </Container>
-  </ChartProvider>
 );

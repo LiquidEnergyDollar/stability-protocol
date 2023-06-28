@@ -7,7 +7,7 @@ import { Decimal } from "@liquity/lib-base";
 export type HistoricalDataItem = {
   timestamp: number;
   network: string;
-  value: Decimal;
+  value: string;
 };
 
 export type HistoricalData = {
@@ -17,6 +17,7 @@ export type HistoricalData = {
 export type FunctionalPanelProps = {
   loader?: React.ReactNode;
   children?: React.ReactNode;
+  dataSource?: string
 };
 
 async function requestHistoricalData<TResponse>(
@@ -28,7 +29,7 @@ async function requestHistoricalData<TResponse>(
     .then((data) => data as TResponse)
 }
 
-export const ChartProvider = ({ children }: FunctionalPanelProps): JSX.Element => {
+export const ChartProvider = ({ children, dataSource }: FunctionalPanelProps): JSX.Element => {
   // Define the state variables for the component using useState hook
   const [isDataAvailable, setIsDataAvailable] = useState<boolean>(true);
   const [data, setData] = useState<HistoricalDataItem[]>([]);
@@ -47,7 +48,7 @@ export const ChartProvider = ({ children }: FunctionalPanelProps): JSX.Element =
       return;
     }
 
-    const parsedUrl = historicalApiUrl + '/deviationFactor?begin=1&end=16873850922'
+    const parsedUrl = historicalApiUrl + `/${dataSource}?begin=1&end=16873850922`
     requestHistoricalData<HistoricalData>(parsedUrl)
       .then((result) => {
         setData(result.data);
