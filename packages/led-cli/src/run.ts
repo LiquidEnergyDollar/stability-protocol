@@ -70,7 +70,9 @@ const methodArgs: Record<string, any> = {
   };
 
 dotenv.config({path: __dirname + '/.env'})
+console.log("path " + __dirname + '/.env');
 inquirer.registerPrompt('autocomplete', inquirerPrompt);
+console.log("process.env.DEPLOYER_PRIVATE_KEY " + process.env.DEPLOYER_PRIVATE_KEY);
 
 let NETWORK = "sepolia";
 let COLLATERAL = "usd";
@@ -120,7 +122,6 @@ async function run() {
             );
         const deployment = JSON.parse(deploymentString);
 
-        console.log("process.env.DEPLOYER_PRIVATE_KEY" + process.env.DEPLOYER_PRIVATE_KEY);
         const deployerAccount = process.env.DEPLOYER_PRIVATE_KEY || Wallet.createRandom().privateKey;
 
         const provider = new ethers.providers.InfuraProvider(

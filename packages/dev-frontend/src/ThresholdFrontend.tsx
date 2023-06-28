@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Container, Heading, Paragraph } from "theme-ui";
+import { Flex, Container, Heading, Button } from "theme-ui";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { Nav } from "./components/Nav";
@@ -25,6 +25,45 @@ type ThresholdFrontendProps = {
   loader?: React.ReactNode;
 };
 
+async function connectToSepolia() {
+  if (window.ethereum) {
+    try {
+      const ethereum = window.ethereum;
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts"
+      });
+
+      // Log public address of user
+      console.log(accounts[0]);
+
+      // Get network ID
+      let n = ethereum.chainId;
+
+      // Request adding the custom network
+      let params = [
+        {
+          chainId: "0xAA36A7",
+          chainName: "Sepolia test network",
+          rpcUrls: ["https://rpc.sepolia.org"],
+          nativeCurrency: {
+            symbol: "ETH",
+            decimals: 18
+          }
+        }
+      ];
+
+      await ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: params
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    console.log("Please install MetaMask");
+  }
+} 
+
 const UnsupportedMainnetFallback = (): JSX.Element => (
   <Flex
     sx={{
@@ -39,9 +78,9 @@ const UnsupportedMainnetFallback = (): JSX.Element => (
       <Icon name="exclamation-triangle" /> This app is for testing purposes only.
     </Heading>
 
-    <Paragraph sx={{ mb: 3 }}>
-      Please change your network to Sepolia.
-    </Paragraph>
+    <Button sx={{ mb: 3 }} onClick={connectToSepolia}>
+      Connect to Sepolia test network.
+    </Button>
   </Flex>
 );
 
@@ -60,7 +99,9 @@ export const ThresholdFrontend = ({ loader }: ThresholdFrontendProps): JSX.Eleme
         <Icon name="exclamation-triangle" /> LED is not yet deployed to{" "}
         {chainId === 1 ? "mainnet" : "this network"}.
       </Heading>
-      Please switch to Sepolia.
+      <Button sx={{ mb: 3 }} onClick={connectToSepolia}>
+        Connect to Sepolia test network.
+      </Button>
     </Flex>
   );
 
