@@ -45,6 +45,9 @@ export const Dashboard = (): JSX.Element => (
           <Chart />
         </Container> */}
         <Container variant="full">
+          <Chart />
+        </Container>
+        <Container variant="full">
           <SystemStatsCard IsPriceEditable={true} />
         </Container>
         <Container variant="half">
