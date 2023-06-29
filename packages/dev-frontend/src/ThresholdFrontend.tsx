@@ -20,6 +20,7 @@ import { SwapPage } from "./pages/SwapPage";
 
 import { ThresholdProvider } from "./hooks/ThresholdContext";
 import { StabilityPoolPage } from "./pages/StabilityPoolPage";
+import { Charts } from "./pages/Charts";
 
 type ThresholdFrontendProps = {
   loader?: React.ReactNode;
@@ -134,6 +135,9 @@ export const ThresholdFrontend = ({ loader }: ThresholdFrontendProps): JSX.Eleme
                       <Switch>
                         <Route path="/" exact>
                           <Dashboard />
+                        </Route>
+                        <Route path="/charts" exact>
+                          <Charts />
                         </Route>
                         <Route path="/borrow" exact>
                           <VaultPage />

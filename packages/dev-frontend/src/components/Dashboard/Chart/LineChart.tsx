@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Card, Flex, useColorMode } from "theme-ui";
-import { useTvl } from "./context/ChartContext";
-import { TimestampsObject, Tvl } from "./context/ChartProvider";
+import { useHistoricalData } from "./context/ChartContext";
+import { HistoricalDataItem } from "./context/ChartProvider";
+import { BigNumber, utils } from "ethers"
 
 import {
   Chart as ChartJS,
@@ -19,6 +20,7 @@ import { Line } from 'react-chartjs-2';
 import { Decimal } from "@liquity/lib-base";
 import { useHover } from "../../../utils/hooks";
 import { LoadingChart } from "./LoadingChart";
+import { InfoIcon } from "../../InfoIcon";
 
 ChartJS.register(
   CategoryScale,
@@ -52,32 +54,44 @@ ChartJS.register({
   }
 });
 
-export const LineChart = (): JSX.Element => {
+type LineChartProps = {
+  dataTitle?: string;
+  tooltipText?: string;
+};
+
+export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Element => {
   const [isMounted, setIsMounted] = useState<boolean>(true);
   const [hoverRef, isHovered] = useHover<HTMLDivElement>();
   const [colorMode] = useColorMode();
   const [activeData, setActiveData] = useState<number | string>('-');
-  const [tvl, setTvl] = useState<Tvl[]>([]);
+  const [historicalData, setHistoricalData] = useState<HistoricalDataItem[]>([]);
   const [loadedChart, setLoadedChart] = useState<boolean>(false);
-  const [timestamps, setTimestamps] = useState<Array<TimestampsObject>>([]);
   const [activeLabel, setActiveLabel] = useState<string>('-');
-  const [chartData, setChartData] = useState<Array<Number>>([]);
-  const [lastTvlDecimal, setLastTvlDecimal] = useState<Decimal>();
-  const [lastTvlNumber, setLastTvlNumber] = useState<Array<number>>([]);
-  const [chartLabels, setChartLabels] = useState<Array<TimestampsObject>>();
 
-  useTvl()
+  const formatData = (data: string) => {
+    if (dataTitle == 'LED APY') {
+      const redemptionRate = Decimal.from(data).div(Decimal.from(10).pow(27));
+      const secondsPerYear = 31536000; // Approximate number of seconds in a year
+      const ratePerYear = redemptionRate.pow(secondsPerYear);
+      return parseFloat(ratePerYear.toString()) * 100 - 100;
+    }
+    let multiplier = 18;
+    if (dataTitle == 'Deviation Factor') multiplier = 27;
+    const str = utils.formatUnits(BigNumber.from(data), multiplier)
+    return parseFloat(str);
+  }
+
+  useHistoricalData()
     .then((result) => {
       if (result === null || !isMounted) {
         return
       }
-      setTvl(result.tvl)
-      setTimestamps(result.timestamps)
+      setHistoricalData(result.data)
       setLoadedChart(true);
     })
     .catch((error) => {
       setLoadedChart(false)
-      console.error('tvl fetch error: ', error)
+      console.error('hist data fetch error: ', error)
     })
 
   useEffect(() => {
@@ -88,54 +102,36 @@ export const LineChart = (): JSX.Element => {
     const cachedLabels = localStorage.getItem("chartLabels");
     
     if (cachedData && cachedLabels) {
-      setChartData(JSON.parse(cachedData));
-      setChartLabels(JSON.parse(cachedLabels));
-      setLastTvlDecimal(JSON.parse(cachedData)[cachedData.length - 1]);
       setLoadedChart(true);
     }
   
     if (!loadedChart) {
       return;
     }
-    let memeTvl: Decimal[] = [];
-  
-    for (const collateralTvl of tvl) {
-      collateralTvl.tvl.forEach((tvl, index) => {
-        if (memeTvl[index] === undefined) {
-          memeTvl[index] = Decimal.from(0);
-        }
-        memeTvl[index] = tvl.totalCollateral.add(memeTvl[index]);
-      });
-    }
-    setLastTvlNumber(memeTvl.map(decimal => parseInt(decimal.toString())))
-  
-  
+
     return () => {
       setIsMounted(false);
     };
-  }, [isMounted, loadedChart, tvl, timestamps]);
-
-  useEffect(() => {
-    if (lastTvlNumber.length > 0 && timestamps.length > 0) {
-      setChartData(lastTvlNumber);
-      setChartLabels(timestamps);
-      localStorage.setItem("chartData", JSON.stringify(lastTvlNumber));
-      localStorage.setItem("chartLabels", JSON.stringify(timestamps));
-    }
-  
-
-  }, [isMounted, lastTvlNumber, timestamps]);
+  }, [isMounted, loadedChart, historicalData]);
 
   const labels: Array<{[date: string]: string}> = [];
 
-  chartLabels?.map((timestamp: TimestampsObject) => {
-    const date = new Date(timestamp.localTimestamp * 1000) // convert timestamp to date;
+  historicalData.map((item) => {
+    const date = new Date(item.timestamp * 1000) // convert timestamp to date;
+    const hour = date.getUTCHours();
+    const minute = date.getUTCMinutes();
     const day = date.getUTCDate();
     const month = date.toLocaleString('default', { month: 'long' });
     const year = date.getUTCFullYear();
 
-    return labels.push({[day]: `${month} ${day}, ${year}`})
-  });  
+    return labels.push({[day]: `${month} ${day} ${year}, ${hour}:${minute} GMT`})
+  });
+
+  const datapoints: Array<number> = [];
+  historicalData.map((item) => {
+    const parsed = formatData(item.value);
+    return datapoints.push(parsed);
+  })
 
   const options = {
     locale: 'en-US',
@@ -151,7 +147,7 @@ export const LineChart = (): JSX.Element => {
       y: {
         display: false,
         drawTicks: false,
-        beginAtZero: true,
+        beginAtZero: false,
       }, 
       x: {
         ticks: {
@@ -189,8 +185,8 @@ export const LineChart = (): JSX.Element => {
       const activePoint = chart.tooltip._active[0];
       const setIndex = activePoint?.datasetIndex;
       const index = activePoint?.index;
-      const activeData = chart.data?.datasets[setIndex] && 
-      Decimal.from(chart.data?.datasets[setIndex]?.data[index]).prettify(2);
+      const activeData = chart.data?.datasets[setIndex] &&
+        chart.data?.datasets[setIndex]?.data[index].toPrecision(5);
       const labelIndex = labels[index];
       const activeLabel = labelIndex && Object.values(labelIndex)[0];
       setActiveData(activeData ? activeData : '-');
@@ -206,8 +202,8 @@ export const LineChart = (): JSX.Element => {
       {
         fill: "start",
         lineTension: 0.4,
-        label: 'TVL',
-        data: chartData,
+        label: dataTitle,
+        data: datapoints,
         borderColor: colorMode === "dark" ? "#f3f3f3b8" : "#20cb9d",
         pointBackgroundColor: colorMode === 'dark' ? "#f3f3f3b8" : "#20cb9d",
         backgroundColor: (context: ScriptableContext<"line">) => {
@@ -230,7 +226,8 @@ export const LineChart = (): JSX.Element => {
         borderBottom: 1, 
         borderColor: "border"
       }}>
-        TVL Chart
+        {dataTitle}
+        <InfoIcon size="sm" tooltip={<Card variant="tooltip">{tooltipText}</Card>} />
       </Flex>
       <Flex sx={{
         width: "100%",
@@ -256,14 +253,11 @@ export const LineChart = (): JSX.Element => {
               fontWeight: "bold", 
               color: "text"
             }}>
-              {(lastTvlDecimal || (isHovered && activeData)) && '$'}
               {loadedChart && (
-                isHovered 
-                ? activeData 
-                : lastTvlDecimal 
-                  ? lastTvlDecimal.prettify(2) 
-                  : '-'
-              )} 
+                isHovered
+                ? activeData
+                : dataTitle
+              )}
             </Flex>
             <Flex sx={{ 
               fontSize: ".9em",

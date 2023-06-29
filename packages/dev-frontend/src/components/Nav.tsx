@@ -23,6 +23,10 @@ export const Nav = (): JSX.Element => {
           <Icon name="chart-bar" />
           Dashboard
         </Link>
+        <Link to="/charts">
+          <Icon name="chart-line" />
+          Charts
+        </Link>
         <Link to="/borrow" >
           <Flex sx={{ transform: "rotate(155deg)" }}>
             <Icon name="exchange-alt" />
@@ -43,7 +47,7 @@ export const Nav = (): JSX.Element => {
           <Icon name="exclamation-triangle" />
           Risky Vaults
         </Link>
-        <Flex sx={{ mt:"1.5em", alignSelf: "center", display: ["flex", "none"] }}>
+        <Flex sx={{ mt: "1.5em", alignSelf: "center", display: ["flex", "none"] }}>
           <UserAccount />
         </Flex>
       </Flex>

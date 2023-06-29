@@ -1,9 +1,7 @@
 export type ThresholdConfig = {
-  coingeckoIdsBySymbol?: object
   infuraApiKey?: string;
   testnetOnly?: boolean;
-  blocksApiUrl?: string;
-  thresholdUsdApiUrl?: string;
+  historicalApiUrl?: string;
 };
 
 const defaultConfig: ThresholdConfig = {
@@ -17,11 +15,16 @@ const parseConfig = (json: unknown): ThresholdConfig => {
   const config = { ...defaultConfig };
 
   if (typeof json === "object" && json !== null) {
-    if (hasKey(json, "coingeckoIdsBySymbol") && typeof json.coingeckoIdsBySymbol === "object" && json.coingeckoIdsBySymbol !== null) {
-      const { coingeckoIdsBySymbol } = json;
-      config.coingeckoIdsBySymbol = coingeckoIdsBySymbol;
+    if (hasKey(json, "historicalApiUrl") && json.historicalApiUrl !== "") {
+      const { historicalApiUrl } = json;
+      if (typeof historicalApiUrl === "string") {
+        config.historicalApiUrl = historicalApiUrl;
+      } else {
+        console.error("Malformed historical API URL:");
+        console.log(historicalApiUrl);
+      }
     } else {
-      console.error("Malformed coingeckoIdsBySymbol:");
+      console.error("Missing historicalApiUrl in config.json")
     }
 
     if (hasKey(json, "infuraApiKey") && json.infuraApiKey !== "") {
@@ -42,27 +45,6 @@ const parseConfig = (json: unknown): ThresholdConfig => {
       } else {
         console.error("Malformed testnetOnly:");
         console.log(testnetOnly);
-      }
-    }
-
-    if (hasKey(json, "blocksApiUrl") && json.blocksApiUrl !== "") {
-      const { blocksApiUrl } = json;
-      if (typeof blocksApiUrl === "string") {
-        config.blocksApiUrl = blocksApiUrl;
-      } else {
-        console.error("Malformed blocksApiUrl:");
-        console.log(blocksApiUrl);
-      }
-    }
-
-    if (hasKey(json, "thresholdUsdApiUrl") && json.thresholdUsdApiUrl !== "") {
-      const { thresholdUsdApiUrl } = json;
-
-      if (typeof thresholdUsdApiUrl === "string") {
-        config.thresholdUsdApiUrl = thresholdUsdApiUrl;
-      } else {
-        console.error("Malformed thresholdUsdApiUrl:");
-        console.log(thresholdUsdApiUrl);
       }
     }
   } else {
