@@ -5,12 +5,13 @@ import { LineChart } from "./LineChart";
 type ChartCardProps = {
   variant?: string;
   dataTitle?: string;
+  tooltipText?: string;
 };
 
-export const Chart = ({ variant = "mainCards", dataTitle }: ChartCardProps): JSX.Element => {
+export const Chart = ({ variant = "mainCards", dataTitle, tooltipText }: ChartCardProps): JSX.Element => {
   return (
     <Card {...{ variant }} sx={{ width: "100%" }}>
-      <LineChart dataTitle={dataTitle} />
+      <LineChart dataTitle={dataTitle} tooltipText={tooltipText} />
     </Card>
   );
 };

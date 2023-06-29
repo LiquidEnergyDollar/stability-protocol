@@ -23,6 +23,8 @@ const parseConfig = (json: unknown): ThresholdConfig => {
         console.error("Malformed historical API URL:");
         console.log(historicalApiUrl);
       }
+    } else {
+      console.error("Missing historicalApiUrl in config.json")
     }
 
     if (hasKey(json, "infuraApiKey") && json.infuraApiKey !== "") {

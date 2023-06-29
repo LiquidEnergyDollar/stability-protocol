@@ -4,28 +4,16 @@ import { useThresholdSelector} from "@liquity/lib-react";
 
 import { TopCard } from "./TopCard";
 import { COIN } from "../../utils/constants";
+import { TooltipText, selector } from "../../utils/tooltips"
 
 type SystemStatsProps = {
   variant?: string;
 };
 
-const selector = ({
-    price,
-    marketPrice,
-    piRedemptionRate,
-    deviationFactor,
-    symbol,
-  }: ThresholdStoreState) => ({
-    price,
-    marketPrice,
-    piRedemptionRate,
-    deviationFactor,
-    symbol,
-  });
-
 export const RedemptionPriceCard = ({ variant = "mainCards" }: SystemStatsProps): JSX.Element => {
   const thresholdSelectorStores = useThresholdSelector(selector);
     const store = thresholdSelectorStores[0].store;
+    const collat = thresholdSelectorStores[0].collateral
     const price = store.price;
     // TODO: Remove inverse after we switch methods
     const inversePrice = Decimal.ONE.div(price);
@@ -34,7 +22,7 @@ export const RedemptionPriceCard = ({ variant = "mainCards" }: SystemStatsProps)
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
         name={`${ COIN } Redemption Price`}
-        tooltip={`The redemption price of ${ COIN } denominated in ${ thresholdSelectorStores[0].collateral }.`} 
+        tooltip={TooltipText.redemptionPrice(COIN, collat)}
         imgSrc="./icons/price-chart.png"
       >
         
@@ -48,12 +36,13 @@ export const MarketPriceCard = ({ variant = "mainCards" }: SystemStatsProps): JS
   const thresholdSelectorStores = useThresholdSelector(selector);
     const store = thresholdSelectorStores[0].store;
     const price = store.marketPrice;
+    const collat = thresholdSelectorStores[0].collateral
   
   return (
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
         name={`${ COIN } Market Price`}
-        tooltip={`The market price of ${ COIN } denominated in ${ thresholdSelectorStores[0].collateral }.`} 
+        tooltip={TooltipText.marketPrice(COIN, collat)}
         imgSrc="./icons/price-chart.png"
       >
         
@@ -68,12 +57,12 @@ export const RedemptionRateCard = ({ variant = "mainCards" }: SystemStatsProps):
     const store = thresholdSelectorStores[0].store;
     const redemptionRate = store.piRedemptionRate;
     const annualizedRate = annualizeInterestRate(redemptionRate);
-  
+
   return (
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
         name={`${ COIN } APY`}
-        tooltip={`The annualized yield that ${ COIN } holders are currently earning.`} 
+        tooltip={TooltipText.redemptionRate(COIN)}
         imgSrc="./icons/scale-icon.png"
       >
         
@@ -93,12 +82,12 @@ export const DeviationFactorCard = ({ variant = "mainCards" }: SystemStatsProps)
   const thresholdSelectorStores = useThresholdSelector(selector);
     const store = thresholdSelectorStores[0].store;
     const factor = store.deviationFactor;
-  
+
   return (
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
         name={`Deviation Factor`}
-        tooltip={`The accumulated interest rate of ${ COIN } since deployment. Initialized to 1.`} 
+        tooltip={TooltipText.deviationFactor(COIN)}
         imgSrc="./icons/scale-icon.png"
       >
         
@@ -120,7 +109,7 @@ export const OraclePriceCard = ({ variant = "mainCards" }: SystemStatsProps): JS
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
         name={`${ COIN } Oracle Price`}
-        tooltip={`The price returned by the ${ COIN } Oracle.`} 
+        tooltip={TooltipText.oraclePrice(COIN)}
         imgSrc="./icons/price-chart.png"
       >
         

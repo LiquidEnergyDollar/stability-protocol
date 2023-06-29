@@ -20,6 +20,7 @@ import { Line } from 'react-chartjs-2';
 import { Decimal } from "@liquity/lib-base";
 import { useHover } from "../../../utils/hooks";
 import { LoadingChart } from "./LoadingChart";
+import { InfoIcon } from "../../InfoIcon";
 
 ChartJS.register(
   CategoryScale,
@@ -55,9 +56,10 @@ ChartJS.register({
 
 type LineChartProps = {
   dataTitle?: string;
+  tooltipText?: string;
 };
 
-export const LineChart = ({ dataTitle }: LineChartProps): JSX.Element => {
+export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Element => {
   const [isMounted, setIsMounted] = useState<boolean>(true);
   const [hoverRef, isHovered] = useHover<HTMLDivElement>();
   const [colorMode] = useColorMode();
@@ -225,6 +227,7 @@ export const LineChart = ({ dataTitle }: LineChartProps): JSX.Element => {
         borderColor: "border"
       }}>
         {dataTitle}
+        <InfoIcon size="sm" tooltip={<Card variant="tooltip">{tooltipText}</Card>} />
       </Flex>
       <Flex sx={{
         width: "100%",
