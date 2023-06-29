@@ -73,11 +73,8 @@ export const LineChart = ({ dataTitle }: LineChartProps): JSX.Element => {
       const ratePerYear = redemptionRate.pow(secondsPerYear);
       return parseFloat(ratePerYear.toString()) * 100 - 100;
     }
-    let multiplier = 27;
-    if (dataTitle == 'LED Oracle Price'
-      || dataTitle == 'LED Market Price'
-      || dataTitle == 'LED Redemption Price')
-      multiplier = 18;
+    let multiplier = 18;
+    if (dataTitle == 'Deviation Factor') multiplier = 27;
     const str = utils.formatUnits(BigNumber.from(data), multiplier)
     return parseFloat(str);
   }

@@ -41,9 +41,6 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
     uint256 public LEDPrice;
     uint256 public LEDPriceUpdateTime;
 
-    uint256 public marketPrice;
-    uint256 public marketPriceUpdateTime;
-
     uint256 public lastGoodPrice;
 
     // --- Events ---
@@ -121,9 +118,7 @@ contract PriceFeed is GebMath, Ownable, BaseMath {
 
     function getMarketPrice() public view returns(uint)
     {
-        marketPrice = uniV3Reader.getTWAP(uniV3PoolAddress);
-        marketPriceUpdateTime = block.timestamp;
-        return marketPrice;
+        return uniV3Reader.getTWAP(uniV3PoolAddress);
     }
 
     function updateRate() public {

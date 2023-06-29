@@ -35,11 +35,15 @@ export const ChartProvider = ({ children, dataSource }: FunctionalPanelProps): J
   const [data, setData] = useState<HistoricalDataItem[]>([]);
   const [isMounted, setIsMounted] = useState<boolean>(true);
 
+  // Timestamp ranges for API query
+  // Can be changed later if we add date ranges for charts
+  const timestampBegin = 1;
+  const timestampEnd = 16873850922; // arbitrary, we just want all the data
+
   // Destructure values from useThreshold hook
   const { config } = useThreshold();
   const { historicalApiUrl } = config;
 
-  // Define the getTVLData function for fetching TVL data
   const getData = () => {
     // Check if the required config properties are present
     if (!historicalApiUrl) {
@@ -48,7 +52,7 @@ export const ChartProvider = ({ children, dataSource }: FunctionalPanelProps): J
       return;
     }
 
-    const parsedUrl = historicalApiUrl + `/${dataSource}?begin=1&end=16873850922`
+    const parsedUrl = historicalApiUrl + `/${dataSource}?begin=${timestampBegin}&end=${timestampEnd}`
     requestHistoricalData<HistoricalData>(parsedUrl)
       .then((result) => {
         setData(result.data);
@@ -59,7 +63,7 @@ export const ChartProvider = ({ children, dataSource }: FunctionalPanelProps): J
       });
   };
 
-  // Use the useEffect hook to fetch TVL data only once when the component mounts
+  // Use the useEffect hook to fetch historical data only once when the component mounts
   useEffect(() => {
     if (!isMounted) {
       return;
@@ -73,7 +77,7 @@ export const ChartProvider = ({ children, dataSource }: FunctionalPanelProps): J
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
 
-  // Return the children wrapped in ChartContext.Provider if TVL data is available
+  // Return the children wrapped in ChartContext.Provider if historical data is available
   if (!isDataAvailable) {
     return <>{children}</>
   };
