@@ -71,10 +71,10 @@ const deployContracts = async (
     "PIScaledPerSecondCalculator",
     // These are taken from the production RAI deployment
     // Strings are used for BigNum conversion
-    "222002205862",                                   // Kp
-    "16442",                                          // Ki
+    "2664026470344",                                  // Kp * 12
+    "197304",                                         // Ki * 12
     "999999711200000000000000000",                    // perSecondCumulativeLeak
-    "21600",                                          // integralPeriodSize
+    "3600",                                           // integralPeriodSize
     "1000000000000000000",                            // noiseBarrier
     "1000000000000000000000000000000000000000000000", // feedbackOutputUpperBound
     "-999999999999999999999999999",                   // feedbackOutputLowerBound

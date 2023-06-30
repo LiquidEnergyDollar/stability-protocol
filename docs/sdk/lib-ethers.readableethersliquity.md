@@ -43,6 +43,7 @@ The constructor for this class is marked as internal. Third-party code should no
 |  [getPrice(overrides)](./lib-ethers.readableethersliquity.getprice.md) |  | Get the current price of the native currency (e.g. Ether) in USD. |
 |  [getRedemptionRate(overrides)](./lib-ethers.readableethersliquity.getredemptionrate.md) |  |  |
 |  [getStabilityDeposit(address, overrides)](./lib-ethers.readableethersliquity.getstabilitydeposit.md) |  | Get the current state of a Stability Deposit. |
+|  [getStableAddress(overrides)](./lib-ethers.readableethersliquity.getstableaddress.md) |  | Get the stablecoin address. |
 |  [getSymbol(overrides)](./lib-ethers.readableethersliquity.getsymbol.md) |  | Get the ERC20 token's symbol . |
 |  [getTHUSDBalance(address, overrides)](./lib-ethers.readableethersliquity.getthusdbalance.md) |  | Get the amount of thUSD held by an address. |
 |  [getTHUSDInStabilityPool(overrides)](./lib-ethers.readableethersliquity.getthusdinstabilitypool.md) |  | Get the total amount of thUSD currently deposited in the Stability Pool. |

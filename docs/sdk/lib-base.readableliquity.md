@@ -31,6 +31,7 @@ Implemented by [EthersLiquity](./lib-ethers.ethersliquity.md)<!-- -->.
 |  [getPCVBalance()](./lib-base.readableliquity.getpcvbalance.md) | Get the total amount of thUSD currently deposited in the PCV Pool. |
 |  [getPrice()](./lib-base.readableliquity.getprice.md) | Get the current price of the native currency (e.g. Ether) in USD. |
 |  [getStabilityDeposit(address)](./lib-base.readableliquity.getstabilitydeposit.md) | Get the current state of a Stability Deposit. |
+|  [getStableAddress()](./lib-base.readableliquity.getstableaddress.md) | Get the stablecoin address. |
 |  [getSymbol()](./lib-base.readableliquity.getsymbol.md) | Get the ERC20 token's symbol . |
 |  [getTHUSDBalance(address)](./lib-base.readableliquity.getthusdbalance.md) | Get the amount of thUSD held by an address. |
 |  [getTHUSDInStabilityPool()](./lib-base.readableliquity.getthusdinstabilitypool.md) | Get the total amount of thUSD currently deposited in the Stability Pool. |
