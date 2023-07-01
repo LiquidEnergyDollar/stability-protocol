@@ -119,7 +119,8 @@ export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Eleme
   historicalData.map((item) => {
     const date = new Date(item.timestamp * 1000) // convert timestamp to date;
     const hour = date.getUTCHours();
-    const minute = date.getUTCMinutes();
+    // Want to make sure minute values like '5' read as '05'
+    const minute = date.getUTCMinutes().toString().padStart(2, '0');
     const day = date.getUTCDate();
     const month = date.toLocaleString('default', { month: 'long' });
     const year = date.getUTCFullYear();
