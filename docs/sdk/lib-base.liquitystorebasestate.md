@@ -33,6 +33,7 @@ export interface LiquityStoreBaseState
 |  [piRedemptionRate](./lib-base.liquitystorebasestate.piredemptionrate.md) |  | [Decimal](./lib-base.decimal.md) | Current redemption rate of for LED holders. |
 |  [price](./lib-base.liquitystorebasestate.price.md) |  | [Decimal](./lib-base.decimal.md) | Current price of the native currency (e.g. Ether) in USD. |
 |  [stabilityDeposit](./lib-base.liquitystorebasestate.stabilitydeposit.md) |  | [StabilityDeposit](./lib-base.stabilitydeposit.md) | User's stability deposit. |
+|  [stableAddress](./lib-base.liquitystorebasestate.stableaddress.md) |  | string | TroveManager contract stable address. |
 |  [symbol](./lib-base.liquitystorebasestate.symbol.md) |  | string | token's ERC20 symbol. |
 |  [thusdBalance](./lib-base.liquitystorebasestate.thusdbalance.md) |  | [Decimal](./lib-base.decimal.md) | User's thUSD token balance. |
 |  [thusdInStabilityPool](./lib-base.liquitystorebasestate.thusdinstabilitypool.md) |  | [Decimal](./lib-base.decimal.md) | Total amount of thUSD currently deposited in the Stability Pool. |
