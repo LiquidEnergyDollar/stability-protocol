@@ -68,11 +68,12 @@ export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Eleme
   const [loadedChart, setLoadedChart] = useState<boolean>(false);
   const [activeLabel, setActiveLabel] = useState<string>('-');
 
-  const formatData = (data: string) => {
+  const formatData = (data: string, timestamp: number) => {
     if (dataTitle == 'LED APY') {
       const redemptionRate = Decimal.from(data).div(Decimal.from(10).pow(27));
-      const secondsPerYear = 31536000; // Approximate number of seconds in a year
-      const ratePerYear = redemptionRate.pow(secondsPerYear);
+      const tournamentEndDate = Math.floor(new Date('Jul 08 2023 19:00 GMT').getTime() / 1000);
+      const secondsUntilEnd = tournamentEndDate - timestamp; // interest rate at time of collection
+      const ratePerYear = redemptionRate.pow(secondsUntilEnd);
       return parseFloat(ratePerYear.toString()) * 100 - 100;
     }
     let multiplier = 18;
@@ -114,7 +115,7 @@ export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Eleme
     };
   }, [isMounted, loadedChart, historicalData]);
 
-  const labels: Array<{[date: string]: string}> = [];
+  const labels: Array<{date: string, label: string}> = [];
 
   historicalData.map((item) => {
     const date = new Date(item.timestamp * 1000) // convert timestamp to date;
@@ -122,15 +123,15 @@ export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Eleme
     // Want to make sure minute values like '5' read as '05'
     const minute = date.getUTCMinutes().toString().padStart(2, '0');
     const day = date.getUTCDate();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString('default', { month: 'short' });
     const year = date.getUTCFullYear();
 
-    return labels.push({[day]: `${month} ${day} ${year}, ${hour}:${minute} GMT`})
+    return labels.push({date: `${month} ${day} ${year}, ${hour}:${minute} GMT`, label: `${month} ${day}`})
   });
 
   const datapoints: Array<number> = [];
   historicalData.map((item) => {
-    const parsed = formatData(item.value);
+    const parsed = formatData(item.value, item.timestamp);
     return datapoints.push(parsed);
   })
 
@@ -189,15 +190,15 @@ export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Eleme
       const activeData = chart.data?.datasets[setIndex] &&
         chart.data?.datasets[setIndex]?.data[index].toPrecision(5);
       const labelIndex = labels[index];
-      const activeLabel = labelIndex && Object.values(labelIndex)[0];
+      const activeLabel = labelIndex && labelIndex.date;
       setActiveData(activeData ? activeData : '-');
       setActiveLabel(activeLabel ?? '-')
     }
   };
   
   const data = {
-    labels: labels.map((label: {[day: string]: string}) => {
-      return Object.keys(label)[0]
+    labels: labels.map((label: {date: string, label: string}) => {
+      return label.label;
     }),
     datasets: [
       {

@@ -25,7 +25,7 @@ export abstract class TooltipText {
       return `The market price of ${coin} denominated in ${collat}.`
     };
     public static redemptionRate = (coin: string) => {
-      return `The annualized yield that ${coin} holders are currently earning.`
+      return `The current yield that ${coin} holders will earn by tournament's end.`
     };
     public static deviationFactor = (coin: string) => {
       return `The accumulated interest rate of ${coin} since deployment. Initialized to 1.`

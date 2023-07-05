@@ -73,8 +73,9 @@ export const RedemptionRateCard = ({ variant = "mainCards" }: SystemStatsProps):
 };
 
 function annualizeInterestRate(redemptionRate: Decimal): string {
-  const secondsPerYear = 31536000; // Approximate number of seconds in a year
-  const ratePerYear = Number.parseFloat(redemptionRate.pow(secondsPerYear).prettify(2));
+  const tournamentEndDate = new Date('Jul 08 2023 19:00 GMT').getTime();
+  const secondsUntilEnd = Math.floor((tournamentEndDate - new Date().getTime()) / 1000)
+  const ratePerYear = Number.parseFloat(redemptionRate.pow(secondsUntilEnd).prettify(2));
   return ((ratePerYear * 100) - 100).toFixed(2);;
 }
 
