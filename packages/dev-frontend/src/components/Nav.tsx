@@ -47,6 +47,10 @@ export const Nav = (): JSX.Element => {
           <Icon name="exclamation-triangle" />
           Risky Vaults
         </Link>
+        <Link to="/leaderboard">
+          <Icon name="cash-register" />
+          Leaderboard
+        </Link>
         <Flex sx={{ mt: "1.5em", alignSelf: "center", display: ["flex", "none"] }}>
           <UserAccount />
         </Flex>

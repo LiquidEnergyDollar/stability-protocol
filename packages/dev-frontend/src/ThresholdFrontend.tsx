@@ -21,6 +21,7 @@ import { SwapPage } from "./pages/SwapPage";
 import { ThresholdProvider } from "./hooks/ThresholdContext";
 import { StabilityPoolPage } from "./pages/StabilityPoolPage";
 import { Charts } from "./pages/Charts";
+import { LeaderboardPage } from "./pages/LeaderboardPage";
 
 type ThresholdFrontendProps = {
   loader?: React.ReactNode;
@@ -153,6 +154,9 @@ export const ThresholdFrontend = ({ loader }: ThresholdFrontendProps): JSX.Eleme
                         </Route>
                         <Route path="/risky-vaults">
                           <RiskyVaultsPage />
+                        </Route>
+                        <Route path="/leaderboard">
+                          <LeaderboardPage />
                         </Route>
                       </Switch>
                   </FunctionalPanel>

@@ -31,7 +31,8 @@ import {
   faColumns,
   faBook,
   faExchangeAlt,
-  faChartBar
+  faChartBar,
+  faCashRegister
 } from "@fortawesome/free-solid-svg-icons";
 import { faClipboard, faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
@@ -69,7 +70,8 @@ library.add(
   faColumns,
   faBook,
   faExchangeAlt,
-  faChartBar
+  faChartBar,
+  faCashRegister
 );
 
 const getIcon = (name: IconName): IconProp => {
