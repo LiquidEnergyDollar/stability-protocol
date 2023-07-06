@@ -20,7 +20,8 @@ const pageSize = 10;
 // NOTE: These need to be lowercased
 const blacklistedAddresses = new Set([
   "0x0000ce08fa224696a819877070bf378e8b131acf", // remove once he burns the extra 100k
-  "0x62509301068f77fed07c2d17609a8730385d24ed" // this is Isaac lol
+  "0x62509301068f77fed07c2d17609a8730385d24ed", // this is Isaac lol
+  "0x24EcD23096fCF03A15ee8a6FE63F24345Cc4BA46" // this is Cody (not as rich)
 ]);
 
 type LeaderboardProps = {
