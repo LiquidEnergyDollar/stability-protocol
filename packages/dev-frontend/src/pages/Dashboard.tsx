@@ -1,6 +1,6 @@
 import { Container, Heading } from "theme-ui";
 
-import { RedemptionPriceCard, OraclePriceCard, MarketPriceCard, RedemptionRateCard, DeviationFactorCard } from "../components/Dashboard/PriceCard";
+import { RedemptionPriceCard, OraclePriceCard, MarketPriceCard, RedemptionRateCard, DeviationFactorCard, TournamentYieldCard } from "../components/Dashboard/PriceCard";
 import { ColRatio } from "../components/Dashboard/ColRatio";
 import { VaultCard } from "../components/Dashboard/VaultCard";
 import { StabilityPoolCard } from "../components/Dashboard/StabilityPoolCard";
@@ -23,6 +23,9 @@ export const Dashboard = (): JSX.Element => (
         </Container>
         <Container variant="oneThird">
           <RedemptionRateCard />
+        </Container>
+        <Container variant="oneThird">
+          <TournamentYieldCard />
         </Container>
         <Container variant="oneThird">
           <DeviationFactorCard />
