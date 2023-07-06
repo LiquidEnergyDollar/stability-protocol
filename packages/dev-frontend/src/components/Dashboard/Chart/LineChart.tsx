@@ -69,11 +69,15 @@ export const LineChart = ({ dataTitle, tooltipText }: LineChartProps): JSX.Eleme
   const [activeLabel, setActiveLabel] = useState<string>('-');
 
   const formatData = (data: string, timestamp: number) => {
-    if (dataTitle == 'LED APY') {
+    if (dataTitle == 'LED APY' || dataTitle == 'LED End of Tournament Yield') {
       const redemptionRate = Decimal.from(data).div(Decimal.from(10).pow(27));
-      const tournamentEndDate = Math.floor(new Date('Jul 08 2023 19:00 GMT').getTime() / 1000);
-      const secondsUntilEnd = tournamentEndDate - timestamp; // interest rate at time of collection
-      const ratePerYear = redemptionRate.pow(secondsUntilEnd);
+      let totalSeconds = 31536000; // Approximate number of seconds in a year
+      if (dataTitle == 'LED End of Tournament Yield') {
+        const tournamentEndDate = Math.floor(new Date('Jul 08 2023 19:00 GMT').getTime() / 1000);
+        const deltaSeconds = tournamentEndDate - timestamp; // interest rate at time of collection
+        totalSeconds = Math.max(0, deltaSeconds); // make sure we don't have negative time
+      }
+      const ratePerYear = redemptionRate.pow(Math.max(0, totalSeconds)); // make sure we don't have negative time
       return parseFloat(ratePerYear.toString()) * 100 - 100;
     }
     let multiplier = 18;
