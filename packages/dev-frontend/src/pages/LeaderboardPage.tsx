@@ -8,7 +8,7 @@ export const LeaderboardPage = (): JSX.Element => {
     <PageHeading
       heading="Leaderboard"
       descriptionTitle="Leaderboard for LED Tournament"
-      description="Top performing addresses for the LED tournament. Score is determined by assets (USD and LED) minus any outstanding LED debt."
+      description="Top performing addresses for the LED tournament. Score is determined by assets (USD and LED) minus any outstanding LED debt. Leaderboard is updated every 30 minutes."
       link="https://codyborn.notion.site/LED-Trading-Tournament-Guide-6fb50c860dfb41ada89e9e67528140cc"
     />
     <PageRow isWidthFull={true} Component={Leaderboard} />

@@ -236,6 +236,13 @@ const theme: Theme = {
     }
   },
 
+  images: {
+    avatar: {
+      width: 38,
+      height: 38
+    }
+  },
+
   buttons: {
     primary: {
       ...button,

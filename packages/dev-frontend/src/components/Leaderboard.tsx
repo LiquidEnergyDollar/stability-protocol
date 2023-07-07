@@ -39,10 +39,14 @@ type LeaderboardReturnItem = {
   leddebt: string
   ledprice: string
   netvalue: string
+  avatarurl: string
+  username: string
 }
 
 type LeaderboardRow = {
   address: string
+  avatarurl: string
+  username: string
   usdassets: Decimal
   ledassets: Decimal
   leddebt: Decimal
@@ -89,6 +93,8 @@ export const Leaderboard = ({ version, collateral }: LeaderboardProps): JSX.Elem
   const parseRow = (row: LeaderboardReturnItem): LeaderboardRow => {
     return {
       address: row.address,
+      avatarurl: row.avatarurl,
+      username: row.username,
       usdassets: parseNumberString(row.usdassets),
       ledassets: parseNumberString(row.ledassets),
       leddebt: parseNumberString(row.leddebt),
@@ -213,6 +219,7 @@ export const Leaderboard = ({ version, collateral }: LeaderboardProps): JSX.Elem
                   }}
                 >
                   <colgroup>
+                    <col />
                     <col style={{ width: "30%" }} />
                     <col />
                     <col />
@@ -221,6 +228,11 @@ export const Leaderboard = ({ version, collateral }: LeaderboardProps): JSX.Elem
                   </colgroup>
                   <thead>
                     <tr style={{ opacity: 0.6 }}>
+                      <th>
+                        Discord
+                      <br />
+                        Info
+                      </th>
                       <th style={{ verticalAlign: "top" }}>Address</th>
                       <th>
                         <Abbreviation short="Coll.">Collateral</Abbreviation>
@@ -248,6 +260,19 @@ export const Leaderboard = ({ version, collateral }: LeaderboardProps): JSX.Elem
                           style={{
                             fontWeight: "bold"
                           }}>
+                          <td>
+                            <Tooltip message={lbItem.username} placement="top">
+                              <Image
+                                variant="avatar"
+                                src={lbItem.avatarurl}
+                                sx={{
+                                  width: ["73px", "unset"],
+                                  overflow: "hidden",
+                                  position: "relative"
+                                }}
+                              />
+                            </Tooltip>
+                          </td>
                           <td
                             style={{
                               display: "flex",
@@ -324,7 +349,7 @@ export const Leaderboard = ({ version, collateral }: LeaderboardProps): JSX.Elem
             display: "none !important"
           }}>
             <Flex>
-              <Link variant="cardLinks" href="https://docs.threshold.network/fundamentals/threshold-usd" target="_blank">Read about</Link>
+              <Link variant="cardLinks" href="https://codyborn.notion.site/LED-Trading-Tournament-Guide-6fb50c860dfb41ada89e9e67528140cc" target="_blank">Read about</Link>
               in the documentation
             </Flex>
             <Flex>Deployment version: {version}</Flex>
