@@ -46,7 +46,7 @@ async function connectToSepolia() {
         {
           chainId: "0xAA36A7",
           chainName: "Sepolia test network",
-          rpcUrls: ["https://rpc.sepolia.org"],
+          rpcUrls: ["https://sepolia.infura.io/v3/5ba4b2b788834df3b5c43ff0dd82f2e2"],
           nativeCurrency: {
             symbol: "ETH",
             decimals: 18

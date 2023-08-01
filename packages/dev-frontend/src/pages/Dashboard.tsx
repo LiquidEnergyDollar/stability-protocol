@@ -25,9 +25,6 @@ export const Dashboard = (): JSX.Element => (
           <RedemptionRateCard />
         </Container>
         <Container variant="oneThird">
-          <TournamentYieldCard />
-        </Container>
-        <Container variant="oneThird">
           <DeviationFactorCard />
         </Container>
         {/* <Container variant="oneThird">
