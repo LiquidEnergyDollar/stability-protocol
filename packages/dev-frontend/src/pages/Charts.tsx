@@ -39,12 +39,12 @@ export const Charts = (): JSX.Element => {
                        tooltipText={TooltipText.redemptionRate(COIN)}/>
                 </Container>
             </ChartProvider>
-            <ChartProvider dataSource='redemptionRate'>
+            {/* <ChartProvider dataSource='redemptionRate'>
                 <Container variant="full">
                 <Chart dataTitle='LED End of Tournament Yield'
                        tooltipText={TooltipText.tournamentYield(COIN)}/>
                 </Container>
-            </ChartProvider>
+            </ChartProvider> */}
             <ChartProvider dataSource='deviationFactor'>
                 <Container variant="full">
                 <Chart dataTitle='Deviation Factor'
